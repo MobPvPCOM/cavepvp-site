@@ -1,0 +1,18 @@
+{
+  "badges": [
+    {
+      "id": "badge-id",
+      "name": "badge-name",
+      "description": "badge-description",
+      "icon": "badge-icon.png",
+      "clazz": "com.mobpvp.site.badge.BadgeModel"
+    },
+    {
+      "id": "staff",
+      "name": "Staff Member",
+      "description": "This user is a staff member.",
+      "icon": "staff.png",
+      "clazz": "com.mobpvp.site.badge.defaults.StaffBadgeModel"
+    }
+  ]
+}
