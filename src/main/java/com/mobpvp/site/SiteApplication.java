@@ -1,12 +1,11 @@
 package com.mobpvp.site;
 
 import com.mobpvp.site.cache.impl.*;
+import com.mobpvp.site.config.SiteBadgeConfig;
 import lombok.Getter;
 import com.mobpvp.site.badge.BadgeHandler;
 import com.mobpvp.site.cache.CacheHandler;
-import com.mobpvp.site.cache.impl.*;
 import com.mobpvp.site.cache.thread.CacheThread;
-import com.mobpvp.site.config.badge.SiteBadgeConfig;
 import com.mobpvp.site.util.configuration.ConfigurationHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
