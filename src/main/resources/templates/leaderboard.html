@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Leaderboard</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div id="section-above">
+        <div class="alert alert-light breadcrumb-bar" role="alert">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Leaderboards</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="server-status">MOBPVP.ORG <div class="count" th:text="${playerCount} + ' ONLINE'"></div></div>
+    </div>
+
+    <div id="content">
+        <div class="section-title leaderboard">
+            <div class="bar"></div>
+            <h1>Top Players</h1>
+            <div class="bar"></div>
+        </div>
+        <div class="stat-grid top-players">
+            <div class="player-card"
+                 th:each="entry: ${leaderboardEntries}"
+                 th:if="${!entry.getValue().isEmpty()}"
+                 th:with="topPlayer=${entry.getValue().get(0)}">
+                <div class="avatar">
+                    <img th:src="${'https://mc-heads.net/body/' + topPlayer.getUuid()}">
+                </div>
+                <div class="user-meta">
+                    <a th:href="${'/u/' + topPlayer.getResolvedName()}"
+                       th:text="${topPlayer.getResolvedName()}"
+                       th:style="${'color: ' + topPlayer.getWebColor() + ' !important'}">
+                    </a>
+                    <span th:text="${'Top ' + entry.getKey()}"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title leaderboard">
+            <div class="bar"></div>
+            <h1>Leaderboards</h1>
+            <div class="bar"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header sm">
+                <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                    <th:block th:each="item, itemStat : ${leaderboardNavItems}">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               th:classappend="${item.matches(#httpServletRequest.requestURI) ? 'active': ''}"
+                               th:href="@{${item.urls.get(0).toLowerCase()}}"
+                               th:text="${item.label}">
+                            </a>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+
+            <div class="card-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" role="tabpanel">
+                        <div class="stat-grid">
+                            <div class="card" th:each="entry: ${leaderboardEntries}">
+                                <div class="card-header" th:text="${entry.getKey()}">
+                                </div>
+                                <ul class="list-group list-group-flush list-group-numbered">
+                                    <li class="list-group-item" th:each="value: ${entry.getValue()}">
+                                        <div class="user-meta">
+                                            <div class="avatar">
+                                                <img th:src="${'https://mc-heads.net/avatar/' + value.getUuid() + '/32'}">
+                                            </div>
+                                            <a th:href="${'/u/' + value.getResolvedName()}"
+                                               th:text="${value.getResolvedName()}"
+                                               th:style="${'color: ' + value.getWebColor() + ' !important'}">
+                                            </a>
+                                        </div>
+                                        <span class="float-right" th:text="${value.getValue()}"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

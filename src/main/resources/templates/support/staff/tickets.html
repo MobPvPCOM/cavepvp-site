@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Support</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/static">Home</a></li>
+                        <li class="breadcrumb-item">
+                            <a href="/support/tickets" th:if="${ticketPage != null}">Support</a>
+                            <a href="/applications" th:if="${ticketPage == null}">Applications</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Staff</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <a th:href="${ticketPage != null ? '/support/tickets' : '/applications'}"
+               class="server-status cta tickets" style="max-width: 175px">Normal View</a>
+        </div>
+
+        <div class="card forum-list policy tickets" th:if="${tickets.isEmpty()}">
+            <p style="margin-top: 1rem; text-align: center">
+                <b>There are no <span th:text="${ticketPage != null ? 'tickets' : 'applications'}"></span></b>
+                <br>
+                There are currently no active <span style="font-weight: 600" th:text="${ticketPage != null ? 'tickets' : 'applications'}"></span>.
+            </p>
+        </div>
+
+        <div class="card forum-list" th:if="${!tickets.isEmpty()}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="ticket-status-title">Status</th>
+                    <th class="ticket-title text-left" th:text="${ticketPage != null ? 'Ticket' : 'Application'}"></th>
+                    <th>Replies</th>
+                    <th class="ticket-last-reply text-left">Last Reply</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ticket: ${tickets}">
+                    <th><span class="status-label"
+                              th:style="${'background-color: ' + ticket.getStatus().getWebColor()}"
+                              th:text="${ticket.getStatus().getDisplayName()}">
+                        </span></th>
+
+                    <th class="text-left">
+                        <a th:href="${'/ticket/' + ticket.getId()}" th:text="${ticket.getWebDisplay()}"></a>
+                        <div class="meta">
+                                <span>By <span th:style="${'color:' + ticket.getAuthorWebColor()}"
+                                               th:text="${ticket.getAuthorName()}"></span>,
+                                </span>
+                            <span th:text="${ticket.getPostedAgo()}"></span>
+                        </div>
+                    </th>
+
+                    <th th:text="${ticket.getReplies().size()}"></th>
+
+                    <th class="ticket-last-reply text-left" th:if="${ticket.getLastReply() != null}"
+                        th:with="lastReply=${ticket.getLastReply()}">
+                        <a th:href="${'/u/' + lastReply.getAuthorName()}">By <span
+                                th:style="${'color:' + lastReply.getAuthorWebColor()}"
+                                th:text="${lastReply.getAuthorName()}"></span>,</a>
+                        <div class="meta">
+                            <span th:text="${lastReply.getPostedAgo()}"></span>
+                        </div>
+                    </th>
+
+                    <th class="ticket-last-reply text-left" th:if="${ticket.getLastReply() == null}">
+                        <div class="meta">
+                            <a>Never</a>
+                        </div>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <nav aria-label="Page navigation example" th:if="${!tickets.isEmpty()}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${previousPage == currentPage ? 'disabled' : ''}">
+                    <a class="page-link" th:href="${previousPage == currentPage ? '' : previousPageUrl}" aria-disabled="true">&laquo;</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" th:text="${currentPage}">
+                    </a>
+                </li>
+
+                <li class="page-item" th:classappend="${nextPage == currentPage ? 'disabled' : ''}">
+                    <a class="page-link" th:href="${nextPage == currentPage ? '' : nextPageUrl}" aria-disabled="true">&raquo;</a>
+                </li>
+            </ul>
+            <div class="navigation-meta" th:text="${'You are on page ' + currentPage + '/' + pageCount + '.'}">
+            </div>
+        </nav>
+    </div>
+</div>
+</body>
+</html>

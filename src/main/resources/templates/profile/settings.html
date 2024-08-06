@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+<head>
+    <title th:text="${sessionProfile.getName()}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item">
+                            <a th:href="${'/u/' + sessionProfile.getName()}">Profile</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Settings</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row" th:if="${!claimableGrants.isEmpty()}">
+            <div class="col mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        Claimable Ranks
+                        <p>You have unclaimed ranks from MineSurge</p>
+                        <p>After claiming, the highest rank will be applied</p>
+                    </div>
+
+                    <div class="card-body">
+                        <form th:action="@{/claimGrants}" method="post">
+                            <div class="card-feed-list card-recent">
+                                <ol class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center"
+                                        style="text-align: center;"
+                                        th:each="grant: ${claimableGrants}">
+
+                                        <div class="ms-lg-3 me-auto grant-row" style="margin-left: auto !important">
+                                            <div class="fw-bold">
+                                                <a th:style="${'color: ' + grant.getOldRankWebColor()}"
+                                                   th:text="${grant.getOldRankName()}"></a>
+                                            </div>
+                                            <div class="card-feed-meta">
+                                                <span th:text="${grant.getFormattedDuration()}"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="arrow me-auto grant-row">
+                                            →
+                                        </div>
+
+                                        <div class="ms-lg-3 me-auto grant-row">
+                                            <div class="fw-bold">
+                                                <a th:style="${'color: ' + grant.getRankWebColor()}"
+                                                   th:text="${grant.getRankName()}"></a>
+                                            </div>
+                                            <div class="card-feed-meta">
+                                                <span th:text="${grant.getFormattedDuration()}"></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <button type="submit" class="btn btn-green btn-block settings-btn">Claim All</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        Social Links
+                    </div>
+
+                    <div class="card-body">
+                        <form th:action="@{/updateSocials}" method="post">
+                            <div class="social-input"
+                                 th:each="social: ${socials}"
+                                 th:with="key=${social.getName()}">
+                                <i th:class="${social.getIcon()}" th:style="${'color: ' + social.getHexColor()}"
+                                   aria-hidden="true"></i>
+
+                                <label th:for="${key.toLowerCase()}" class="form-label" th:text="${key}"></label>
+
+                                <div class="input-container">
+                                    <div class="input-wrap">
+                                        <span class="static-text" th:text="${social.getStartingUrl()}"></span>
+                                        <input type="text" class="dynamic-input"
+                                               placeholder="..."
+                                               th:name="${social.name()}"
+                                               th:value="${sessionProfile.getSocial(social)}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block settings-btn">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        Change Password
+                    </div>
+
+                    <form th:action="@{/changePassword}" method="post">
+                        <div class="card-body">
+                            <div class="social-input">
+                                <input type="password" class="form-control"
+                                       id="currentPassword"
+                                       name="currentPassword"
+                                       placeholder="Current Password" required>
+                            </div>
+
+                            <div class="social-input">
+                                <input type="password" class="form-control"
+                                       id="newPassword"
+                                       name="newPassword"
+                                       placeholder="New Password" required>
+                            </div>
+
+                            <div class="social-input">
+                                <input type="password" class="form-control"
+                                       id="confirmNewPassword"
+                                       name="confirmNewPassword"
+                                       placeholder="Confirm New Password" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block settings-btn">Change Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card" style="margin-top: 20px">
+                    <div class="card-header">
+                        Two Factor Authentication
+                    </div>
+
+                    <div class="card-body">
+                        <div class="social-input">
+                            <input type="password" class="form-control"
+                                   id="tfaCode"
+                                   name="tfaCode"
+                                   placeholder="Auth Code">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block settings-btn">
+                            Enable <span style="font-size: 15px;">2</span>FA
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px">
+                    <div class="card-header">
+                        Privacy Settings
+                    </div>
+
+                    <form th:action="@{/updatePrivacySettings}" method="post">
+                        <div class="card-body">
+                            <div class="social-input">
+                                <label class="form-label">Who can comment on your profile?</label>
+                                <select name="commentStatus" id="commentStatus">
+                                    <option class="select-option" th:each="privacySetting: ${privacySettings}"
+                                            th:value="${privacySetting.name()}"
+                                            th:text="${privacySetting.getName()}"
+                                            th:selected="${privacySetting == sessionProfile.getCommentStatus()}">
+                                    </option>
+                                </select>
+
+                                <div class="social-input">
+                                    <label class="form-label">Who can see your online status?</label>
+                                    <select name="onlineStatus" id="onlineStatus">
+                                        <option class="select-option" th:each="privacySetting: ${privacySettings}"
+                                                th:value="${privacySetting.name()}"
+                                                th:text="${privacySetting.getName()}"
+                                                th:selected="${privacySetting == sessionProfile.getOnlineStatus()}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block settings-btn">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

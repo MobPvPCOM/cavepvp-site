@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Pack Converter</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Pack Converter</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="server-status cta" style="cursor: auto; max-width: 230px">
+                Packs Converted
+                <div class="count" th:text="${convertedCount}"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="skin-view">
+                <canvas id="skin_container"></canvas>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script th:src="@{/js/skinview3d.bundle.js}"></script>
+    <script>
+        loadSkin()
+
+        async function loadSkin() {
+            const defaultElytra = "/images/elytra.png"
+            const defaultSkin = "https://minotar.net/skin/MHF_Steve"
+            const fetchedCapes = await fetch("https://api.capes.dev/load/tabai");
+
+            let json = await fetchedCapes.json();
+            let capes = {
+                mojang: json.minecraft.exists ? json.minecraft.imageUrl : defaultElytra,
+                optifine: json.optifine.exists ? json.optifine.imageUrl : defaultElytra,
+                labymod: json.labymod.exists ? json.labymod.imageUrl : defaultElytra
+            }
+
+            let skinViewer = new skinview3d.SkinViewer({
+                canvas: document.getElementById("skin_container"),
+                width: 300,
+                height: 400,
+                skin: defaultSkin
+            });
+
+            skinViewer.skin = skinViewer.loadSkin("https://minotar.net/skin/tabai")
+
+            skinViewer.zoom = 0.7;
+            skinViewer.fov = 70;
+
+            // cape
+            skinViewer.loadCape(capes.mojang)
+            skinViewer.animation = new skinview3d.IdleAnimation();
+            skinViewer.animation.speed = 1;
+
+            // elytra
+            // skinViewer.loadCape(capeUrls.mojang, { backEquipment: "elytra" });
+            // skinViewer.animation = new skinview3d.FlyingAnimation();
+            // skinViewer.animation.speed = 1;
+        }
+    </script>
+</div>
+</body>
+</html>

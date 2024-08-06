@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<div th:fragment="forums">
+    <div class="card">
+        <div class="card-feed-list card-recent">
+            <ol class="list-group list-group-flush">
+
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:if="${!threads.isEmpty()}"
+                    th:each="thread: ${threads}">
+
+                    <div class="avatar xm forum">
+                        <img th:src="${'https://mc-heads.net/body/' + profile.getName()}"/>
+                    </div>
+                    <div class="ms-lg-3 me-auto">
+                        <div class="fw-bold">
+                            <a th:href="${'/thread/' + thread.getId()}"
+                               th:text="${thread.getTitle()}" style="color: silver"></a>
+                        </div>
+                        <div class="card-feed-meta">
+                            <span th:text="${thread.getPostedAgo() + ' '}"></span>
+                            <a th:href="${'/forum/' + thread.getForum()}"
+                               th:text="${thread.getForumName()}"></a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    style="background-color: #973333; justify-content: center !important;"
+                    th:if="${threads.isEmpty()}">
+
+                    <div class="fw-bold text-center error">This user has no threads.</div>
+                </li>
+
+            </ol>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example" th:if="${!threads.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo;</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

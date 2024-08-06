@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<div th:fragment="statistics">
+    <div class="stat-grid two">
+        <!--/*@thymesVar id="profile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+        <!--/*@thymesVar id="stat" type="com.mobpvp.site.model.profile.data.StatsModel"*/-->
+        <div class="card"
+             th:each="stat: ${profile.getStats()}"
+             th:with="serverName=${stat.getServerName()}">
+            <div class="card-header" th:classappend="${serverName.toLowerCase() + '-bg'}">
+                <span th:text="${serverName}"></span>
+            </div>
+
+            <div class="card-body error-card" th:if="${stat.getMetadata().isEmpty()}">
+                No stats for this player.
+            </div>
+
+            <ol class="list-group list-group-flush" th:if="${!stat.getMetadata().isEmpty()}">
+                <li class="list-group-item d-flex justify-content-between align-items-start"
+                    th:each="entry: ${stat.getMetadata()}">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold" th:text="${entry.getKey()}"></div>
+                    </div>
+                    <span class="badge bg-dark rounded-pill" th:text="${entry.getValue()}"></span>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="card card-feed">
+        <!--/*@thymesVar id="profile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+        <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+        <div class="card-feed-action" th:if="${profile.getCommentStatus().canInteract(profile, sessionProfile)}">
+            <div class="avatar" th:if="${sessionProfile != null}">
+                <img th:src="${'https://mc-heads.net/body/' + sessionProfile.getName()}">
+            </div>
+
+            <form class="card-feed-input" th:if="${sessionProfile != null}" th:action="@{/comment}" method="post">
+                <input type="hidden" name="uuid" th:value="${profile.getUuid().toString()}">
+                <div style="display: flex">
+                    <input type="text" class="form-control" id="comment" name="comment"
+                           placeholder="Type a message...">
+                    <button type="submit" class="btn btn-primary comment-post">Post
+                    </button>
+                </div>
+            </form>
+
+            <div class="card-feed-input" th:if="${sessionProfile == null}">
+                <input type="text" style="text-align: center"
+                       class="form-control"
+                       placeholder="You must log in to comment." readonly>
+            </div>
+        </div>
+
+        <div class="card-feed-list" th:style="${profile.getCommentStatus().canInteract(profile, sessionProfile) ? '' : 'border-top: 0'}">
+            <ol class="list-group list-group-flush">
+
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:each="comment: ${profile.getComments()}">
+                    <div class="avatar xm">
+                        <img th:src="${'https://mc-heads.net/body/' + comment.getAuthor()}">
+                    </div>
+                    <div class="ms-lg-3 me-auto">
+                        <div class="fw-bold" th:text="${comment.getContent()}"></div>
+                        <div class="card-feed-meta">
+                            <a th:href="${'/u/' + comment.getAuthorName()}"
+                               th:text="${comment.getAuthorName()}"
+                               th:style="${'color: ' + comment.getAuthorWebColor()}">
+                            </a>
+                            <a style="color: dimgray" th:text="${comment.getCommentedAgo()}"></a>
+                        </div>
+                    </div>
+
+                    <div class="node-control-inner nci-user"
+                         th:if="${comment.canDelete(sessionProfile)}">
+                        <a th:href="'#modal-delete-' + ${comment.getUuid()}"
+                           data-bs-toggle="modal"
+                           th:if="${comment.canDelete(sessionProfile)}"
+                           style="font-size: 13px;"
+                        ><i class="fa-solid fa-trash-can"></i> Delete</a>
+                    </div>
+
+                    <div class="modal fade" th:if="${comment.canDelete(sessionProfile)}"
+                         th:id="'modal-delete-' + ${comment.getUuid()}"
+                         style="transform: translateY(250px);">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Delete Comment
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure want to delete this comment?
+                                </div>
+
+                                <form class="form-remove-grant" th:action="@{/comment/delete}"
+                                      method="post">
+                                    <input type="hidden" name="uuid"
+                                           th:value="${profile.getUuid().toString()}">
+                                    <input type="hidden" name="commentId"
+                                           th:value="${comment.getUuid()}">
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Confirm
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ol>
+        </div>
+    </div>
+</div>
+</body>
+</html>

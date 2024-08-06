@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Notifications</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Notifications</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <ol class="list-group list-group-flush">
+
+            <!-- todo: if notifications == 0 -->
+            <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group text-center" style="background-color: #7f2f2f">
+                <div class="ms-lg-3 me-auto flex-grow-1" style="color: white">
+                    <a>You have <b>no notifications</b>.</a>
+                </div>
+            </li>
+
+            <!-- todo: each notification if notifications > 0 -->
+<!--            <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group">-->
+<!--                <div class="node-icon"><i class="fa-regular fa-bell"></i></div>-->
+<!--                <div class="ms-lg-3 me-auto flex-grow-1">-->
+<!--                    <a>Your nan tried to stab you with a <b>cheese stick</b>.</a>-->
+<!--                </div>-->
+<!--            </li>-->
+
+        </ol>
+    </div>
+
+</div>
+</body>
+</html>

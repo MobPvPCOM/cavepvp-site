@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>New Ticket</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content" class="new-ticket-wrapper">
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/support">Support</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">New Ticket</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header text-start" th:text="${'Support Ticket | ' + supportType.getFancyName()}"></div>
+            <div class="card-body" style="padding-top: 5px !important">
+                <form th:action="@{/support/create}" method="post" th:object="${supportForm}">
+                    <input type="hidden" name="category" th:value="${supportType.name()}">
+
+                    <div th:each="question, iterStat: ${supportType.getQuestionSet().getFormattedQuestions().values()}" style="padding: 10px 0">
+                        <label class="form-label support" th:text="${question.question}"></label>
+                        <textarea class="form-control" th:field="*{answers[__${iterStat.index}__]}" name="answers" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block login-btn" style="margin-top: 10px">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

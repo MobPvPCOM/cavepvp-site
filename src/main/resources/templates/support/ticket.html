@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+>
+<head>
+    <title th:text="${ticket.getTitle()}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="sidebar" class="end" th:if="${sessionProfile.hasPermission('website.support.viewall')}">
+        <div class="card">
+            <div class="card-header text-start">Ticket Information</div>
+            <ol class="list-group list-group-flush">
+
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Ticket ID</div>
+                        <span th:text="${'#' + ticket.getId()}"></span>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Category</div>
+                        <span th:text="${ticket.getCategory().getFancyName()}"></span>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Creator</div>
+                        <a th:href="${'/u/' + ticket.getAuthorName()}"
+                           class="username"
+                           th:text="${ticket.getAuthorName()}"
+                           th:style="${'color: ' + ticket.getAuthorWebColor()}">
+                        </a>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Assignee</div>
+                        <a href="#" class="username admin">N/A</a>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Creation Date</div>
+                        <span th:text="${ticket.formatCreationDate()}"></span>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Last Update</div>
+                        <span th:if="${ticket.getLastReply() != null}"
+                              th:text="${ticket.getLastReply().formatCreationDate()}"></span>
+                        <span th:if="${ticket.getLastReply() == null}">N/A</span>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-start"
+                    th:if="${punishment != null}">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Punishment</div>
+                        <span th:utext="${'<b>Type: </b>' + punishment.getType().getDisplayName()}"></span><br>
+                        <span th:utext="${'<b>Status: </b>' + punishment.formatStatus()}"></span><br>
+                        <span th:utext="${'<b>Reason: </b>' + punishment.getPunishedReason()}"></span><br>
+                        <span th:utext="${'<b>Duration: </b>' + punishment.formatDuration()}"></span><br>
+                        <span th:utext="${'<b>Added At: </b>' + punishment.getPunishedAgo()}"></span><br>
+                        <span><b>Added By: </b><a th:text="${punishment.getPunishedByName()}"
+                                                  th:href="${'/u/' + punishment.getPunishedByName()}"
+                                                  th:style="${'color: ' + punishment.getPunishedByWebColor()}">
+                        </a>
+                        </span>
+                        <br>
+                        <span class="punishment-footer">Marking this ticket as resolved will appeal the punishment.</span>
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start"
+                    th:if="${ticket.getResolveSuggestion() != null}"
+                    th:with="resolveSuggestion=${ticket.getResolveSuggestion()}">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold sub--heading">Staff Resolve</div>
+                        <span>
+                            <b>Status: </b>
+                            <span th:text="${resolveSuggestion.getStatus().getDisplayName()}"
+                                  th:style="${'color: ' + resolveSuggestion.getStatus().getWebColor() + '; font-weight: 600'}">
+                            </span>
+                        </span><br>
+                        <span th:if="${resolveSuggestion.getPunishmentAction() != null}"
+                              th:utext="${'<b>Punishment Action: </b>'  + resolveSuggestion.formatPunishmentAction() + '<br>'}"></span>
+                        <span th:if="${resolveSuggestion.getPunishmentAction() != null && resolveSuggestion.getPunishmentAction() == 'UPDATE_TIME'}"
+                              th:utext="${'<b>New Punishment Duration: </b>'  + resolveSuggestion.formatNewDuration() + '<br>'}"></span>
+                        <span th:utext="${'<b>Decrease Infraction Level: </b>'  + resolveSuggestion.isDecreaseLevel() + '<br>'}"></span>
+                        <span><b>Staff: </b><a th:text="${resolveSuggestion.getStaffName()}"
+                                               th:href="${'/u/' + resolveSuggestion.getStaffName()}"
+                                               th:style="${'color: ' + resolveSuggestion.getStaffWebColor()}"></a>
+                        </span><br>
+
+                        <form style="display: inline-block;"
+                              th:if="${sessionProfile.hasPermission('website.support.status.admin')}"
+                              th:action="@{'/support/resolve/' + ${ticket.getId()} + '/confirm'}" method="post">
+                            <button type="submit" class="btn btn-primary small"
+                                    style="background-color: green !important;">Confirm
+                            </button>
+                        </form>
+
+                        <form style="display: inline-block;"
+                              th:if="${sessionProfile.hasPermission('website.support.status.admin')}"
+                              th:action="@{'/support/resolve/' + ${ticket.getId()} + '/deny'}" method="post">
+                            <button type="submit" class="btn btn-primary small" style="min-width: 85px">Deny</button>
+                        </form>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div id="content">
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/support/tickets">Support</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"
+                            th:text="${ticket.getTitle()}"></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="post-view flex">
+            <div id="content" class="post-card card">
+                <div class="card-header flex left">
+                    <div class="avatar ticket">
+                        <img th:src="${'https://mc-heads.net/body/' + ticket.getAuthorName()}">
+                    </div>
+                    <div class="post-title ticket">
+                        <h1 th:text="${ticket.getWebDisplay()}"></h1>
+                        <div class="card-feed-meta ticket">
+                            <a th:href="${'/u/' + ticket.getAuthorName()}"
+                               th:text="${ticket.getAuthorName()}"
+                               th:style="${'color: ' + ticket.getAuthorWebColor()}">
+                            </a>
+                            <span th:text="${ticket.getPostedAgo()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="post-status ticket" th:if="${!sessionProfile.hasPermission('website.support.status')}">
+                        <div class="status--label"
+                             th:style="${'background-color: ' + ticket.getStatus().getWebColor()}">
+                            <span th:text="${ticket.getStatus().getDisplayName()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="post-status ticket" th:if="${sessionProfile.hasPermission('website.support.status')}">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" role="button"
+                               id="dropdownMenuLink" data-bs-toggle="dropdown"
+                               aria-expanded="false" th:with="status=${ticket.getStatus()}">
+
+                                <div class="status--label" th:style="${'background-color: ' + status.getWebColor()}">
+                                    <span th:text="${status.getDisplayName()}"></span>
+                                    <i class="fa-solid fa-caret-down"></i>
+                                </div>
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item"
+                                       th:each="status: ${statuses}"
+                                       th:attr="data-bs-toggle=${status.name() == 'RESOLVED' && ticket.getPunishment() != null ? 'modal' : ''}"
+                                       th:href="${status.name() == 'RESOLVED' && ticket.getPunishment() != null ? '#modal-info-' + ticket.getId() : '/support/state/' + ticket.getId() + '/' + status.name()}">
+
+                                        <div class="status--label"
+                                             th:style="${'background-color: ' + status.getWebColor()}"
+                                             th:text="${status.getDisplayName()}">
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade"
+                     th:if="${punishment != null && sessionProfile.hasPermission('website.support.status')}"
+                     th:id="'modal-info-' + ${ticket.getId()}"
+                     style="transform: translateY(250px);">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                Resolve Ticket
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <form th:action="@{'/support/update/' + ${ticket.getId()}}" method="post">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col" style="padding-right: 0">
+                                            <label for="time" class="form-label">Time</label>
+                                            <input type="number" min="0" value="0" id="time" name="time"
+                                                   class="form-control"
+                                                   required>
+                                        </div>
+                                        <div class="col" style="max-width: 150px">
+                                            <label for="timeUnit" class="form-label">Time Unit</label>
+                                            <select class="form-select time-form" id="timeUnit" name="timeUnit">
+                                                <option value="MINUTES">Minute/s</option>
+                                                <option value="HOURS">Hour/s</option>
+                                                <option value="DAYS">Day/s</option>
+                                                <option value="WEEKS">Week/s</option>
+                                                <option value="MONTHS">Month/s</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-check"
+                                             style="display: flex; margin-top: 15px; padding-left: 3%;">
+                                            <input type="checkbox" id="decreaseLevel" name="decreaseLevel"
+                                                   class="form-check-input" style="margin-left: 0"
+                                                   th:disabled="${!sessionProfile.hasPermission('core.command.infractions.decrease')}">
+                                            <label for="decreaseLevel" class="form-check-label"
+                                                   style="margin-left: 10px">Decrease Infraction Level</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer" style="display: flex; justify-content: space-between;">
+                                    <button type="button"
+                                            class="btn btn-primary"
+                                            data-bs-dismiss="modal"
+                                            style="background: rgb(128,128,128) !important;">
+                                        Close
+                                    </button>
+
+                                    <div class="ml-auto">
+                                        <button type="submit"
+                                                class="btn btn-primary"
+                                                style="background: green !important; color: white"
+                                                th:formaction="${'/support/resolve/' + ticket.getId()}"
+                                                th:text="${'UN' + punishment.getType().getDisplayName()}">
+                                        </button>
+
+                                        <button type="submit" class="btn btn-primary">
+                                            Update
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-text ticket">
+                        <div class="ticket-question" th:each="entry: ${ticket.getQuestions()}">
+                            <span class="title" th:text="${ticket.getQuestionHeader(entry.getKey())}"></span>
+                            <br>
+                            <span th:utext="${ticket.getContent(entry.getKey())}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+        <div class="card card-feed post-view">
+            <div class="card-feed-action" th:if="${ticket.canReply(sessionProfile)}">
+                <div class="avatar">
+                    <img th:src="${'https://mc-heads.net/body/' + sessionProfile.getName()}">
+                </div>
+
+                <div class="card-feed-input" th:if="${!ticket.canReply(sessionProfile)}">
+                    <input type="text" style="text-align: center"
+                           class="form-control"
+                           placeholder="This ticket has been resolved." readonly>
+                </div>
+
+                <form class="card-feed-input" th:action="@{'/support/reply/' + ${ticket.getId()}}" method="post"
+                      th:if="${ticket.canReply(sessionProfile)}">
+                    <textarea class="form-control" id="comment" name="body" placeholder="Type a reply..." required></textarea>
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                </form>
+            </div>
+
+            <div class="card-feed-list" th:classappend="${ticket.canReply(sessionProfile) ? '' : 'no-top-border'}">
+                <ol class="list-group list-group-flush">
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center"
+                        th:each="reply: ${ticket.getReplies()}">
+                        <div class="avatar xm ticket">
+                            <img th:src="${'https://mc-heads.net/body/' + reply.getAuthorName()}">
+                        </div>
+
+                        <div class="ms-lg-3 me-auto">
+                            <div class="fw-bold" th:text="${reply.getBody()}"></div>
+                            <div class="card-feed-meta">
+                                <a th:href="${'/u/' + reply.getAuthorName()}" class="admin"
+                                   th:style="${'color: ' + reply.getAuthorWebColor() + ' !important'}"
+                                   th:text="${reply.getAuthorName()}">
+                                </a>
+                                <span th:text="${reply.getPostedAgo()}"></span>
+                            </div>
+                        </div>
+                    </li>
+
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

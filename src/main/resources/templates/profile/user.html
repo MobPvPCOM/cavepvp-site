@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${profile.getName()}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="sidebar">
+        <div class="card">
+            <div class="card-user-details">
+                <div class="avatar">
+                    <img th:src="'https://mc-heads.net/body/' + ${profile.getName()}">
+                </div>
+
+                <div class="user-text">
+                    <div class="username" th:text="${profile.getName()}"></div>
+
+                    <div class="rank" th:style="${'color: ' + profile.getRank().getWebColor()}">
+                        <span th:text="${profile.getRank().getName()}"></span>
+                    </div>
+
+                    <div class="user-small-meta">
+                        <div>Joined <span th:text="${profile.formatFirstJoin()}"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer last-seen" th:if="${profile.getOnlineStatus().canInteract(profile, sessionProfile)}">
+                <div th:if="${!profile.isOnline() && profile.getActiveBan() == null}">
+                    Last seen <span th:text="${profile.formatSeenAgo()}"></span> on <span
+                        th:text="${profile.getLastServer()}"></span>
+                </div>
+
+                <div th:if="${!profile.isOnline() && profile.getActiveBan() != null}" th:with="ban=${profile.getActiveBan()}">
+                    BANNED
+                </div>
+
+                <div th:if="${profile.isOnline()}">
+                    Currently online on <span th:text="${profile.getLastServer()}"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" th:if="${!badges.isEmpty()}">
+            <div class="card-body card-socials">
+                <a th:each="badge: ${badges}" data-bs-toggle="tooltip" data-bs-placement="top" th:title="${badge.getDescription()}">
+                    <img th:src="@{'/images/badges/' + ${badge.getIcon()}}" style="width: 25px">
+                </a>
+            </div>
+        </div>
+
+        <div class="card" th:if="${!profile.getActiveSocials().isEmpty()}">
+            <div class="card-body card-socials">
+                <a th:each="social: ${profile.getActiveSocials()}"
+                   th:href="${social == social.DISCORD ? '#' : social.getStartingUrl() + profile.getSocial(social)}"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   th:title="${social.getStartingUrl() + profile.getSocial(social)}">
+                    <i th:class="${social.getIcon()}"
+                       th:style="'color: ' + ${social.getHexColor()}">
+                    </i>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="card" th:if="${!profile.getFriends().isEmpty()}">
+            <div class="card-header">
+                Friends
+            </div>
+            <div class="card-body card-friends">
+                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                   th:each="friend: ${profile.getFriends()}"
+                   th:with="friendName=${friend.getOtherName(profile.getUuid())}"
+                   th:href="${'/u/' + friendName}"
+                   th:title="${friendName}">
+                    <img th:src="${'https://mc-heads.net/avatar/' + friendName}">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" th:each="item: ${userNavItems}" th:if="${item.canView(sessionProfile)}">
+                        <a class="nav-link"
+                           th:classappend="${item.matches(#httpServletRequest.requestURI) ? 'active': ''}"
+                           th:text="${item.getLabel()}"
+                           th:href="${item.getUrls().get(0)}">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card-body">
+                <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                    <div th:replace="${'profile/' + page}"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

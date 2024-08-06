@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">MobPvP</title>
+
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/images/favicon/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/images/favicon/favicon-16x16.png}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body id="page-index">
+<div id="view">
+    <div id="header">
+        <div class="header-bg"></div>
+        <div class="header-logo header-bg">
+            <img th:src="@{/images/hcgames-white-red.png}">
+        </div>
+        <nav class="navbar navbar-expand-lg bg-transparent">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <th:block th:each="item, itemStat : ${navItems}">
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   th:classappend="${item.matches(#httpServletRequest.requestURI) ? 'active': ''}"
+                                   th:href="@{${item.urls.get(0)}}" th:text="${item.label}"></a>
+                            </li>
+                        </th:block>
+                    </ul>
+
+                    <div id="styleToggle">
+                        <div class="light-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
+                            </svg>
+                        </div>
+                        <div class="dark-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                 stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <form class="d-flex search" role="search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input class="form-control me-2 dropdown show" data-bs-toggle="dropdown"
+                               type="search" placeholder="Search" aria-label="Search" id="searchInput"/>
+                        <ul class="dropdown-menu" id="searchResults">
+                        </ul>
+                    </form>
+
+                    <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+                    <div class="user-btn signed-in dropdown" th:if="${sessionProfile != null}">
+                        <div class="dropdown-toggle" id="accountDropdown" data-bs-toggle="dropdown"
+                             aria-expanded="false">
+                            <div class="user avatar xm">
+                                <img th:src="${'https://mc-heads.net/body/' + sessionProfile.getName()}">
+<!--                                <div class="notification">123</div>-->
+                            </div>
+                            <div class="username" th:text="${sessionProfile.getName()}"></div>
+                            <i class="fa-solid fa-angle-down"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                            <li><h6 class="dropdown-header">Account</h6></li>
+                            <li><a class="dropdown-item" href="/panel"
+                                   th:if="${sessionProfile.hasPermission('website.admin.view')}">
+                                Panel
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="${'/u/' + sessionProfile.getName()}">Profile</a></li>
+                            <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                            <li><a class="dropdown-item" href="/notifications">Notifications</a></li>
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+                            <li><a class="dropdown-item" href="/support/tickets">Tickets</a></li>
+                            <li><a class="dropdown-item" href="/applications">Applications</a></li>
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="user-btn" th:if="${sessionProfile == null}">
+                        <a href="/login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="MobPvP">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main--wrapper">
+        <div layout:fragment="content" th:class="${'container' + (vertContainer == null ? '' : ' vert')}"></div>
+
+        <div class="error-container success" th:if="${successMessage != null}">
+            <div class="alert alert-danger fade-in fade-out show"
+                 style="font-size: 12px; background-color: #47a947; color: white"
+                 role="alert" th:text="${successMessage.message()}">
+            </div>
+        </div>
+
+        <div class="error-container" th:if="${errorMessage != null}">
+            <div class="alert alert-danger fade-in fade-out show"
+                 style="font-size: 12px"
+                 role="alert" th:text="${errorMessage.message()}">
+            </div>
+        </div>
+    </div>
+
+    <div id="foot">
+        <div class="container">
+            <div class="top">
+                <div class="left">
+                    <h1>MobPvP</h1>
+                </div>
+                <div class="right">
+                    <a href="/">Home</a>
+                    <a href="/staff">Staff</a>
+                    <a href="/rules">Rules</a>
+                    <a href="/policy">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="middle">
+                <div class="text">
+                    <span>Copyright 2024 <strong>MobPvP</strong></span>
+                    <br/>
+                    We are not afiliated with Mojang, AB.
+                </div>
+                <section class="watermark">
+                    <a href="https://benjdzn.com/">
+                        <span id="benj"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 107.2 53.9" style="enable-background: new 0 0 107.2 53.9;" xml:space="preserve"><g id="XMLID_2_"><path id="XMLID_7_" class="st0" d="M38.8,32.2c0.9-1.7,1.8-3.9,1.3-5.9c-0.5-1.7-2-2.6-3.7-2.9c0.8-0.4,1.6-0.9,2.4-1.4c2.8-1.8,5.4-3.8,7.9-6c2.3-2.1,5.1-4.6,5-7.9c-0.1-3.3-3-5.7-6.1-6.3c-3.4-0.8-7.2-0.3-10.6,0.2c-7.1,1.2-13.9,4-20.3,7.3c-3.2,1.6-6.4,3.4-9.2,5.7C3,16.9,0.2,20,0,23.3c-0.1,0.9,1.1,1.2,1.7,0.7c1-0.8,1.8-1.8,2.7-2.7c0.9-0.9,1.8-1.9,2.8-2.7c2.2-1.7,4.5-3.2,6.9-4.6c5.3-2.9,10.9-5.5,16.8-7.1c0.5-0.1,0.9-0.2,1.4-0.4c-0.5,0.9-1,1.8-1.3,2.6c-0.7,1.7-1.5,3.4-2.1,5.2c-1.3,3.6-2.5,7.2-3.5,10.8c0,0.2-0.1,0.3-0.1,0.5c-3.7,1.5-7.5,3.6-10.3,6.3c-0.9,0.9,0.2,2.1,1.3,1.6c2.2-1,4.3-2.1,6.5-3c0.4-0.2,0.9-0.4,1.3-0.5c-0.5,2-1,3.9-1.4,5.9c-0.4,1.8-0.8,3.7-1,5.5c-0.2,1.2-0.4,2.5-0.5,3.8c-0.5,0.4-1,0.7-1.5,1.1c-1.8,1.3-3.9,2.2-5.7,3.5c-0.6,0.4-0.2,1.3,0.5,1.1c2.5-0.6,5-1.8,7.3-3.1c0.2,0,0.3-0.1,0.4-0.2c1.1-0.7,2.2-1.3,3.3-2c3.5-2.3,6.8-5.1,9.6-8.3C36.4,35.7,37.8,34,38.8,32.2z M32.5,15.9c0.7-1.7,1.3-3.5,1.9-5.2c0.5-1.4,1.1-3.2,1.2-4.8c1.5-0.2,2.9-0.4,4.4-0.5c2.2-0.1,6.4-0.4,7.4,2.2c0.9,2.2-2.6,4.7-4,5.9c-2.1,1.9-4.3,3.7-6.7,5.3c-2.2,1.6-4.5,3-6.9,4.4C30.8,20.7,31.6,18.3,32.5,15.9z M25.1,42.1c-0.5,0.4-1,0.8-1.5,1.2c0.1-0.3,0.2-0.5,0.3-0.8c0.6-1.7,1.1-3.5,1.7-5.3c0.8-2.9,1.7-5.7,2.6-8.6c0.5-0.1,0.9-0.3,1.4-0.4c1.1-0.3,2.2-0.6,3.3-0.9c0.7-0.2,2.9-0.6,3.4,0.2c0.1,0.2-0.5,1.7-0.6,2.1c-0.4,1-1,2-1.6,2.8C31.6,36.1,28.4,39.3,25.1,42.1z"></path> <path
+                                id="XMLID_4_" class="st0"
+                                d="M105.7,4.5c-0.2,0-0.4-0.1-0.6-0.1c0,0,0,0,0,0c0,0,0,0-0.1,0c-8-1-16-0.1-24,1.3c0.2-1.7,0.3-3.3,0.3-5c0-0.8-1.2-1-1.4-0.2c-0.5,1.9-1,3.8-1.5,5.6c-0.6,0.1-1.1,0.2-1.7,0.3c-4.7,0.9-9.5,2-14.3,2.1c-1.6,0-4.8,0.4-5.1-1.8c-0.2-1.9,1.7-3.6,2.9-4.8c0.3-0.3-0.1-0.8-0.5-0.6c-1.9,0.9-3.6,1.9-4.6,3.8c-0.8,1.7-0.7,3.8,0.6,5.2c1.7,1.9,4.8,2,7.1,2c2.8,0.1,5.6-0.4,8.4-0.8c1.9-0.3,3.9-0.7,5.8-1c-0.3,0.9-0.5,1.7-0.8,2.6c-1.3,4.3-2.9,8.5-4.3,12.8c-0.1,0.2-0.1,0.4-0.2,0.6c-0.1-0.5-0.1-1-0.3-1.5c-0.1-0.6-1-0.6-1.2,0c-0.2,0.6-0.3,1.3-0.5,1.9c-0.3,0.9-0.7,1.6-1.1,2.5c-0.5,0.9-0.9,2-1.7,2.7c-0.7,0.7-1.1,0.4-1.2-0.6c-0.1-1,0.3-2.2,0.5-3.1c1.2-4.2,3.4-8.1,4.2-12.5c0.2-1.1-0.5-2.4-1.8-2.3c-4.5,0.3-6.9,4.2-9.1,7.6c-0.2,0.4-0.5,0.7-0.7,1.1c0.6-1.9,1.2-3.8,1.7-5.6c0.6-2-2.5-3.4-3.5-1.5c-2.3,4.2-4.3,8.4-6.5,12.6c-0.5,1-3.7,7-5.5,5.9c1.7-1.8,3.1-3.9,4.3-6.1c1.2-2.3,3-5,3.2-7.6c0.3-3.2-3-5-5.7-3.6c-2.6,1.2-4.1,4.4-5.1,6.9c-1.1,2.6-1.7,5.7-1.4,8.6c0.1,1.1,0.4,2.3,1,3.3c-1,1-2.2,2-3.5,2.7c-0.5,0.3-0.1,1,0.4,0.8c1.4-0.6,2.7-1.4,3.9-2.3c0.6,0.6,1.2,1,2.1,1.3c2.4,0.7,4.7-0.9,6.2-2.7c0.6-0.7,1.2-1.4,1.7-2.2c-0.1,0.7-0.2,1.4-0.3,2.1c-0.1,0.9,0.8,1.7,1.6,1.8c1,0.1,1.7-0.4,2-1.3c1.6-3.7,3.9-7.3,6.1-10.7c1-1.6,2-3.2,3.2-4.7c0.3-0.3,0.5-0.6,0.8-0.9c-0.6,1.7-1.3,3.3-2,5c-1.1,2.7-2.5,6.3-1.7,9.3c0.9,3,4.4,4.1,6.6,1.7c0.1-0.2,0.3-0.3,0.4-0.5c-0.5,1.6-0.9,3.1-1.3,4.7c0,0,0-0.1-0.1-0.1c-2.3-4-6.8-3.1-10.3-1.6c-4.3,1.8-8.6,3.7-12.8,5.5c-1.6,0.7-3.6,1.6-5.4,0.9c-1.5-0.7-1.5-3.1-2-4.5c-0.4-0.9-1.4-1.1-2-0.3c-2.7,3.5-0.6,8.1,3.6,9.1c2.1,0.5,4.3,0,6.3-0.8c2.2-0.9,4.4-1.9,6.5-2.8c2.1-0.9,4.2-1.8,6.3-2.7c1.3-0.6,4-2.2,5.5-1.5c1.3,0.6,1.4,3.2,1.6,4.3c0.4,2.4,0.5,4.8,0.3,7.1c-0.1,1.1,1,2.1,2.1,2.1c1.3,0,2-1,2.2-2.1c1.1-8.7,3.8-17.1,6.3-25.5c1.6-5.3,3.2-10.8,4.2-16.3c3.1-0.5,6.1-1,9.2-1.4c-1.6,1.2-2.9,2.6-3.3,4.3c-0.2,0.8,0.6,1.9,1.5,1.5c1.4-0.5,2.5-1.5,3.8-2.2c1.3-0.8,2.8-1.6,4.3-2.1c2.9-1.2,6.1-1.6,9.2-1.4C107.5,8.9,108.1,4.8,105.7,4.5z M44.8,28c0.4-2.3,1.2-4.4,2.5-6.3c0.4-0.6,1.1-1.9,1.8-2.1c1-0.3,0.4,1.2,0.3,1.6c-0.6,2-1.4,4-2.3,5.9c-0.7,1.5-1.5,3-2.5,4.4C44.5,30.3,44.6,29,44.8,28z"></path><path
+                                id="XMLID_3_" class="st0"
+                                d="M77.3,32.4c-0.5,0-1,0.2-1.3,0.5c-0.3,0.3-0.6,0.8-0.6,1.3c0,0.5,0.2,1,0.5,1.3c0.4,0.3,0.8,0.5,1.3,0.6c0.5,0,1-0.2,1.3-0.5c0.3-0.3,0.6-0.8,0.6-1.3c0-0.5-0.2-1-0.5-1.3C78.3,32.7,77.8,32.4,77.3,32.4z"></path></g></svg></span>
+                    </a>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
+<script th:if="${newThread != null}"
+        src="https://cdn.tiny.cloud/1/tqa6hncq4otrx3spd8acqz9p5hlkbeixngm8u68w3pzfdvph/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
+<script th:if="${newThread != null}">
+    let darkMode = localStorage.getItem("theme") === 'dark';
+    const tinymceConfig = {
+        selector: 'textarea#tiny',
+        skin: darkMode ? 'oxide-dark' : 'oxide',
+        plugins: 'quickbars image lists code table codesample link',
+        toolbar: 'undo redo | blocks | forecolor backcolor | bold italic underline strikethrough | link image blockquote codesample | align bullist numlist | code',
+        menubar: false,
+    };
+
+    if (darkMode) {
+        tinymceConfig.skin_url = '/css/tiny-dark';
+        tinymceConfig.content_css = '/css/tiny-dark/content/dark.css';
+    }
+
+    tinymce.init(tinymceConfig);
+
+    setInterval(function () {
+        let icon = document.querySelector("#content > div > div.card-body > form > div.col.mb-3 > div > div.tox-editor-container > div.tox-statusbar > div.tox-statusbar__text-container.tox-statusbar__text-container--flex-start")
+        icon.style.display = "none"
+    }, 10);
+</script>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+<script th:src="@{/app.js}"></script>
+<script th:src="@{/search.js}"></script>
+</body>
+</html>

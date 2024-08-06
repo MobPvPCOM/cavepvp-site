@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Support</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"
+                            th:text="${ticketPage != null ? 'Support' : 'Applications'}"></li>
+                    </ol>
+                </nav>
+            </div>
+
+            <a href="/support" class="server-status cta" style="max-width: 350px"
+               th:text="'Create a' + ${ticketPage != null ? ' ticket' : 'n application'}"></a>
+        </div>
+
+        <div class="card forum-list policy tickets" th:if="${tickets.isEmpty()}">
+            <p style="margin-top: 1rem; text-align: center">
+                <b>You do not have any <span th:text="${ticketPage != null ? 'tickets' : 'applications'}"></span></b>
+                <br>
+                You can create a ticket by clicking the <span style="font-weight: 600" th:text="${ticketPage != null ? 'create ticket' : 'create an application'}"></span> button above.
+            </p>
+        </div>
+
+        <div class="card forum-list" th:if="${!tickets.isEmpty()}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="ticket-status-title">Status</th>
+                    <th class="ticket-title text-left" th:text="${ticketPage != null ? 'Ticket' : 'Application'}"></th>
+                    <th>Replies</th>
+                    <th class="ticket-last-reply text-left">Last Reply</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ticket: ${tickets}">
+                    <th><span class="status-label"
+                              th:style="${'background-color: ' + ticket.getStatus().getWebColor()}"
+                              th:text="${ticket.getStatus().getDisplayName()}">
+                        </span></th>
+
+                    <th class="text-left">
+                        <a th:href="${'/ticket/' + ticket.getId()}" th:text="${ticket.getWebDisplay()}"></a>
+                        <div class="meta">
+                                <span>By <span th:style="${'color:' + ticket.getAuthorWebColor()}"
+                                               th:text="${ticket.getAuthorName()}"></span>,
+                                </span>
+                            <span th:text="${ticket.getPostedAgo()}"></span>
+                        </div>
+                    </th>
+
+                    <th th:text="${ticket.getReplies().size()}"></th>
+
+                    <th class="ticket-last-reply text-left" th:if="${ticket.getLastReply() != null}"
+                        th:with="lastReply=${ticket.getLastReply()}">
+                        <a th:href="${'/u/' + lastReply.getAuthorName()}">By <span
+                                th:style="${'color:' + lastReply.getAuthorWebColor()}"
+                                th:text="${lastReply.getAuthorName()}"></span>,</a>
+                        <div class="meta">
+                            <span th:text="${lastReply.getPostedAgo()}"></span>
+                        </div>
+                    </th>
+
+                    <th class="ticket-last-reply text-left" th:if="${ticket.getLastReply() == null}">
+                        <div class="meta">
+                            <a>Never</a>
+                        </div>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

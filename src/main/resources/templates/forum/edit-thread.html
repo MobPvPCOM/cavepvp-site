@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+>
+<head>
+    <title>Edit Thread</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content" class="new-ticket-wrapper">
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/forums">Forums</a></li>
+                        <li class="breadcrumb-item"><a th:href="${'/forum/' + thread.getForum()}" th:text="${thread.getForumName()}"></a></li>
+                        <li class="breadcrumb-item">
+                            <a th:href="${'/thread/' + thread.getId()}" aria-current="page" th:text="${thread.getTitle()}"></a>
+                        </li>
+                        <li class="breadcrumb-item active"><a>Edit Thread</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header text-start">Edit Thread</div>
+            <div class="card-body">
+                <form th:action="@{/thread/edit}" method="post">
+                    <input type="hidden" name="threadId" th:value="${thread.getId()}">
+
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" id="title" name="title" class="form-control" th:value="${thread.getTitle()}">
+                        </div>
+                    </div>
+
+                    <div class="row" th:if="${sessionProfile != null && sessionProfile.hasPermission('website.thread.image.edit')}">
+                        <div class="col mb-3">
+                            <label for="imageUrl" class="form-label">Image Link</label>
+                            <input type="text" id="imageUrl" name="imageUrl" class="form-control" th:value="${thread.getImageUrl()}">
+                        </div>
+                    </div>
+
+                    <div class="col mb-3">
+                        <label for="tiny" class="form-label">Message</label>
+                        <textarea id="tiny" name="body" th:text="${thread.getBody()}"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block login-btn">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

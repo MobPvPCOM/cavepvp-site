@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+>
+<head>
+    <title th:text="${forum.getName()}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content" class="forum-wrap" th:with="admin=${sessionProfile != null && sessionProfile.hasPermission('website.forum.manage')}">
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="/forums">Forums</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${forum.getName()}"></li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="dropdown">
+                <a class="server-status cta"
+                   style="max-width: 175px; background: #d58512 !important;"
+                   th:if="${admin}"
+                   data-bs-toggle="dropdown">
+                    Options
+                    <i class="fa-solid fa-caret-down" style="margin-left: 5px"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="${'#editForum'}" data-bs-toggle="modal">Edit Forum</a>
+                    <a class="dropdown-item" th:href="${'#deleteForum'}" data-bs-toggle="modal">Delete Forum</a>
+                </div>
+            </div>
+
+            <a th:href="${'/thread/new?forum=' + forum.getId()}" class="server-status cta" th:if="${forum.canPost(sessionProfile)}"
+               th:style="${'max-width: ' + (admin ? '175px' : '350px')}">Create Thread</a>
+
+            <div class="modal fade" th:id="${'deleteForum'}" style="transform: translateY(250px);" th:if="${admin}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Delete Forum
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <form th:action="@{'/forums/delete/' + ${forum.getId()}}" method="post">
+                            <div class="modal-body">
+                                Are you sure want to delete this forum?
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" style="background-color: green !important">Confirm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="${'editForum'}" style="transform: translateY(250px);" th:if="${admin}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Edit Forum
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <form th:action="@{'/forums/edit/' + ${forum.getId()}}" method="post">
+                            <div class="modal-body">
+                                <label for="name" class="form-label">Forum Name</label>
+                                <input type="text" id="name" name="name" class="form-control" th:value="${forum.getName()}" required>
+
+                                <label for="weight" class="form-label" style="margin-top: 15px">Weight</label>
+                                <input type="number" id="weight" name="weight" class="form-control" th:value="${forum.getWeight()}" required>
+
+                                <label for="description" class="form-label" style="margin-top: 15px">Description</label>
+                                <input type="text" id="description" name="description" class="form-control" th:value="${forum.getDescription()}" required>
+
+                                <label for="permission" class="form-label" style="margin-top: 15px">Permission</label>
+                                <input type="text" id="permission" name="permission" class="form-control" th:value="${forum.getPermission()}">
+
+                                <div class="form-check" style="display: flex; margin-top: 15px; padding-left: 0">
+                                    <label for="locked" class="form-check-label" style="margin-right: 10px">Locked</label>
+                                    <input type="checkbox" id="locked" name="locked" class="form-check-input" style="margin-left: 0" th:value="${forum.isLocked()}">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" style="background-color: green !important">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card forum-list" style="background: none; box-shadow: none;">
+            <div class="card-header left rounded" th:text="${forum.getName()}" style="margin-bottom: 3px">
+            </div>
+
+            <ol class="card-body forum" th:if="${threads.isEmpty()}" style="margin-bottom: 0">
+                <p style="margin-top: 1rem; text-align: center;">
+                    <b>There are currently no threads</b>
+                    <br>
+                    You can create a thread by clicking the <span style="font-weight: 600">create thread</span> button above.
+                </p>
+            </ol>
+
+            <ol class="list-group list-group-flush" th:if="${!threads.isEmpty()}">
+                <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group"
+                    th:each="thread: ${threads}" th:styleappend="${thread.isPinned() ? 'border: 1px solid #7b4e4e !important' : ''}">
+                    <!--/*@thymesVar id="thread" type="com.mobpvp.site.model.forum.ForumThread"*/-->
+
+                    <div class="node-icon">
+                        <div class="avatar xm">
+                            <img th:src="${'https://mc-heads.net/body/' + thread.getAuthorName()}">
+                        </div>
+                    </div>
+
+                    <div class="ms-lg-3 me-auto flex-grow-1 category-node">
+                        <a th:href="${'/thread/' + thread.getId()}" class="fw-bold" th:text="${thread.getTitle()}"></a>
+                        <div class="user-meta flex">
+                            <div class="avatar">
+                                <img th:src="${'https://mc-heads.net/avatar/' + thread.getAuthorName() + '/32'}"/>
+                            </div>
+                            <a href="#"
+                               th:style="${'color: ' + thread.getAuthorWebColor() + ' !important'}"
+                               th:text="${thread.getAuthorName()}">
+                            </a>
+
+                            <span th:text="${thread.getPostedAgo()}"></span>
+                        </div>
+                    </div>
+                    <div class="node-user me-auto d-flex justify-content-start align-items-center text-align-right"
+                         th:if="${thread.getLastReply() != null}"
+                         th:with="lastReply=${thread.getLastReply()}">
+                        <div class="avatar xm">
+                            <img th:src="${'https://mc-heads.net/body/' + lastReply.getAuthorName()}">
+                        </div>
+
+                        <div>
+                            <a th:href="${'/thread/' + thread.getId()}" class="fw-bold node-title">Last Reply</a>
+                            <div class="card-feed-meta">
+                                <a th:href="${'/u/' + lastReply.getAuthorName()}"
+                                   th:style="${'color: ' + lastReply.getAuthorWebColor()}"
+                                   th:text="${lastReply.getAuthorName()}"></a> 1 day ago
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ms-lg-3 me-auto node-meta">
+                        <div class="card-feed-meta">
+                            <i class="fa-regular fa-eye"></i>
+                            <span th:text="${thread.getSeenBy().size()}"></span> Views
+                        </div>
+                        <div class="card-feed-meta">
+                            <i class="fa-regular fa-comments"></i>
+                            <span th:text="${thread.getReplies().size()}"></span> Replies
+                        </div>
+                    </div>
+                </li>
+            </ol>
+
+            <nav aria-label="Page navigation example" th:if="${!threads.isEmpty()}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${previousPage == currentPage ? 'disabled' : ''}">
+                        <a class="page-link" th:href="${previousPage == currentPage ? '' : previousPageUrl}" aria-disabled="true">&laquo;</a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link" th:text="${currentPage}">
+                        </a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${nextPage == currentPage ? 'disabled' : ''}">
+                        <a class="page-link" th:href="${nextPage == currentPage ? '' : nextPageUrl}" aria-disabled="true">&raquo;</a>
+                    </li>
+                </ul>
+                <div class="navigation-meta" th:text="${'You are on page ' + currentPage + '/' + pageCount + '.'}">
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

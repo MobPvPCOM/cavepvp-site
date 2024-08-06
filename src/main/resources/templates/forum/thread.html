@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+>
+<head>
+    <title th:text="${thread.getTitle()}"></title>
+</head>
+<body>
+<div layout:fragment="content" th:with="admin=${sessionProfile != null && sessionProfile.hasPermission('website.thread.manage')}">
+    <div id="content">
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/forums">Forums</a></li>
+                        <li class="breadcrumb-item">
+                            <a th:text="${thread.getForumName()}"
+                               th:href="${'/forum/' + thread.getForumName().toLowerCase()}">
+                            </a>
+                        </li>
+
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${thread.getTitle()}"></li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="dropdown">
+                <a class="server-status cta"
+                   style="max-width: 175px; background: #d58512 !important;"
+                   th:if="${admin}"
+                   data-bs-toggle="dropdown">
+                    Staff Options
+                    <i class="fa-solid fa-caret-down" style="margin-left: 5px"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="'#pinThread'"
+                       data-bs-toggle="modal" th:if="${admin}"
+                       th:text="${(thread.isPinned() ? 'Unpin Thread' : 'Pin thread')}"></a>
+
+                    <a class="dropdown-item" th:href="'#lockThread'"
+                       data-bs-toggle="modal" th:if="${thread.canLock(sessionProfile)}"
+                       th:text="${(thread.isLocked() ? 'Unlock Thread' : 'Lock thread')}"></a>
+
+                    <a class="dropdown-item" th:href="${'/thread/' + thread.getId() + '/edit'}"
+                       th:if="${thread.canEdit(sessionProfile)}">Edit Thread</a>
+
+                    <a class="dropdown-item" th:href="'#modal-delete-' + ${thread.getId()}"
+                       data-bs-toggle="modal" th:if="${thread.canDelete(sessionProfile)}">Delete Thread</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="post-view flex">
+            <div id="content" class="post-card card">
+                <div class="card-header flex left">
+                    <div class="avatar">
+                        <img th:src="${'https://mc-heads.net/body/' + thread.getAuthorName()}">
+                    </div>
+
+                    <div class="post-title">
+                        <h1 th:text="${thread.getTitle()}"></h1>
+                        <div class="card-feed-meta">
+                            <a th:href="${'/u/' + thread.getAuthorName()}"
+                               th:text="${thread.getAuthorName()}"
+                               th:style="${'color: ' + thread.getAuthorWebColor() + ' !important'}">
+                            </a>
+
+                            <a style="color: dimgrey" th:text="${' ' + thread.getPostedAgo()}"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body card-text">
+                    <a th:utext="${thread.getContent()}"></a>
+                    <div class="node-controls">
+                        <div class="node-control-inner" th:if="${sessionProfile != null}">
+                            <a href="#"><i class="fa-solid fa-triangle-exclamation"></i> Report</a>
+                        </div>
+
+                        <div class="node-control-inner nci-user" th:if="${sessionProfile != null}">
+                            <a th:href="${'/thread/' + thread.getId() + '/edit'}"
+                               th:if="${thread.canEdit(sessionProfile)}">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </a>
+
+                            <a th:href="'#modal-delete-' + ${thread.getId()}"
+                               data-bs-toggle="modal"
+                               th:if="${thread.canDelete(sessionProfile)}"
+                            ><i class="fa-solid fa-trash-can"></i> Delete</a>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" th:if="${thread.canDelete(sessionProfile)}"
+                         th:id="'modal-delete-' + ${thread.getId()}" style="transform: translateY(250px);">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Delete Thread
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure want to delete this thread?
+                                </div>
+
+                                <form class="form-remove-grant" th:action="@{/thread/delete}" method="post">
+                                    <input type="hidden" name="threadId" th:value="${thread.getId()}">
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Confirm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" th:if="${thread.canLock(sessionProfile)}" th:id="'lockThread'" style="transform: translateY(250px);">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <span th:text="${(thread.isLocked() ? 'Unlock' : 'Lock') + ' Thread'}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <span th:text="'Are you sure want to ' + ${thread.isLocked() ? 'unlock' : 'lock'} + ' this thread?'"></span>
+                                </div>
+
+                                <form class="form-remove-grant" th:action="@{'/thread/lock/' + ${thread.getId()}}" method="post">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Confirm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" th:if="${sessionProfile != null && sessionProfile.hasPermission('website.thread.manage')}" th:id="'pinThread'" style="transform: translateY(250px);">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <span th:text="${(thread.isPinned() ? 'Unpin' : 'Pin') + ' Thread'}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <span th:text="'Are you sure want to ' + ${thread.isPinned() ? 'unpin' : 'pin'} + ' this thread?'"></span>
+                                </div>
+
+                                <form class="form-remove-grant" th:action="@{'/thread/pin/' + ${thread.getId()}}" method="post">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Confirm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-feed post-view">
+            <div class="card-feed-action" th:if="${sessionProfile != null}">
+                <div class="avatar">
+                    <img th:src="${'https://mc-heads.net/body/' + sessionProfile.getName()}">
+                </div>
+
+                <form class="card-feed-input" th:if="${thread.isLocked()}">
+                    <input type="text" class="form-control" placeholder="This thread is locked..." readonly>
+                </form>
+
+                <form class="card-feed-input" th:action="@{'/reply/' + ${thread.getId()}}" method="post" th:if="${!thread.isLocked()}">
+                    <textarea class="form-control" id="body" name="body" placeholder="Type a message..."></textarea>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+
+            <div class="card-feed-list">
+                <ol class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="reply: ${thread.getReplies()}">
+                        <div class="comment">
+                            <div class="avatar xm">
+                                <img th:src="${'https://mc-heads.net/body/' + reply.getAuthorName()}"/>
+                            </div>
+                            <div class="ms-lg-3 me-auto">
+                                <div class="fw-bold" th:text="${reply.getBody()}"></div>
+                                <div class="card-feed-meta">
+                                    <a th:href="${'/u/' + reply.getAuthorName()}"
+                                       th:text="${reply.getAuthorName()}"
+                                       th:style="${'color: ' + reply.getAuthorWebColor()}">
+                                    </a>
+                                    <span th:text="${' ' + reply.getPostedAgo()}"></span>
+                                </div>
+                            </div>
+                            <div class="node-controls">
+                                <div class="node-control-inner nci-user">
+                                    <a th:href="'#modal-reply-' + ${reply.getId()}"
+                                       data-bs-toggle="modal"
+                                    ><i class="fa-solid fa-reply"></i> Reply</a>
+
+                                    <a th:href="'#modal-delete-' + ${reply.getId()}"
+                                       data-bs-toggle="modal"
+                                       th:if="${reply.canDelete(sessionProfile)}"
+                                    ><i class="fa-solid fa-trash-can"></i> Delete</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comment comment--reply" th:each="subReply: ${reply.getReplies()}">
+                            <div class="avatar xm">
+                                <img th:src="${'https://mc-heads.net/body/' + subReply.getAuthorName()}"/>
+                            </div>
+                            <div class="ms-lg-3 me-auto">
+                                <div class="fw-bold" th:utext="${subReply.getContent()}"></div>
+
+                                <a th:href="${'/u/' + subReply.getAuthorName()}"
+                                   th:text="${subReply.getAuthorName()}"
+                                   th:style="${'color: ' + subReply.getAuthorWebColor()}">
+                                </a>
+                                <span th:text="${' ' + subReply.getPostedAgo()}"></span>
+                            </div>
+                            <div class="node-controls">
+                                <div class="node-control-inner nci-user">
+                                    <a th:href="'#modal-reply-' + ${reply.getId()}"
+                                       data-bs-toggle="modal"
+                                    ><i class="fa-solid fa-reply"></i> Reply</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" th:if="${reply.canDelete(sessionProfile)}"
+                             th:id="'modal-delete-' + ${reply.getId()}" style="transform: translateY(250px);">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        Delete Reply
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure want to delete this reply?
+                                    </div>
+
+                                    <form class="form-remove-grant" th:action="@{/reply/delete}" method="post">
+                                        <input type="hidden" name="replyId" th:value="${reply.getId()}">
+                                        <input type="hidden" name="parentId" th:value="${reply.getParentThreadId()}">
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" th:id="'modal-reply-' + ${reply.getId()}"
+                             style="transform: translateY(250px);">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        Reply to<span
+                                            th:style="${'color: ' + reply.getAuthorWebColor() + '; padding-left: 4px;'}"
+                                            th:text="${' ' + reply.getAuthorName()}"></span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <form class="form-reply" th:action="@{'/reply/' + ${thread.getId()}}" method="post">
+                                        <input type="hidden" name="replyId" th:value="${reply.getId()}">
+
+                                        <div class="modal-body">
+                                            <textarea name="body" required></textarea>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">Post</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

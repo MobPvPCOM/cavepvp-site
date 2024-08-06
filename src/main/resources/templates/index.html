@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+        <div class="alert alert-light d-none" role="alert">
+            Example Area
+        </div>
+
+        <div id="news-collection" th:if="${latestAnnouncement != null}">
+            <div class="news-post large">
+                <a th:href="${'/thread/' + latestAnnouncement.getId()}" class="news-image">
+                    <img th:src="${!latestAnnouncement.getImageUrl().isEmpty() ? latestAnnouncement.getImageUrl() : 'https://assets.originrealms.com/cdn-cgi/image/format=webp,quality=90,fit=scale-down,width=1920/2022/03/Badlands_Blog.jpg'}">
+                </a>
+
+                <div class="news-text">
+                    <a th:href="${'/thread/' + latestAnnouncement.getId()}" class="news-title">
+                        <th:block th:utext="${latestAnnouncement.getTitle()}"/>
+                        <span>Latest</span>
+                    </a>
+
+                    <div class="news-desc" th:utext="${latestAnnouncement.getContent()}">
+                    </div>
+
+                    <div class="user-meta">
+                        <div class="avatar">
+                            <img th:src="${'https://mc-heads.net/avatar/' + latestAnnouncement.getAuthorName() + '/32'}">
+                        </div>
+
+                        <a th:href="${'/u/' + latestAnnouncement.getAuthorName()}"
+                           th:text="${latestAnnouncement.getAuthorName()}"
+                           th:style="${'color: ' + latestAnnouncement.getAuthorWebColor() + ' !important'}">
+                        </a>
+
+                        <span th:text="${latestAnnouncement.getPostedAgo()}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="news-collection" class="small two" th:if="${announcements != null && announcements.size() > 1}">
+            <div class="news-post" th:each="announcement: ${announcements}">
+                <a th:href="${'/thread/' + announcement.getId()}" class="news-image">
+                    <img th:src="${!announcement.getImageUrl().isEmpty() ? announcement.getImageUrl() : 'https://assets.originrealms.com/cdn-cgi/image/format=webp,quality=90,fit=scale-down,width=1920/2022/03/Badlands_Blog.jpg'}">
+                </a>
+                <div class="news-text">
+                    <a th:href="${'/thread/' + announcement.getId()}" class="news-title"
+                       th:text="${announcement.getTitle()}">
+                    </a>
+
+                    <div class="news-desc" th:utext="${announcement.getContent()}">
+                    </div>
+
+                    <div class="user-meta">
+                        <div class="avatar">
+                            <img th:src="${'https://mc-heads.net/avatar/' + announcement.getAuthorName() + '/32'}">
+                        </div>
+
+                        <a th:href="${'/u/' + announcement.getAuthorName()}"
+                           th:text="${announcement.getAuthorName()}"
+                           th:style="${'color: ' + latestAnnouncement.getAuthorWebColor() + ' !important'}">
+                        </a>
+
+                        <span th:text="${announcement.getPostedAgo()}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar">
+        <div class="server-status">MOBPVP.COM <div class="count" th:text="${playerCount} + ' ONLINE'"></div></div>
+        <div id="discord" class="dark-only">
+            <iframe src="https://discord.com/widget?id=895404766400757760&theme=dark" width="100%" height="350" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        </div>
+        <div id="discord" class="light-only">
+            <iframe src="https://discord.com/widget?id=895404766400757760&theme=light" width="100%" height="350" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        </div>
+        <div id="twitter" class="light-only">
+            <a class="twitter-timeline" data-height="330" href="https://twitter.com/MobPvP?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        <div id="twitter" class="dark-only">
+            <a class="twitter-timeline" data-height="330" data-theme="dark" href="https://twitter.com/MobPvP?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </div>
+</div>
+</body>
+</html>

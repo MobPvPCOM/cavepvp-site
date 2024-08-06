@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Register</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content" class="login-wrapper">
+        <div class="card">
+            <div class="card-header">Create an account</div>
+            <div class="card-body">
+                <form th:action="@{'/register/' + ${token}}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Email address</label>
+                        <input type="email" class="form-control" aria-describedby="emailHelp" th:placeholder="${email}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" th:placeholder="${username}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block login-btn">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="return-to">
+            <a href="/login">Already have an account? Login <span>here</span>.</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

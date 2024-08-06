@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Badges</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Badges</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card forum-list policy tickets" th:if="${badges.isEmpty()}">
+            <p style="margin-top: 1rem; text-align: center">
+                <b>There are no badges</b>
+                <br>
+                You can create a badge by <span style="font-weight: 600">updating the config</span>.
+            </p>
+        </div>
+
+        <div class="card forum-list" th:if="${!badges.isEmpty()}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="ticket-title text-center" style="width: 150px">ID</th>
+                    <th class="ticket-status-title" style="width: 250px">Icon</th>
+                    <th class="ticket-title text-left">Name</th>
+                    <th class="ticket-title text-left">Description</th>
+                    <th class="ticket-title text-center" style="width: 200px">Apply</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="badge: ${badges}">
+                    <th class="text-center" th:text="${badge.getId()}">
+                    </th>
+
+                    <th>
+                        <img style="width: 50px" th:src="@{'/images/badges/' + ${badge.getIcon()}}" alt="Badge Icon">
+                    </th>
+
+                    <th class="text-left">
+                        <a th:text="${badge.getName()}" th:href="${'/badge/view/' + badge.getId()}">
+                        </a>
+                    </th>
+
+                    <th class="text-left" th:text="${badge.getDescription()}">
+                    </th>
+
+                    <th class="text-center">
+                        <a type="button" class="btn btn-green" th:href="${'#giveBadge-' + badge.getId()}" data-bs-toggle="modal">
+                            Give to player
+                        </a>
+                    </th>
+
+                    <div class="modal fade" th:id="'giveBadge-' + ${badge.getId()}"
+                         style="transform: translateY(250px);">
+                        <form th:action="@{/badge/give}" method="post">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        Give Badge
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <label for="uuid" class="form-label">Player UUID</label>
+                                        <input type="text" id="uuid" name="uuid" class="form-control" required>
+                                        <input type="hidden" id="badge" name="badge" class="form-control" th:value="${badge.getId()}">
+                                        <p class="validation-text" id="validationResult"></p>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary confirm" id="confirmButton" style="background-color: green !important">Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const uuidPattern = /^[0-9a-f]{8}(-?[0-9a-f]{4}){3}-?[0-9a-f]{12}$/i;
+
+        // Listen for modal show events on the document level
+        document.addEventListener('show.bs.modal', function (e) {
+            if (e.target.classList.contains('modal')) {
+                // This event is fired for any modal, so we need to make sure it's a badge modal
+                const modal = e.target;
+                const uuidInput = modal.querySelector('.form-control');
+                const confirmButton = modal.querySelector('.btn-primary.confirm');
+                const validationResult = modal.querySelector('.validation-text');
+
+                async function validateUUID() {
+                    const inputValue = uuidInput.value;
+                    if (uuidPattern.test(inputValue)) {
+                        try {
+                            const name = await getName(inputValue);
+                            validationResult.textContent = "Valid UUID | " + name;
+                            confirmButton.disabled = false;
+                        } catch (error) {
+                            validationResult.textContent = "Valid UUID | Error fetching name";
+                            confirmButton.disabled = true;
+                        }
+                    } else {
+                        validationResult.textContent = "Not a valid UUID!";
+                        confirmButton.disabled = true;
+                    }
+                }
+
+                uuidInput.addEventListener('input', validateUUID);
+
+                // You can also trigger the validation when the modal is shown
+                modal.addEventListener('shown.bs.modal', validateUUID);
+            }
+        });
+
+        function getName(uuid) {
+            const apiUrl = `https://playerdb.co/api/player/minecraft/${uuid}`;
+
+            return fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Request failed");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.data || !data.data.player || !data.data.player.username) {
+                        throw new Error("Data not found");
+                    }
+
+                    return data.data.player.username;
+                })
+                .catch(error => {
+                    throw error;
+                });
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Support</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Support</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card forum-list" th:each="category: ${categories}" style="margin-bottom: 20px;">
+            <div class="section-title ticket-creation">
+                <div class="bar"></div>
+                <h1 th:text="${category.getName()}"></h1>
+                <div class="bar"></div>
+            </div>
+
+            <div class="row justify-content-center" style="padding: 0 10px">
+                <div class="col-md-4 ticket-creation"
+                     th:each="type: ${category.getModels()}"
+                     th:if="${type.getShouldDisplay().test(sessionProfile)}">
+                    <a th:text="${type.getFancyName()}" th:href="${type.formatUrl()}"
+                       class="btn btn-primary btn-block ticket-creation-btn d-flex align-items-center justify-content-center">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

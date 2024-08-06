@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+>
+<head>
+    <title>New Thread</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content" class="new-ticket-wrapper">
+        <div class="card">
+            <div class="card-header text-start">Create Thread</div>
+            <div class="card-body">
+                <form th:action="@{/thread}" method="post">
+                    <div class="row">
+                        <div class="col-3 mb-3">
+                            <label class="form-label">Forum</label>
+                            <select class="form-select" name="forumId">
+                                <option th:each="forum: ${forums}"
+                                        th:text="${forum.getName()}"
+                                        th:value="${forum.getId()}"
+                                        th:selected="${forum.getId() == forumId}"
+                                ></option>
+                            </select>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" id="title" name="title" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col mb-3">
+                        <label for="tiny" class="form-label">Message</label>
+                        <textarea id="tiny" name="body"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block login-btn">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

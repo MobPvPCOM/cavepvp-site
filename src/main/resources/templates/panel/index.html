@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Admin Panel</title>
+</head>
+<body>
+<div layout:fragment="content" th:if="${sessionProfile != null && sessionProfile.hasPermission('website.admin.view')}">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Admin Panel</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card forum-list">
+            <div class="section-title ticket-creation">
+                <div class="bar"></div>
+                <h1>Staff Panel</h1>
+                <div class="bar"></div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-4 ticket-creation" th:each="item: ${items}" th:if="${item.canView(sessionProfile)}">
+                    <a th:href="${item.getUrls().get(0)}" th:text="${item.getLabel()}"
+                       class="btn btn-primary btn-block ticket-creation-btn d-flex align-items-center justify-content-center">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Forums</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content" class="forum-wrap"
+         th:with="admin=${sessionProfile != null && sessionProfile.hasPermission('website.forum.category.manage')}">
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Forums</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <a class="server-status cta"
+               th:if="${admin}"
+               href="#newCategory"
+               data-bs-toggle="modal"
+               style="max-width: 175px; background: #d58512 !important">
+                <span>New Category</span>
+            </a>
+
+            <a href="/thread/new" class="server-status cta"
+               th:if="${sessionProfile != null}"
+               th:style="${'max-width: ' + (admin ? '175px' : '350px')}">
+                Create thread
+            </a>
+
+            <div class="modal fade" th:if="${admin}" id="newCategory" style="transform: translateY(250px);">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Create Category
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <form th:action="@{'/category/create'}" method="post">
+                            <div class="modal-body">
+                                <label for="name" class="form-label">Category</label>
+                                <input type="text" id="name" name="name" class="form-control" required>
+
+                                <label for="weight" class="form-label" style="margin-top: 15px">Weight</label>
+                                <input type="number" id="weight" name="weight" class="form-control" required>
+
+                                <label for="permission" class="form-label" style="margin-top: 15px">Permission</label>
+                                <input type="text" id="permission" name="permission" class="form-control">
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary"
+                                        style="background-color: green !important">Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card forum-list" th:each="category: ${categories}" style="background: none">
+            <div class="card-header left d-flex justify-content-between rounded" style="margin-bottom: 3px">
+                <span th:text="${category.getName().toUpperCase()}"></span>
+
+                <div class="dropdown" th:if="${admin}">
+                    <a href="#" class="server-status forum category options" id="optionsDropdown"
+                       data-bs-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false" style="max-width: 175px">
+                        OPTIONS
+                        <i class="fa-solid fa-caret-down" style="margin-left: 5px"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="optionsDropdown">
+                        <a class="dropdown-item" th:href="${'#editCategory-' + category.getId()}"
+                           data-bs-toggle="modal">Edit Category</a>
+                        <a class="dropdown-item" th:href="${'#deleteCategory-' + category.getId()}"
+                           data-bs-toggle="modal">Delete Category</a>
+                        <a class="dropdown-item" th:href="${'#newForum-' + category.getId()}"
+                           data-bs-toggle="modal">New Forum</a>
+                    </div>
+                </div>
+
+                <div class="modal fade" th:id="${'deleteCategory-' + category.getId()}"
+                     style="transform: translateY(250px);" th:if="${admin}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                Delete Category
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <form th:action="@{'/category/delete/' + ${category.getId()}}" method="post">
+                                <div class="modal-body">
+                                    Are you sure want to delete this category?
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary"
+                                            style="background-color: green !important">Confirm
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" th:id="${'editCategory-' + category.getId()}"
+                     style="transform: translateY(250px);" th:if="${admin}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                Edit Category
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <form th:action="@{'/category/edit/' + ${category.getId()}}" method="post">
+                                <div class="modal-body">
+                                    <label for="name" class="form-label">Category</label>
+                                    <input type="text" id="name" name="name" class="form-control"
+                                           th:value="${category.getName()}" required>
+
+                                    <label for="weight" class="form-label" style="margin-top: 15px">Weight</label>
+                                    <input type="number" id="weight" name="weight" class="form-control"
+                                           th:value="${category.getWeight()}" required>
+
+                                    <label for="permission" class="form-label">Permission</label>
+                                    <input type="text" id="permission" name="permission" class="form-control"
+                                           th:value="${category.getPermission()}">
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary"
+                                            style="background-color: green !important">Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" th:id="${'newForum-' + category.getId()}"
+                 style="transform: translateY(250px);" th:if="${admin}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            New Forum
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <form th:action="@{'/forums/create/' + ${category.getId()}}" method="post">
+                            <div class="modal-body">
+                                <label for="name" class="form-label">Forum Name</label>
+                                <input type="text" id="name" name="name" class="form-control" required>
+
+                                <label for="weight" class="form-label" style="margin-top: 15px">Weight</label>
+                                <input type="number" id="weight" name="weight" class="form-control" required>
+
+                                <label for="description" class="form-label" style="margin-top: 15px">Description</label>
+                                <input type="text" id="description" name="description" class="form-control" required>
+
+                                <label for="permission" class="form-label" style="margin-top: 15px">Permission</label>
+                                <input type="text" id="permission" name="permission" class="form-control">
+
+                                <div class="form-check" style="display: flex; margin-top: 15px; padding-left: 0">
+                                    <label for="locked" class="form-check-label"
+                                           style="margin-right: 10px">Locked</label>
+                                    <input type="checkbox" id="locked" name="locked" class="form-check-input"
+                                           style="margin-left: 0">
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary"
+                                        style="background-color: green !important">Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <ol class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group"
+                    th:each="forum: ${category.getFormattedForums(sessionProfile)}">
+                    <div class="node-icon"><i class="fa-regular fa-comments"></i></div>
+                    <div class="ms-lg-3 me-auto flex-grow-1">
+                        <a th:href="${'/forum/' + forum.getUrlName()}" class="fw-bold" th:text="${forum.getName()}"></a>
+                        <div class="card-feed-meta" th:text="${forum.getDescription()}"></div>
+                    </div>
+
+                    <div class="node-user me-auto d-flex justify-content-start align-items-center text-align-right"
+                         th:if="${forum.getLastThread() != null}"
+                         th:with="lastThread=${forum.getLastThread()}">
+                        <div class="avatar xm">
+                            <img th:src="${'https://mc-heads.net/body/' + lastThread.getAuthorName()}">
+                        </div>
+
+                        <div>
+                            <a th:href="${'/thread/' + lastThread.getId()}" class="fw-bold node-title"
+                               th:text="${lastThread.getTitle()}"></a>
+                            <div class="card-feed-meta">
+                                <a th:href="${'/u/' + lastThread.getAuthorName()}"
+                                   th:style="${'color: ' + lastThread.getAuthorWebColor() + ' !important'}"
+                                   th:text="${lastThread.getAuthorName()}">
+                                </a>
+
+                                <a style="color: dimgray" th:text="${lastThread.getPostedAgo()}"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ms-lg-3 me-auto node-meta">
+                        <div class="card-feed-meta">
+                            <i class="fa-solid fa-reply"></i>
+                            <span th:text="${forum.getThreadAmount()}"></span>
+                            <span th:text="${forum.getThreadAmount() == 1 ? 'Thread' : 'Threads'}" style="color: silver"></span>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+</body>
+</html>

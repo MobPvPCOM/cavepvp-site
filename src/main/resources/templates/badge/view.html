@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="${badge.getName() + ' Badge'}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/badges">Badges</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${badge.getName() + ' Badge'}"></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9 card forum-list badge">
+                <h1 th:text="${badge.getName() + ' Badge'}" style="margin-top: 10px"></h1>
+
+                <div class="badge-view-box">
+                    <img th:src="@{'/images/badges/' + ${badge.getIcon()}}">
+                </div>
+
+                <h5 class="badge-meta" style="margin: 15px 0">
+                    <b>Icon Path: </b><span th:text="${'/images/badges/' + badge.getIcon()}"></span>
+                    <br>
+                    <b>Description: </b><span th:text="${badge.getDescription()}"></span>
+                </h5>
+            </div>
+
+            <div class="col-md-3 mb-3 badge-display" style="text-align: center">
+                <div class="card">
+                    <div class="card-header">
+                        Badge Statistics
+                    </div>
+                    <div class="card-body">
+                        <b>Identifier: </b><span th:text="${badge.getId()}"></span>
+                        <br>
+                        <b>Active Users: </b>N/A
+                        <br>
+                        <b>Active Groups: </b>N/A
+                        <a type="button" style="margin-top: 10px" class="btn btn-primary"
+                           th:href="${'#removeBadge-' + badge.getId()}" data-bs-toggle="modal">
+                            Remove from player
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" th:id="'removeBadge-' + ${badge.getId()}"
+         style="transform: translateY(250px);">
+        <form th:action="@{/badge/remove}" method="post">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Remove Badge
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <label for="uuid" class="form-label">Player UUID</label>
+                        <input type="text" id="uuid" name="uuid" class="form-control" required>
+                        <input type="hidden" id="badge" name="badge" class="form-control" th:value="${badge.getId()}">
+                        <p class="validation-text" id="validationResult"></p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary confirm" id="confirmButton" style="background-color: green !important">Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const uuidPattern = /^[0-9a-f]{8}(-?[0-9a-f]{4}){3}-?[0-9a-f]{12}$/i;
+
+        document.addEventListener('show.bs.modal', function (e) {
+            if (e.target.classList.contains('modal')) {
+                const modal = e.target;
+                const uuidInput = modal.querySelector('.form-control');
+                const confirmButton = modal.querySelector('.btn-primary.confirm');
+                const validationResult = modal.querySelector('.validation-text');
+
+                async function validateUUID() {
+                    const inputValue = uuidInput.value;
+                    if (uuidPattern.test(inputValue)) {
+                        try {
+                            const name = await getName(inputValue);
+                            validationResult.textContent = "Valid UUID | " + name;
+                            confirmButton.disabled = false;
+                        } catch (error) {
+                            validationResult.textContent = "Valid UUID | Error fetching name";
+                            confirmButton.disabled = true;
+                        }
+                    } else {
+                        validationResult.textContent = "Not a valid UUID!";
+                        confirmButton.disabled = true;
+                    }
+                }
+
+                uuidInput.addEventListener('input', validateUUID);
+                modal.addEventListener('shown.bs.modal', validateUUID);
+            }
+        });
+
+        function getName(uuid) {
+            const apiUrl = `https://playerdb.co/api/player/minecraft/${uuid}`;
+
+            return fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Request failed");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.data || !data.data.player || !data.data.player.username) {
+                        throw new Error("Data not found");
+                    }
+
+                    return data.data.player.username;
+                })
+                .catch(error => {
+                    throw error;
+                });
+        }
+    </script>
+</div>
+</body>
+</html>

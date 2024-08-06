@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<div th:fragment="logs">
+    <div class="card">
+        <div class="card-feed-list card-recent">
+            <ol class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:if="${!logs.isEmpty()}"
+                    th:each="log: ${logs}">
+                    <div class="avatar xm log">
+                        <img th:src="${'https://mc-heads.net/body/' + profile.getName()}"/>
+                    </div>
+                    <!--/*@thymesVar id="log" type="com.mobpvp.site.model.profile.log.LogModel"*/-->
+                    <div class="ms-lg-3 me-auto">
+                        <div class="fw-bold">
+                            <a th:style="${'color: ' + log.getAddedByWebColor()}" th:text="${log.getAddedByName()}"></a>
+                            <a th:text="${log.getLogTextName().toLowerCase() + ' on '}" style="color: silver"></a>
+                            <a th:style="${'color: #db5757'}" th:text="${log.getServer()}"></a>
+                        </div>
+                        <div class="card-feed-meta">
+                            <span th:text="${log.getAddedAgo()}"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            th:href="'#modal-info-' + ${log.getId()}"
+                            data-bs-toggle="modal"
+                            class="btn btn-primary comment-post"
+                            th:if="${sessionProfile.hasPermission('website.log.details')}">
+                        Details
+                    </button>
+
+                    <div class="modal fade"
+                         th:if="${sessionProfile.hasPermission('website.log.details')}"
+                         th:id="'modal-info-' + ${log.getId()}"
+                         style="transform: translateY(250px);">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Log Details
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div th:each="entry: ${log.getMetadata()}">
+                                        <b th:text="${log.formatMetaKey(entry.getKey()) + ': '}"></b>
+                                        <a th:text="${log.formatMetaValue(entry.getValue())}"></a>
+                                        <br>
+                                    </div>
+
+                                    <div>
+                                        <b>Action: </b>
+                                        <a th:text="${log.getLogAction()}"></a>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    style="background-color: #973333; justify-content: center !important;"
+                    th:if="${logs.isEmpty()}">
+                    <div class="fw-bold text-center error">This user has no logs.</div>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example" th:if="${!logs.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${previousPage == currentPage ? 'disabled' : ''}">
+                <a class="page-link" th:href="${previousPage == currentPage ? '' : previousPageUrl}" aria-disabled="true">&laquo;</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:text="${currentPage}">
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${nextPage == currentPage ? 'disabled' : ''}">
+                <a class="page-link" th:href="${nextPage == currentPage ? '' : nextPageUrl}" aria-disabled="true">&raquo;</a>
+            </li>
+        </ul>
+        <div class="navigation-meta" th:text="${'You are on page ' + currentPage + '/' + pageCount + '.'}">
+        </div>
+    </nav>
+
+</div>
+</body>
+</html>

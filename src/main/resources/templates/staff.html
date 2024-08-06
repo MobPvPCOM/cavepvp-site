@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Staff</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Staff</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="server-status">MOBPVP.ORG
+                <div class="count" th:text="${playerCount} + ' ONLINE'"></div>
+            </div>
+        </div>
+
+        <div th:each="rank: ${ranks}">
+            <div class="staff-title alert alert-light"
+                 th:style="${'color: ' + rank.getWebColor()}"
+                 th:text="${rank.getName()}">
+            </div>
+
+            <div id="staff" class="mb-5">
+                <div class="staff-member card" th:each="member: ${rank.getMembers()}">
+                    <div class="staff-avatar">
+                        <img th:src="${'https://mc-heads.net/body/' + member.getName()}"
+                             th:href="${'/u/' + member.getName()}"/>
+                    </div>
+                    <div class="staff-info card-body text-center">
+                        <a class="staff-name"
+                             th:text="${member.getName()}"
+                             th:href="${'/u/' + member.getName()}">
+                        </a>
+
+                        <div class="staff-banner" th:style="${'background-color: ' + rank.getWebColor()}">
+                            <span th:text="${rank.getName()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

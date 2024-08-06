@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Error</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+        <div id="section-above">
+            <div class="alert alert-danger alert-error" role="alert">
+                <h3 th:text="${status}"></h3>
+                <h3 th:text="${error}"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
