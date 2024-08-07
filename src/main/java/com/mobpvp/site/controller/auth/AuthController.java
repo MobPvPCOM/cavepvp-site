@@ -1,6 +1,7 @@
 package com.mobpvp.site.controller.auth;
 
 import com.google.gson.JsonObject;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.mobpvp.site.util.ErrorUtil;
 import com.mobpvp.site.util.SessionUtil;
 import com.mobpvp.site.util.password.PasswordValidation;
@@ -61,7 +62,7 @@ public class AuthController {
 
         RequestResponse response = RequestHandler.get("forum/account/token/%s", token);
 
-        System.out.println(response.getResponse());
+
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
@@ -90,7 +91,7 @@ public class AuthController {
 
         JsonObject body = new JsonObject();
         body.addProperty("token", token);
-        body.addProperty("password", encoder.encode(password));
+        body.addProperty("password", password);
 
         RequestResponse response = RequestHandler.post("forum/account/register", body);
         if (!response.wasSuccessful()) {

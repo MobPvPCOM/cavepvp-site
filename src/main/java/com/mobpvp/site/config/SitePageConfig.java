@@ -1,15 +1,17 @@
 package com.mobpvp.site.config;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
+
 
 import java.util.concurrent.TimeUnit;
 
@@ -49,5 +51,7 @@ public class SitePageConfig implements WebMvcConfigurer {
                 ).resourceChain(true)
                 .addResolver(new PathResourceResolver());
     }
+
+
 
 }

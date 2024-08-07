@@ -1,6 +1,7 @@
 package com.mobpvp.site.controller.auth;
 
 import com.google.gson.JsonObject;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.mobpvp.site.util.PopupUtil;
 import com.mobpvp.site.util.SessionUtil;
 import com.mobpvp.site.request.RequestHandler;

@@ -1,10 +1,12 @@
 package com.mobpvp.site.config;
 
-import lombok.RequiredArgsConstructor;
 import com.mobpvp.site.account.AccountDetailsService;
-import com.mobpvp.site.config.firewall.SiteHttpFirewall;
-import com.mobpvp.site.config.logout.SiteLogoutHandler;
 import com.mobpvp.site.config.filter.SiteUrlFilter;
+import com.mobpvp.site.config.firewall.CustomAuthenticationProvider;
+import com.mobpvp.site.config.firewall.SiteHttpFirewall;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.mobpvp.site.config.logout.SiteLogoutHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,12 +36,14 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final SiteAuthSuccessHandler successHandler;
+    private final AccountDetailsService accountDetailsService;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        UserDetailsService service = new AccountDetailsService();
-
-        auth.userDetailsService(service)
+        auth.authenticationProvider(customAuthenticationProvider)
+                .userDetailsService(accountDetailsService)
                 .passwordEncoder(this.passwordEncoder);
     }
 
