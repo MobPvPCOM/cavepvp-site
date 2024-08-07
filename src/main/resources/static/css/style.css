@@ -1873,15 +1873,16 @@ ol.breadcrumb li {
 }
 
 .header-bg {
-    background: url(/images/background-light.png);
+    background: url(/images/background.jpg);
     background-size: cover;
     background-position: center -5%;
 }
 
 .dark .header-bg {
-    background: url(/images/background-dark.png);
+    background: url(/images/background.jpg);
     background-size: cover;
     background-position: center -5%;
+    filter: grayscale(1);
 }
 
 .header-logo.header-bg {
