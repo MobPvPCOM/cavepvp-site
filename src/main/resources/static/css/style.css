@@ -91,6 +91,22 @@ body:not(.light) .light-btn {
     max-width: 180px;
 }
 
+#header .breathing-logo {
+    animation: breathing 5s infinite;
+}
+
+@keyframes breathing {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05); /* Adjusted scale for a subtle increase */
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 #header .nav-link:hover, .nav-link:focus {
     color: white !important;
 }
@@ -354,10 +370,12 @@ h6.dropdown-header {
     width: 100px;
     height: 100px;
     transition: all 1s ease;
+    filter: grayscale(1);
 }
 
 #foot .logo:hover {
-    filter: grayscale(1);
+    transition: all 1s ease;
+    filter: grayscale(0);
 }
 
 #foot .top h1 {
