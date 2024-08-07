@@ -92,7 +92,7 @@ public class ProfileController {
         body.addProperty("author", profile.getUuid().toString());
         body.addProperty("profile", targetProfile.getUuid().toString());
 
-        RequestResponse response = RequestHandler.post("comment", body);
+        RequestResponse response = RequestHandler.post("forum/account/comment", body);
 
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
@@ -118,7 +118,7 @@ public class ProfileController {
         }
 
         RequestResponse response = RequestHandler.delete(
-                "comment/" + commentId.toString()
+                "forum/account/comment/" + uuid + "/" + commentId.toString()
         );
 
         if (!response.wasSuccessful())

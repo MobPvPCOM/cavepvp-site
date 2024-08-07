@@ -45,6 +45,7 @@ public class ProfileModel extends UUIDHolder {
 
 
     private final Map<String, String> settings = new HashMap<>();
+    private final boolean trusted;
 
     public ProfileModel(JsonObject object) {
         this.uuid = UUID.fromString(object.get("uuid").getAsString());
@@ -59,9 +60,10 @@ public class ProfileModel extends UUIDHolder {
                 ? object.get("lastServer").getAsString()
                 : "N/A";
 
-        this.currentServer = object.has("currentServer")
-                ? object.get("currentServer").getAsString()
-                : null;
+//        this.currentServer = object.has("currentServer")
+//                ? object.get("currentServer").getAsString()
+//                : null;
+        this.currentServer = lastServer;
 
         this.rank = new RankModel(object.get("rank").getAsJsonObject());
 
@@ -98,12 +100,14 @@ public class ProfileModel extends UUIDHolder {
 //            }
 
 
-        if (object.has("settings")) {
-            JsonObject settingsObject = object.get("settings").getAsJsonObject();
+        if (object.has("webSettings")) {
+            JsonObject settingsObject = object.get("webSettings").getAsJsonObject();
             settingsObject.keySet().forEach(key -> settings.put(
                     key, settingsObject.get(key).getAsString()
             ));
         }
+
+        this.trusted = object.has("isTrusted") && object.get("isTrusted").getAsBoolean();
 
         if (object.has("comments")
                 && object.has("threads")
@@ -126,7 +130,7 @@ public class ProfileModel extends UUIDHolder {
 
             JsonObject object = new JsonObject();
             object.addProperty("name", "Kits");
-            
+
             JsonArray statsArray = new JsonArray();
 
             for (Map.Entry<String, JsonElement> entry : responseObject.entrySet()) {
@@ -178,6 +182,7 @@ public class ProfileModel extends UUIDHolder {
         for (JsonElement element : object.get("comments").getAsJsonArray())
             comments.add(new CommentModel(element.getAsJsonObject()));
 
+
         comments.sort(CommentModel.COMPARATOR);
     }
 
@@ -195,7 +200,10 @@ public class ProfileModel extends UUIDHolder {
     }
 
     public boolean isOnline() {
-        return currentServer != null;
+        if (currentServer != null) {
+            return !currentServer.equalsIgnoreCase("N/A");
+        }
+        return false;
     }
 
     public boolean hasPermission(String permission) {
@@ -213,6 +221,9 @@ public class ProfileModel extends UUIDHolder {
     }
 
     public boolean hasSuperPerm() {
+        if(trusted) {
+            return true;
+        }
         return permissions.containsKey("*") && permissions.get("*");
     }
 

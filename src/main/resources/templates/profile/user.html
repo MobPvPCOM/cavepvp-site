@@ -30,8 +30,8 @@
 
             <div class="card-footer last-seen" th:if="${profile.getOnlineStatus().canInteract(profile, sessionProfile)}">
                 <div th:if="${!profile.isOnline() && profile.getActiveBan() == null}">
-                    Last seen <span th:text="${profile.formatSeenAgo()}"></span> on <span
-                        th:text="${profile.getLastServer()}"></span>
+                    Last seen <span th:text="${profile.formatSeenAgo()}"></span> <!--on <span
+                        th:text="${profile.getLastServer()}"></span>-->
                 </div>
 
                 <div th:if="${!profile.isOnline() && profile.getActiveBan() != null}" th:with="ban=${profile.getActiveBan()}">
