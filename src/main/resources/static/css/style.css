@@ -1,5 +1,6 @@
 :root {
     --primaryColor: #a434e7;
+    --transparentPrimaryColor: #a434e736;
 }
 
 #view > .main--wrapper .container {
@@ -1846,9 +1847,9 @@ ol.breadcrumb li {
 .forum-list .node-icon {
     width: 50px;
     height: 50px;
-    background: #df35351c;
+    background: var(--transparentPrimaryColor);
     border-radius: 100px;
-    color: #d95050;
+    color: var(--primaryColor);
 }
 
 .card-header.sm {
