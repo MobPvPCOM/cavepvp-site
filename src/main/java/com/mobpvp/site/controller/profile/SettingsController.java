@@ -50,22 +50,10 @@ public class SettingsController {
         if (profile == null)
             return ErrorUtil.loginRedirect("/settings");
 
-        RequestResponse response = RequestHandler.get(
-                "profile/%s/grants/claimable",
-                profile.getUuid().toString()
-        );
 
-        if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
-        List<ClaimableGrantModel> models = new ArrayList<>();
-        for (JsonElement element : response.asArray())
-            models.add(new ClaimableGrantModel(element.getAsJsonObject()));
-
-        models.sort(ClaimableGrantModel.COMPARATOR);
 
         ModelAndView view = new ModelAndView("profile/settings");
-        view.addObject("claimableGrants", models);
         view.addObject("socials", SocialModel.values());
         view.addObject("privacySettings", PrivacyModel.values());
 
