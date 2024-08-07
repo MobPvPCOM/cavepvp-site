@@ -216,8 +216,7 @@ public class ProfileController {
         List<NavItem> userNavItems = List.of(
                 new NavItem("General", "/u/" + profile.getName()),
                 new NavItem("Forums", "/u/" + profile.getName() + "/forums"),
-                new NavItem("Logs", "/u/" + profile.getName() + "/logs", "website.log.view"),
-                new NavItem("AntiCheat", "/u/" + profile.getName() + "/anticheat", "website.anticheat.view")
+                new NavItem("Logs", "/u/" + profile.getName() + "/logs", "website.log.view")
         );
 
         List<ForumThread> threads = new ArrayList<>(profile.getThreads());
