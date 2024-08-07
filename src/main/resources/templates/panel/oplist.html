@@ -26,6 +26,7 @@
                 <div class="bar"></div>
                 <h1>OP List Management</h1>
                 <div class="bar"></div>
+                <a type="button" class="btn btn-green" th:href="'#add-op'" data-bs-toggle="modal"> OP </a>
             </div>
             <div id="staff" class="mb-5">
                 <div class="staff-member card" th:each="member: ${oplist}">
@@ -53,10 +54,8 @@
 
                                 </div>
 
-                                <form class="form-remove-grant" th:action="@{/oplist/remove}"
-                                      method="post">
-                                    <input type="hidden" name="uuid"
-                                           th:value="${member.getUuid()}">
+                                <form class="form-remove-grant" th:action="@{/oplist/remove}" method="post">
+                                    <input type="hidden" name="uuid" th:value="${member.getUuid()}">
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
@@ -71,7 +70,32 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade"
+                 th:id="'add-op'"
+                 style="transform: translateY(250px);">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Add op
+                            <button type="button" class="btn-close"
+                                    data-bs-dismiss="modal"></button>
+                        </div>
 
+
+                        <form class="form-remove-grant" th:action="@{/oplist/add}"
+                              method="post">
+                            <div class="modal-body">
+                                <label for="name" class="form-label">Player Name</label>
+                                <input type="text" id="name" name="name" class="form-control" required>
+                                <p class="validation-text" id="validationResult"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-green">Confirm</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
         </div>
 

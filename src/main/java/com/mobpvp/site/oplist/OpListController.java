@@ -1,6 +1,7 @@
 package com.mobpvp.site.oplist;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mobpvp.site.advice.item.NavItem;
 import com.mobpvp.site.model.profile.ProfileModel;
 import com.mobpvp.site.request.RequestHandler;
@@ -9,10 +10,7 @@ import com.mobpvp.site.util.ErrorUtil;
 import com.mobpvp.site.util.SessionUtil;
 import com.mobpvp.site.util.uuid.UUIDCache;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +49,26 @@ public class OpListController {
         view.addObject("oplist", users);
         return view;
     }
-    @PostMapping("/oplist/remove/")
+    @PostMapping("/oplist/add")
+    public ModelAndView addPlayer(HttpServletRequest request, String name) {
+        ProfileModel profile = SessionUtil.getProfile(request);
+
+        if (profile == null)
+            return ErrorUtil.loginRedirect("/oplist");
+
+        if (!profile.hasPermission("trusted"))
+            return ErrorUtil.noPerms("You do not have permission to view this page.");
+
+        UUID playerId = UUIDCache.getUuid(name);
+
+        RequestResponse response = RequestHandler.post("oplist/" + playerId.toString(), new JsonObject());
+
+        if (!response.wasSuccessful())
+            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+
+        return new ModelAndView("redirect:/oplist");
+    }
+    @PostMapping("/oplist/remove")
     public ModelAndView removeUser(HttpServletRequest request, @RequestParam("uuid") UUID playerId) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
@@ -66,6 +83,10 @@ public class OpListController {
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
+        return new ModelAndView("redirect:/oplist");
+    }
+    @GetMapping("/oplist/remove")
+    public ModelAndView removeUser(HttpServletRequest request) {
         return new ModelAndView("redirect:/oplist");
     }
 }
