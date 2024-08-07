@@ -14,6 +14,8 @@ public class StaffCache extends RepeatingCache<List<StaffRankModel>> {
 
     public StaffCache() {
         super(TimeUnit.MINUTES.toMillis(1));
+
+
     }
 
     @Override
