@@ -14,7 +14,6 @@ import com.mobpvp.site.cache.CacheHandler;
 import com.mobpvp.site.cache.impl.ProfileCache;
 import com.mobpvp.site.model.profile.ProfileModel;
 import com.mobpvp.site.model.forum.ForumThread;
-import com.mobpvp.site.model.profile.log.AntiCheatLogModel;
 import com.mobpvp.site.request.RequestHandler;
 import com.mobpvp.site.request.RequestResponse;
 import com.mobpvp.site.util.*;
@@ -58,43 +57,6 @@ public class ProfileController {
         ).applyTo(view, String.format(
                 "/u/%s/logs?page={page}",
                 profile.getName()
-        ));
-
-        return view;
-    }
-
-    @RequestMapping({"/user/{name}/anticheat", "/u/{name}/anticheat"})
-    public ModelAndView antiCheat(HttpServletRequest request,
-                                  @PathVariable("name") String name,
-                                  @RequestParam(value = "page", required = false) Integer page,
-                                  @RequestParam(value = "server", required = false) String server) {
-        Tuple<ProfileModel, ModelAndView> tuple
-                = displayPage(request, name, "anticheat", "website.anticheat.view");
-
-        ProfileModel profile = tuple.key();
-        if (profile == null)
-            return tuple.value();
-
-        ModelAndView view = tuple.value();
-        RequestResponse response = RequestHandler.get(
-                "anticheat/%s?scope=%s",
-                profile.getUuid(),
-                server == null ? "global" : server
-        );
-
-        if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
-
-        List<AntiCheatLogModel> logs = new ArrayList<>();
-        for (JsonElement element : response.asArray())
-            logs.add(new AntiCheatLogModel(element.getAsJsonObject()));
-
-        new ViewPaginationModel<>(
-                page == null ? 1 : page, 10, logs, "antiCheatLogs"
-        ).applyTo(view, String.format(
-                "/u/%s/anticheat?page={page}%s",
-                profile.getName(),
-                server != null ? "&server=" + server : ""
         ));
 
         return view;
