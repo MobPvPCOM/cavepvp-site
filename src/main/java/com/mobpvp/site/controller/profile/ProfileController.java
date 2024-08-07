@@ -72,7 +72,7 @@ public class ProfileController {
         if (profile == null)
             return ErrorUtil.loginRedirect("/u/" + targetProfile.getName());
 
-        if (targetProfile.getCommentStatus().canInteract(targetProfile, profile)) {
+        if (!targetProfile.getCommentStatus().canInteract(targetProfile, profile)) {
             PopupUtil.error(request.getSession(), "You cannot comment on this profile.");
             return new ModelAndView("redirect:/u/" + targetProfile.getName());
         }
