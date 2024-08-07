@@ -1665,6 +1665,14 @@ ul.nav.nav-tabs.card-header-tabs {
     color: black !important;
 }
 
+.dropdown-item:hover {
+    font-weight: bold;
+    font-size: 14px;
+    color: #504f4f !important;
+}
+
+
+
 .card-footer {
     border-color: #e1e1e1 !important;
     padding: 13px;
@@ -2252,6 +2260,10 @@ h6 {
 .dark .dropdown-item {
     background: transparent !important;
     color: white !important;
+}
+.dark .dropdown-item:hover {
+    background: transparent !important;
+    color: #b6b6b6 !important;
 }
 
 .dark .dropdown-divider {

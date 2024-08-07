@@ -59,7 +59,7 @@ public class SupportController {
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
         List<SupportTicketModel> tickets = new ArrayList<>();
-        response.asArray().forEach(element -> tickets.add(
+        response.asObject().getAsJsonArray("tickets").forEach(element -> tickets.add(
                 new SupportTicketModel(element.getAsJsonObject())
         ));
 
