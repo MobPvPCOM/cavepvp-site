@@ -34,7 +34,10 @@ public class ForumModel {
         this.weight = object.get("weight").getAsInt();
         this.locked = object.get("locked").getAsBoolean();
         this.category = object.get("category").getAsString();
-        this.permission = object.get("permission").getAsString();
+
+        if (object.has("permission"))
+            this.permission = object.get("permission").getAsString();
+        else this.permission = "";
 
         if (object.has("threads"))
             object.get("threads").getAsJsonArray().forEach(element ->
