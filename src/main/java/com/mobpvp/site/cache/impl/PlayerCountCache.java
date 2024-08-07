@@ -15,13 +15,12 @@ public class PlayerCountCache extends RepeatingCache<Integer> {
     @Override
     public void execute() {
         RequestResponse response = RequestHandler.get("global-count");
-
         if (!response.wasSuccessful()) {
             cache(0);
             return;
         }
 
-        cache(response.asObject().get("count").getAsInt());
+        cache(response.asObject().get("online").getAsInt());
     }
 
     @Override
