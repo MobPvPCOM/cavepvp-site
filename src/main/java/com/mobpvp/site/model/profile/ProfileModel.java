@@ -107,7 +107,8 @@ public class ProfileModel extends UUIDHolder {
             ));
         }
 
-        this.trusted = object.has("isTrusted") && object.get("isTrusted").getAsBoolean();
+        this.trusted = object.has("isTrusted")
+                && object.get("isTrusted").getAsBoolean();
 
         if (object.has("comments")
                 && object.has("threads")
@@ -207,9 +208,8 @@ public class ProfileModel extends UUIDHolder {
     }
 
     public boolean hasPermission(String permission) {
-        if(permission.equalsIgnoreCase("trusted")) {
+        if (permission.equalsIgnoreCase("trusted"))
             return isTrusted();
-        }
 
         boolean superPerm = hasSuperPerm();
 
@@ -226,9 +226,9 @@ public class ProfileModel extends UUIDHolder {
     }
 
     public boolean hasSuperPerm() {
-        if(trusted) {
+        if (trusted)
             return true;
-        }
+
         return permissions.containsKey("*") && permissions.get("*");
     }
 
