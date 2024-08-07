@@ -105,7 +105,8 @@ public class RequestHandler {
     }
 
     private static Request.Builder newBuilder(String endpoint, Object... args) {
-        if(SiteConstant.API_DEBUG) System.out.println("Creating Builder for " + SiteConstant.API_HOST + String.format(endpoint, args));
+        if (SiteConstant.API_DEBUG)
+            System.out.println("Creating Builder for " + SiteConstant.API_HOST + String.format(endpoint, args));
         return new Request.Builder()
                 .url(SiteConstant.API_HOST + String.format(endpoint, args))
                 .addHeader("Authorization", SiteConstant.API_KEY);
