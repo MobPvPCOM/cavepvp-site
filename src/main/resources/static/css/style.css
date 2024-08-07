@@ -349,14 +349,14 @@ h6.dropdown-header {
     border-bottom: 1px solid #ffffff0d;
 }
 
-#foot .left .logo {
-    margin-top: 40px;
+#foot .logo {
+    margin-top: 30px;
     width: 100px;
     height: 100px;
     transition: all 1s ease;
 }
 
-#foot .left .logo:hover {
+#foot .logo:hover {
     filter: grayscale(1);
 }
 
