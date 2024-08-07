@@ -103,4 +103,11 @@ public class RequestResponse {
         return response.getAsJsonArray();
     }
 
+    @Override
+    public String toString() {
+        if(wasSuccessful()) {
+            return "{code=" + this.code + ", response=" + response + "}";
+        }
+        return "{code=" + this.code + ", response=" + response + ", error=" + errorMessage + "}";
+    }
 }

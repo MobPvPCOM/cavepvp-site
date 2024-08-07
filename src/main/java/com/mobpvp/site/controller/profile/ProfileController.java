@@ -93,6 +93,7 @@ public class ProfileController {
         body.addProperty("profile", targetProfile.getUuid().toString());
 
         RequestResponse response = RequestHandler.post("comment", body);
+
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
