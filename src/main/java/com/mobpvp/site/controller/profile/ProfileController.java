@@ -148,6 +148,7 @@ public class ProfileController {
                 return null;
 
             ProfileModel profile = new ProfileModel(response.asObject());
+            profile.loadProfileStats();
             CACHE.update(profile);
 
             return profile;

@@ -1,18 +1,20 @@
 package com.mobpvp.site.model.profile;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mobpvp.site.SiteApplication;
+import com.mobpvp.site.badge.BadgeModel;
+import com.mobpvp.site.model.RankModel;
+import com.mobpvp.site.model.forum.ForumThread;
 import com.mobpvp.site.model.profile.data.*;
+import com.mobpvp.site.model.profile.log.LogModel;
 import com.mobpvp.site.model.punishment.PunishmentModel;
+import com.mobpvp.site.request.RequestHandler;
+import com.mobpvp.site.request.RequestResponse;
+import com.mobpvp.site.util.StatsFormatUtil;
 import com.mobpvp.site.util.TimeUtils;
 import com.mobpvp.site.util.uuid.UUIDHolder;
 import lombok.Getter;
-import com.mobpvp.site.model.RankModel;
-import com.mobpvp.site.model.profile.data.*;
-import com.mobpvp.site.model.forum.ForumThread;
-import com.mobpvp.site.badge.BadgeModel;
-import com.mobpvp.site.model.profile.log.LogModel;
 
 import java.util.*;
 
@@ -103,16 +105,69 @@ public class ProfileModel extends UUIDHolder {
             ));
         }
 
-        if (object.has("stats")
-                && object.has("comments")
+        if (object.has("comments")
                 && object.has("threads")
                 && object.has("friends"))
             loadProfileData(object);
     }
 
+    public void loadProfileStats() {
+        kitsStats:
+        {
+            RequestResponse response = RequestHandler.get("kits/" + uuid.toString());
+
+            if (!response.wasSuccessful())
+                break kitsStats;
+
+            JsonObject responseObject = response.asObject();
+
+            if (responseObject.has("message") && responseObject.get("message").getAsString().equalsIgnoreCase("User not found"))
+                break kitsStats;
+
+            JsonObject object = new JsonObject();
+            object.addProperty("name", "Kits");
+            
+            JsonArray statsArray = new JsonArray();
+
+            for (Map.Entry<String, JsonElement> entry : responseObject.entrySet()) {
+                JsonObject entryObject = new JsonObject();
+                entryObject.addProperty("name", StatsFormatUtil.getFormattedName(entry.getKey()));
+                entryObject.addProperty("value", StatsFormatUtil.getFormattedValue(entry.getKey(), entry.getValue()));
+                statsArray.add(entryObject);
+            }
+
+            object.add("stats", statsArray);
+            stats.add(new StatsModel(object));
+        }
+        miniStats:
+        {
+            RequestResponse response = RequestHandler.get("mini/" + uuid.toString());
+
+            if (!response.wasSuccessful())
+                break miniStats;
+
+            JsonObject responseObject = response.asObject();
+
+            if (responseObject.has("message") && responseObject.get("message").getAsString().equalsIgnoreCase("User not found"))
+                break miniStats;
+
+            JsonObject object = new JsonObject();
+            object.addProperty("name", "Mini");
+            JsonArray statsArray = new JsonArray();
+
+            for (Map.Entry<String, JsonElement> entry : responseObject.entrySet()) {
+                JsonObject entryObject = new JsonObject();
+                entryObject.addProperty("name", StatsFormatUtil.getFormattedName(entry.getKey()));
+                entryObject.addProperty("value", StatsFormatUtil.getFormattedValue(entry.getKey(), entry.getValue()));
+                statsArray.add(entryObject);
+            }
+
+            object.add("stats", statsArray);
+            stats.add(new StatsModel(object));
+        }
+    }
+
     private void loadProfileData(JsonObject object) {
-        for (JsonElement element : object.get("stats").getAsJsonArray())
-            stats.add(new StatsModel(element.getAsJsonObject()));
 
         for (JsonElement element : object.get("threads").getAsJsonArray())
             threads.add(new ForumThread(element.getAsJsonObject()));
