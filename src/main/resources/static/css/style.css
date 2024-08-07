@@ -1,3 +1,7 @@
+:root {
+    --primaryColor: #a434e7;
+}
+
 #view > .main--wrapper .container {
     display: flex;
     gap: 30px;
@@ -97,7 +101,7 @@ body:not(.light) .light-btn {
 .server-status {
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.01);
     height: 57px;
-    background: #e73434 !important;
+    background: var(--primaryColor) !important;
     color: white !important;
     outline-offset: -2px;
     outline: 1px solid #ffffff82;
@@ -785,7 +789,7 @@ div#sidebar.end {
 
 .btn.btn-primary {
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.01);
-    background: #e73434 !important;
+    background: var(--primaryColor) !important;
     color: white !important;
     outline-offset: -2px;
     outline: 1px solid #ffffff82;
@@ -807,7 +811,7 @@ div#sidebar.end {
 }
 
 .news-title span {
-    background: #e73434 !important;
+    background: var(--primaryColor) !important;
     outline-offset: -2px;
     outline: 1px solid #ffffff82;
     border: 1px solid #0000002b !important;
@@ -1970,7 +1974,7 @@ body {
 }
 
 .card-header-tabs .nav-link.active {
-    background: #e73434 !important;
+    background: var(--primaryColor) !important;
     color: white !important;
     outline-offset: -2px;
     outline: 1px solid #ffffff82;
@@ -1982,7 +1986,7 @@ body {
 }
 
 .staff-banner.owner {
-    background: #e73434;
+    background: var(--primaryColor);
 }
 
 .staff-banner {
