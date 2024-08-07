@@ -46,9 +46,9 @@ public class ProfileModel extends UUIDHolder {
     private final Map<String, String> settings = new HashMap<>();
 
     public ProfileModel(JsonObject object) {
-        this.uuid = UUID.fromString(object.get("_id").getAsString());
+        this.uuid = UUID.fromString(object.get("uuid").getAsString());
         this.name = object.get("name").getAsString();
-        this.firstJoin = object.get("firstJoin").getAsLong();
+        this.firstJoin = object.get("firstLogin").getAsLong();
 
         this.lastSeen = object.has("lastSeen")
                 ? object.get("lastSeen").getAsLong()

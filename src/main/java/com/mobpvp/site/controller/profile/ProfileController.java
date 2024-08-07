@@ -130,7 +130,7 @@ public class ProfileController {
         body.addProperty("author", profile.getUuid().toString());
         body.addProperty("profile", targetProfile.getUuid().toString());
 
-        RequestResponse response = RequestHandler.post("/comment", body);
+        RequestResponse response = RequestHandler.post("comment", body);
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 

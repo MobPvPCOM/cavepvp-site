@@ -19,7 +19,7 @@ public class CategoryCache extends RepeatingCache<List<ForumCategory>> {
 
     @Override
     public void execute() {
-        RequestResponse response = RequestHandler.get("/forum/category");
+        RequestResponse response = RequestHandler.get("forum/category");
 
         if (!response.wasSuccessful())
             return;

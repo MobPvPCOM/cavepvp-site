@@ -13,6 +13,7 @@ import com.mobpvp.site.util.password.impl.LengthRule;
 import com.mobpvp.site.util.password.impl.LowercaseRule;
 import com.mobpvp.site.util.password.impl.UppercaseRule;
 import com.mobpvp.site.util.password.result.PasswordResult;
+import com.mobpvp.site.util.uuid.UUIDCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Controller
 public class AuthController {
@@ -59,6 +61,7 @@ public class AuthController {
 
         RequestResponse response = RequestHandler.get("forum/account/token/%s", token);
 
+        System.out.println(response.getResponse());
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
@@ -67,7 +70,7 @@ public class AuthController {
 
         view.addObject("token", token);
         view.addObject("email", object.get("email").getAsString());
-        view.addObject("username", object.get("username").getAsString());
+        view.addObject("username", UUIDCache.getName(UUID.fromString(object.get("uuid").getAsString())));
 
         return view;
     }

@@ -17,7 +17,7 @@ public class AccountDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        RequestResponse response = RequestHandler.get("/forum/account/login/%s", username);
+        RequestResponse response = RequestHandler.get("forum/account/login/%s", username);
 
         if (!response.wasSuccessful())
             throw new UsernameNotFoundException(username);

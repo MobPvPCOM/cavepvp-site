@@ -95,7 +95,7 @@ public class ThreadController {
         if (profile == null)
             return ErrorUtil.loginRedirect("/thread/new");
 
-        RequestResponse response = RequestHandler.get("/forum/category");
+        RequestResponse response = RequestHandler.get("forum/category");
         if (!response.wasSuccessful()) {
             PopupUtil.error(request.getSession(), response);
             return new ModelAndView("redirect:/forums");

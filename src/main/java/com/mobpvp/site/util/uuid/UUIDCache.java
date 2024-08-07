@@ -15,7 +15,8 @@ public class UUIDCache {
     private static final LoadingCache<String, UUID> NAME_UUID_CACHE = Caffeine.newBuilder()
             .expireAfterWrite(15L, TimeUnit.MINUTES)
             .build(name -> {
-                RequestResponse response = RequestHandler.get("/uuid/%s", name);
+                RequestResponse response = RequestHandler.get("uuid/%s", name);
+
                 if (!response.wasSuccessful())
                     return null;
 
@@ -26,10 +27,13 @@ public class UUIDCache {
     private static final LoadingCache<UUID, String> UUID_NAME_CACHE = Caffeine.newBuilder()
             .expireAfterWrite(15L, TimeUnit.MINUTES)
             .build(uuid -> {
-                RequestResponse response = RequestHandler.get("/uuid/%s", uuid.toString());
+                RequestResponse response = RequestHandler.get("uuid/%s", uuid.toString());
+                System.out.println(response.getResponse());
+                System.out.println(response.getCode());
+                System.out.println(response.getErrorMessage());
+
                 if (!response.wasSuccessful())
                     return null;
-
                 JsonObject object = response.asObject();
                 return object.get("name").getAsString();
             });

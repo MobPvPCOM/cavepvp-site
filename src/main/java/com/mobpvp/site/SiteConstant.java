@@ -11,7 +11,7 @@ import java.time.ZoneId;
 
 public class SiteConstant {
 
-    public static final String API_HOST = "http://127.0.0.1:8080/";
+    public static final String API_HOST = "http://mobpvp:8081/";
     public static final String API_KEY = "1234567890";
 
     public static final String ANNOUNCEMENTS_FORUM = "forum-id";
