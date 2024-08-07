@@ -11,6 +11,7 @@ import java.time.ZoneId;
 
 public class SiteConstant {
 
+    public static final boolean API_DEBUG = false;
     public static final String API_HOST = "http://localhost:8081/";
     public static final String API_KEY = "1234567890";
 

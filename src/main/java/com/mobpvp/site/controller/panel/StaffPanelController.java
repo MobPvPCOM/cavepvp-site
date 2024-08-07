@@ -17,6 +17,7 @@ public class StaffPanelController {
     public static final List<NavItem> ITEMS = List.of(
             new NavItem("Staff Ticket View", "/support/staff", "core.staff"),
             new NavItem("Badge Management", "/badges", "*"),
+            new NavItem("Op List", "/oplist", "trusted"),
             new NavItem("Applications", "/applications/staff", "website.support.application.view")
     );
 

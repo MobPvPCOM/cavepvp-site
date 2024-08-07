@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>OP List</title>
+</head>
+<body>
+<div layout:fragment="content" th:if="${sessionProfile != null && sessionProfile.hasPermission('trusted')}">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">OP List</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card forum-list">
+            <div class="section-title ticket-creation">
+                <div class="bar"></div>
+                <h1>OP List Management</h1>
+                <div class="bar"></div>
+            </div>
+            <div id="staff" class="mb-5">
+                <div class="staff-member card" th:each="member: ${oplist}">
+                    <div class="staff-avatar">
+                        <img th:src="${'https://mc-heads.net/body/' + member.getName()}" th:href="'#oplist-' + ${member.getUuid()}" data-bs-toggle="modal"/>
+                    </div>
+                    <div class="staff-info card-body text-center">
+                        <a class="staff-name"
+                           th:text="${member.getName()}"
+                           th:href="'#oplist-' + ${member.getUuid()}"
+                           data-bs-toggle="modal">
+                        </a>
+                    </div>
+                    <div class="modal fade"
+                         th:id="'oplist-' + ${member.getUuid()}"
+                         style="transform: translateY(250px);">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Deop
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body" th:text="'Are you sure want to deop ' + ${member.getName()} + '?'">
+
+                                </div>
+
+                                <form class="form-remove-grant" th:action="@{/oplist/remove}"
+                                      method="post">
+                                    <input type="hidden" name="uuid"
+                                           th:value="${member.getUuid()}">
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Confirm
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

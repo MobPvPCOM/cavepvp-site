@@ -85,13 +85,14 @@
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
                             <li><h6 class="dropdown-header">Account</h6></li>
+
+                            <li><a class="dropdown-item" th:href="${'/u/' + sessionProfile.getName()}">Profile</a></li>
+                            <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                            <li><a class="dropdown-item" href="/notifications">Notifications</a></li>
                             <li><a class="dropdown-item" href="/panel"
                                    th:if="${sessionProfile.hasPermission('website.admin.view')}">
                                 Panel
                             </a></li>
-                            <li><a class="dropdown-item" th:href="${'/u/' + sessionProfile.getName()}">Profile</a></li>
-                            <li><a class="dropdown-item" href="/settings">Settings</a></li>
-                            <li><a class="dropdown-item" href="/notifications">Notifications</a></li>
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>

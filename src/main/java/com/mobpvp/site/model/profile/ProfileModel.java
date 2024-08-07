@@ -207,7 +207,12 @@ public class ProfileModel extends UUIDHolder {
     }
 
     public boolean hasPermission(String permission) {
+        if(permission.equalsIgnoreCase("trusted")) {
+            return isTrusted();
+        }
+
         boolean superPerm = hasSuperPerm();
+
         if (permission.equals("*"))
             return superPerm;
 
