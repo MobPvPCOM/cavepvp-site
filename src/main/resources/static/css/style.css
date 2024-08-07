@@ -663,7 +663,7 @@ a {
 }
 
 .dark .return-to > a span {
-    color: #c14141;
+    color: var(--primaryColor);
 }
 
 .return-to > a {
