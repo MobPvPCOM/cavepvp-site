@@ -1965,7 +1965,7 @@ body {
     background: #4CAF50 !important;
 }
 
-.card-header.kitmap-bg {
+.card-header.mini-bg {
     background: url(/images/background.jpg);
     background-position: bottom;
     background-size: cover;
@@ -1974,7 +1974,7 @@ body {
     border: 1px solid black !important;
 }
 
-.card-header.hcf-bg {
+.card-header.kits-bg {
     background: url(/images/background.jpg);
     background-position: top;
     background-size: cover;
@@ -2464,7 +2464,7 @@ body.dark {
     min-width: 301px;
 }
 
-.dark .card-header.hcfactions-bg {
+.dark .card-header.kits-bg {
     background: url(/images/background.jpg) top;
     background-size: cover;
     outline: none !important;
@@ -2472,7 +2472,7 @@ body.dark {
     background-blend-mode: multiply;
 }
 
-.dark .card-header.kitmap-bg {
+.dark .card-header.mini-bg {
     background: url(/images/background.jpg) bottom;
     background-size: cover;
     outline: none !important;
