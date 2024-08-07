@@ -175,7 +175,10 @@ public class ProfileController {
 
         if (!CACHE.contains(uuid)) {
             RequestResponse response = RequestHandler.get(
-                    "profile/%s?webResolved=true&profilePage=true&adminPanel=true",
+                    "profile/%s?webResolved=true" +
+                            "&profilePage=true" +
+                            "&adminPanel=true" +
+                            "&includePermissions=true",
                     uuid
             );
 
