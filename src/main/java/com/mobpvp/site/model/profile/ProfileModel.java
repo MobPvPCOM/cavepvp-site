@@ -72,22 +72,29 @@ public class ProfileModel extends UUIDHolder {
                 ? new PunishmentModel(object.get("activeMute").getAsJsonObject())
                 : null;
 
-        object.get("currentPermissions").getAsJsonObject().entrySet().forEach(entry ->
-                permissions.put(entry.getKey(), entry.getValue().getAsBoolean()));
+        if (object.has("effectivePermissions")) {
+            JsonObject jsonObject = object.get("effectivePermissions").getAsJsonObject();
+            for (String permission : jsonObject.keySet()) {
+                if (!jsonObject.get(permission).getAsString().equals("true"))
+                    continue;
+
+                this.permissions.put(permission, true);
+            }
+        }
 
         if (object.has("logs"))
             for (JsonElement element : object.get("logs").getAsJsonArray())
                 logs.add(new LogModel(element.getAsJsonObject()));
 
-        if (object.has("badges"))
-            for (JsonElement element : object.get("badges").getAsJsonArray()) {
-                BadgeModel badge = SiteApplication.INSTANCE
-                        .getBadgeHandler()
-                        .getBadge(element.getAsString());
-
-                if (badge != null)
-                    badges.add(badge);
-            }
+//        if (object.has("badges"))
+//            for (JsonElement element : object.get("badges").getAsJsonArray()) {
+//                BadgeModel badge = SiteApplication.INSTANCE
+//                        .getBadgeHandler()
+//                        .getBadge(element.getAsString());
+//
+//                if (badge != null)
+//                    badges.add(badge);
+//            }
 
         if (object.has("antiCheatLogs"))
             for (JsonElement element : object.get("antiCheatLogs").getAsJsonArray())

@@ -18,7 +18,7 @@ public class StaffCache extends RepeatingCache<List<StaffRankModel>> {
 
     @Override
     public void execute() {
-        RequestResponse response = RequestHandler.get("stafflist");
+        RequestResponse response = RequestHandler.get("staffList");
 
         if (!response.wasSuccessful())
             return;

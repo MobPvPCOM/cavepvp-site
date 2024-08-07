@@ -19,7 +19,7 @@ public class RankModel {
     private final List<String> permissions = new ArrayList<>();
 
     public RankModel(JsonObject object) {
-        this.id = UUID.fromString(object.get("_id").getAsString());
+        this.id = UUID.fromString(object.get("uuid").getAsString());
         this.name = object.get("name").getAsString();
         this.weight = object.get("weight").getAsInt();
         this.webColor = object.get("webColor").getAsString();
