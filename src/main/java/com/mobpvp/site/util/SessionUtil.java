@@ -30,7 +30,7 @@ public class SessionUtil {
             return profileModel;
 
         RequestResponse response = RequestHandler.get(
-                "profile/%s?web=true",
+                "profile/%s?webResolved=true",
                 uuid.toString()
         );
 
