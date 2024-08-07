@@ -12,7 +12,6 @@ import com.mobpvp.site.model.RankModel;
 import com.mobpvp.site.model.profile.data.*;
 import com.mobpvp.site.model.forum.ForumThread;
 import com.mobpvp.site.badge.BadgeModel;
-import com.mobpvp.site.model.profile.log.AntiCheatLogModel;
 import com.mobpvp.site.model.profile.log.LogModel;
 
 import java.util.*;
@@ -41,7 +40,7 @@ public class ProfileModel extends UUIDHolder {
 
     private final List<LogModel> logs = new ArrayList<>();
     private final List<BadgeModel> badges = new ArrayList<>();
-    private final List<AntiCheatLogModel> antiCheatLogs = new ArrayList<>();
+
 
     private final Map<String, String> settings = new HashMap<>();
 
@@ -96,9 +95,6 @@ public class ProfileModel extends UUIDHolder {
 //                    badges.add(badge);
 //            }
 
-        if (object.has("antiCheatLogs"))
-            for (JsonElement element : object.get("antiCheatLogs").getAsJsonArray())
-                antiCheatLogs.add(new AntiCheatLogModel(element.getAsJsonObject()));
 
         if (object.has("settings")) {
             JsonObject settingsObject = object.get("settings").getAsJsonObject();
