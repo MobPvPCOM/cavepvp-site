@@ -349,6 +349,17 @@ h6.dropdown-header {
     border-bottom: 1px solid #ffffff0d;
 }
 
+#foot .left .logo {
+    margin-top: 40px;
+    width: 100px;
+    height: 100px;
+    transition: all 1s ease;
+}
+
+#foot .left .logo:hover {
+    filter: grayscale(1);
+}
+
 #foot .top h1 {
     font-weight: 900;
     margin: 0;
@@ -1678,7 +1689,6 @@ ul.nav.nav-tabs.card-header-tabs {
 }
 
 
-
 .card-footer {
     border-color: #e1e1e1 !important;
     padding: 13px;
@@ -2265,6 +2275,7 @@ h6 {
     background: transparent !important;
     color: white !important;
 }
+
 .dark .dropdown-item:hover {
     background: transparent !important;
     color: #b6b6b6 !important;
