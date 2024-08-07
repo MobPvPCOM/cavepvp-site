@@ -1879,9 +1879,6 @@ ol.breadcrumb li {
 }
 
 .dark .header-bg {
-    background: url(/images/background.jpg);
-    background-size: cover;
-    background-position: center -5%;
     filter: grayscale(1);
 }
 
