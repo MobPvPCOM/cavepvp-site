@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+>
 <head>
     <title>OP List</title>
 </head>
@@ -31,7 +31,8 @@
             <div id="staff" class="mb-5">
                 <div class="staff-member card" th:each="member: ${oplist}">
                     <div class="staff-avatar">
-                        <img th:src="${'https://mc-heads.net/body/' + member.getName()}" th:href="'#oplist-' + ${member.getUuid()}" data-bs-toggle="modal"/>
+                        <img th:src="${'https://mc-heads.net/body/' + member.getName()}"
+                             th:href="'#oplist-' + ${member.getUuid()}" data-bs-toggle="modal" alt=""/>
                     </div>
                     <div class="staff-info card-body text-center">
                         <a class="staff-name"
@@ -50,7 +51,8 @@
                                     <button type="button" class="btn-close"
                                             data-bs-dismiss="modal"></button>
                                 </div>
-                                <div class="modal-body" th:text="'Are you sure want to deop ' + ${member.getName()} + '?'">
+                                <div class="modal-body"
+                                     th:text="'Are you sure want to deop ' + ${member.getName()} + '?'">
 
                                 </div>
 
@@ -97,8 +99,9 @@
                     </div>
                 </div>
 
-        </div>
+            </div>
 
+        </div>
     </div>
 </div>
 </body>
