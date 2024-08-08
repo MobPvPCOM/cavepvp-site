@@ -1,13 +1,20 @@
 
 package com.mobpvp.site.controller.profile;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.mobpvp.site.util.ErrorUtil;
+import com.mobpvp.site.util.PopupUtil;
+import com.mobpvp.site.util.SessionUtil;
 import com.mobpvp.site.cache.CacheHandler;
 import com.mobpvp.site.cache.impl.ProfileCache;
 import com.mobpvp.site.cache.impl.SessionCache;
 import com.mobpvp.site.controller.auth.AuthController;
 import com.mobpvp.site.model.account.ForumAccountModel;
+import com.mobpvp.site.controller.auth.AuthController;
 import com.mobpvp.site.model.profile.ProfileModel;
+import com.mobpvp.site.model.profile.data.ClaimableGrantModel;
 import com.mobpvp.site.model.profile.data.PrivacyModel;
 import com.mobpvp.site.model.profile.data.SocialModel;
 import com.mobpvp.site.request.RequestHandler;
@@ -25,6 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class SettingsController {
@@ -44,6 +55,8 @@ public class SettingsController {
 
         if (profile == null)
             return ErrorUtil.loginRedirect("/settings");
+
+
 
 
         ModelAndView view = new ModelAndView("profile/settings");
@@ -117,15 +130,25 @@ public class SettingsController {
             return modelAndView;
         }
 
-        String password = new ForumAccountModel(response.asObject()).getPassword();
-        if (!encoder.matches(currentPassword, password)) {
+        RequestResponse responsePasssword = RequestHandler.get("forum/account/login/%s?password=%s",
+                profile.getName(), currentPassword
+        );
+
+        if (!responsePasssword.wasSuccessful()) {
+            PopupUtil.error(request.getSession(), responsePasssword.getCode(), responsePasssword.getErrorMessage());
+            return modelAndView;
+        }
+
+        JsonObject object = responsePasssword.asObject();
+
+        if (!object.has("passwordCorrect") || !object.get("passwordCorrect").getAsBoolean()) {
             request.getSession().setAttribute("error_message", "Your current password is incorrect.");
             return modelAndView;
         }
 
         JsonObject body = new JsonObject();
-        body.addProperty("currentPassword", password);
-        body.addProperty("password", encoder.encode(newPassword));
+        body.addProperty("currentPassword", currentPassword);
+        body.addProperty("password", newPassword);
 
         response = RequestHandler.put(
                 "forum/account/password/%s",
@@ -149,16 +172,14 @@ public class SettingsController {
     @PostMapping("/updatePrivacySettings")
     public ModelAndView updatePrivacy(HttpServletRequest request,
                                       @RequestParam("commentStatus") String commentStatus,
-                                      @RequestParam("onlineStatus") String onlineStatus,
-                                      @RequestParam("staffPageStatus") String staffPageStatus) {
+                                      @RequestParam("onlineStatus") String onlineStatus) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
         if (profile == null)
             return ErrorUtil.loginRedirect("/settings");
 
         if (PrivacyModel.get(commentStatus) == null
-                || PrivacyModel.get(onlineStatus) == null
-                || PrivacyModel.get(staffPageStatus) == null) {
+                || PrivacyModel.get(onlineStatus) == null) {
             PopupUtil.error(request.getSession(), "Invalid privacy settings.");
             return new ModelAndView("redirect:/settings");
         }
@@ -166,7 +187,6 @@ public class SettingsController {
         JsonObject body = new JsonObject();
         body.addProperty("COMMENT_STATUS", commentStatus);
         body.addProperty("ONLINE_STATUS", onlineStatus);
-        body.addProperty("STAFF_PAGE_STATUS", staffPageStatus);
 
         RequestResponse response = RequestHandler.put(
                 "forum/account/setting/%s",

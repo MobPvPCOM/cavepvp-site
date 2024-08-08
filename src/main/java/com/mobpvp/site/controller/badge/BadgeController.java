@@ -9,6 +9,7 @@ import com.mobpvp.site.badge.BadgeModel;
 import com.mobpvp.site.model.profile.ProfileModel;
 import com.mobpvp.site.request.RequestHandler;
 import com.mobpvp.site.request.RequestResponse;
+import com.mobpvp.site.util.uuid.UUIDCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,7 +64,7 @@ public class BadgeController {
 
     @PostMapping("/badge/give")
     public ModelAndView giveBadge(HttpServletRequest request,
-                                  @RequestParam("uuid") String uuid,
+                                  @RequestParam("username") String username,
                                   @RequestParam("badge") String badgeId) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
@@ -84,7 +85,7 @@ public class BadgeController {
         }
 
         JsonObject body = new JsonObject();
-        body.addProperty("uuid", uuid);
+        body.addProperty("uuid", UUIDCache.getUuid(username).toString());
         body.addProperty("badgeId", badge.getId());
 
         RequestResponse response = RequestHandler.post("badge", body);
@@ -99,7 +100,7 @@ public class BadgeController {
 
     @PostMapping("/badge/remove")
     public ModelAndView removeBadge(HttpServletRequest request,
-                                  @RequestParam("uuid") String uuid,
+                                  @RequestParam("uuid") String username,
                                   @RequestParam("badge") String badgeId) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
@@ -120,7 +121,7 @@ public class BadgeController {
         }
 
         JsonObject body = new JsonObject();
-        body.addProperty("uuid", uuid);
+        body.addProperty("uuid", UUIDCache.getUuid(username).toString());
         body.addProperty("badgeId", badge.getId());
 
         RequestResponse response = RequestHandler.post("badge/remove", body);
