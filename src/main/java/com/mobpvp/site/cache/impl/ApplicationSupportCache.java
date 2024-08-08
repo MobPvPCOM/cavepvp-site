@@ -19,7 +19,7 @@ public class ApplicationSupportCache extends RepeatingCache<List<SupportTicketMo
 
     @Override
     public void execute() {
-        RequestResponse response = RequestHandler.get("forum/tickets/all/applications");
+        RequestResponse response = RequestHandler.get("forum/ticket/s/all/applications");
 
         if (!response.wasSuccessful())
             return;
