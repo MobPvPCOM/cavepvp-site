@@ -18,7 +18,7 @@ public class StaffSupportCache extends RepeatingCache<List<SupportTicketModel>> 
 
     @Override
     public void execute() {
-        RequestResponse response = RequestHandler.get("forum/tickets/all");
+        RequestResponse response = RequestHandler.get("forum/ticket/s/all");
 
         if (!response.wasSuccessful())
             return;
