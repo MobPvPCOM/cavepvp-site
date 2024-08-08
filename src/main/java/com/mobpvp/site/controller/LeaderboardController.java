@@ -32,7 +32,7 @@ public class LeaderboardController {
 
     public ModelAndView fillData(String leaderboardId) {
         if (CACHE.getCachedData().isEmpty())
-            return ErrorUtil.create(500, "There are no leaderboards");
+            return ErrorUtil.create(404, "Coming Soon"); // change this back to a 500 no leaderboards after its finished
 
         LeaderboardModel leaderboard = CACHE.getLeaderboard(leaderboardId);
         if (leaderboard == null)
