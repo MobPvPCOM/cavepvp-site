@@ -378,6 +378,13 @@ h6.dropdown-header {
     filter: grayscale(0);
 }
 
+@media (max-width: 768px) {
+    #foot .logo {
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
 #foot .top h1 {
     font-weight: 900;
     margin: 0;
@@ -1145,6 +1152,10 @@ div#sidebar.end {
 
     .avatar.xm.log {
         display: none;
+    }
+
+    .avatar.xm.statistic {
+        margin-right: 10px;
     }
 
     .card-feed-meta.ticket {

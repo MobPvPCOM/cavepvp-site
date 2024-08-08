@@ -123,6 +123,7 @@
                                 <label class="form-label">Who can comment on your profile?</label>
                                 <select name="commentStatus" id="commentStatus">
                                     <option class="select-option" th:each="privacySetting: ${privacySettings}"
+                                            th:if="${!privacySetting.isYesOrNo()}"
                                             th:value="${privacySetting.name()}"
                                             th:text="${privacySetting.getName()}"
                                             th:selected="${privacySetting == sessionProfile.getCommentStatus()}">
@@ -133,6 +134,19 @@
                                     <label class="form-label">Who can see your online status?</label>
                                     <select name="onlineStatus" id="onlineStatus">
                                         <option class="select-option" th:each="privacySetting: ${privacySettings}"
+                                                th:if="${!privacySetting.isYesOrNo()}"
+                                                th:value="${privacySetting.name()}"
+                                                th:text="${privacySetting.getName()}"
+                                                th:selected="${privacySetting == sessionProfile.getOnlineStatus()}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="social-input" th:if="${sessionProfile.hasPermission('website.staff')}">
+                                    <label class="form-label">Do you want to be shown on the staff page?</label>
+                                    <select name="staffPageStatus" id="staffPageStatus">
+                                        <option class="select-option" th:each="privacySetting: ${privacySettings}"
+                                                th:if="${privacySetting.isYesOrNo()}"
                                                 th:value="${privacySetting.name()}"
                                                 th:text="${privacySetting.getName()}"
                                                 th:selected="${privacySetting == sessionProfile.getOnlineStatus()}">

@@ -62,7 +62,7 @@
 
                 <li class="list-group-item d-flex justify-content-between align-items-center"
                     th:each="comment: ${profile.getComments()}">
-                    <div class="avatar xm">
+                    <div class="avatar xm statistic">
                         <img th:src="${'https://mc-heads.net/body/' + comment.getAuthor()}">
                     </div>
                     <div class="ms-lg-3 me-auto">
