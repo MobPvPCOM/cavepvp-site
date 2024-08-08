@@ -39,7 +39,7 @@
                 </div>
 
                 <div th:if="${profile.isOnline()}">
-                    Currently online on <span th:text="${profile.getLastServer()}"></span>
+                    Currently <span class="online-text">online</span> on <span class="server" th:text="${profile.getLastServer()}"></span>
                 </div>
             </div>
         </div>

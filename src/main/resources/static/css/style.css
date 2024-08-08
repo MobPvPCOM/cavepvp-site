@@ -1608,6 +1608,14 @@ ul.nav.nav-tabs.card-header-tabs {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 
+.card-footer .online-text {
+    color: #1ac60e !important;
+}
+
+.card-footer .server .dark {
+    color: white;
+}
+
 .card-user-details {
     text-align: center;
     display: flex;
