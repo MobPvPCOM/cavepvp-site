@@ -1,10 +1,10 @@
 {
   "badges": [
     {
-      "id": "badge-id",
-      "name": "badge-name",
-      "description": "badge-description",
-      "icon": "badge-icon.png",
+      "id": "developer",
+      "name": "Developer",
+      "description": "This user is a developer",
+      "icon": "developer.png",
       "clazz": "com.mobpvp.site.badge.BadgeModel"
     },
     {

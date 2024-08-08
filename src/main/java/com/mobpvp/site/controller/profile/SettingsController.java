@@ -3,6 +3,7 @@ package com.mobpvp.site.controller.profile;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.mobpvp.site.util.ErrorUtil;
 import com.mobpvp.site.util.PopupUtil;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,15 +127,25 @@ public class SettingsController {
             return modelAndView;
         }
 
-        String password = new ForumAccountModel(response.asObject()).getPassword();
-        if (!encoder.matches(currentPassword, password)) {
+        RequestResponse responsePasssword = RequestHandler.get("forum/account/login/%s?password=%s",
+                profile.getName(), currentPassword
+        );
+
+        if (!responsePasssword.wasSuccessful()) {
+            PopupUtil.error(request.getSession(), responsePasssword.getCode(), responsePasssword.getErrorMessage());
+            return modelAndView;
+        }
+
+        JsonObject object = responsePasssword.asObject();
+
+        if (!object.has("passwordCorrect") || !object.get("passwordCorrect").getAsBoolean()) {
             request.getSession().setAttribute("error_message", "Your current password is incorrect.");
             return modelAndView;
         }
 
         JsonObject body = new JsonObject();
-        body.addProperty("currentPassword", password);
-        body.addProperty("password", encoder.encode(newPassword));
+        body.addProperty("currentPassword", currentPassword);
+        body.addProperty("password", newPassword);
 
         response = RequestHandler.put(
                 "forum/account/password/%s",
