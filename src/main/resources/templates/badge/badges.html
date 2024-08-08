@@ -75,8 +75,8 @@
                                     </div>
 
                                     <div class="modal-body">
-                                        <label for="uuid" class="form-label">Player Name</label>
-                                        <input type="text" id="uuid" name="uuid" class="form-control" required>
+                                        <label for="username" class="form-label">Player Name</label>
+                                        <input type="text" id="username" name="username" class="form-control" required>
                                         <input type="hidden" id="badge" name="badge" class="form-control" th:value="${badge.getId()}">
                                         <p class="validation-text" id="validationResult"></p>
                                     </div>
@@ -101,38 +101,6 @@
     <script>
         const uuidPattern = /^[0-9a-f]{8}(-?[0-9a-f]{4}){3}-?[0-9a-f]{12}$/i;
 
-        // Listen for modal show events on the document level
-        document.addEventListener('show.bs.modal', function (e) {
-            if (e.target.classList.contains('modal')) {
-                // This event is fired for any modal, so we need to make sure it's a badge modal
-                const modal = e.target;
-                const uuidInput = modal.querySelector('.form-control');
-                const confirmButton = modal.querySelector('.btn-primary.confirm');
-                const validationResult = modal.querySelector('.validation-text');
-
-                async function validateUUID() {
-                    const inputValue = uuidInput.value;
-                    if (uuidPattern.test(inputValue)) {
-                        try {
-                            const name = await getName(inputValue);
-                            validationResult.textContent = "Valid UUID | " + name;
-                            confirmButton.disabled = false;
-                        } catch (error) {
-                            validationResult.textContent = "Valid UUID | Error fetching name";
-                            confirmButton.disabled = true;
-                        }
-                    } else {
-                        validationResult.textContent = "Not a valid UUID!";
-                        confirmButton.disabled = true;
-                    }
-                }
-
-                uuidInput.addEventListener('input', validateUUID);
-
-                // You can also trigger the validation when the modal is shown
-                modal.addEventListener('shown.bs.modal', validateUUID);
-            }
-        });
 
         function getName(uuid) {
             const apiUrl = `https://playerdb.co/api/player/minecraft/${uuid}`;
