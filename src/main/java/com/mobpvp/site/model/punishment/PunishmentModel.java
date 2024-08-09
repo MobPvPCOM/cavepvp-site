@@ -2,6 +2,7 @@ package com.mobpvp.site.model.punishment;
 
 import com.google.gson.JsonObject;
 import com.mobpvp.site.util.TimeUtils;
+import com.mobpvp.site.util.uuid.UUIDCache;
 import lombok.Getter;
 
 import java.util.Comparator;
@@ -37,9 +38,9 @@ public class PunishmentModel {
     private final String punishedByWebColor;
 
     public PunishmentModel(JsonObject object) {
-        this.id = UUID.fromString(object.get("_id").getAsString());
+        this.id = UUID.fromString(object.get("id").getAsString());
         this.uuid = UUID.fromString(object.get("uuid").getAsString());
-        this.type = PunishmentType.valueOf(object.get("type").getAsString());
+        this.type = PunishmentType.valueOf(object.get("punishmentType").getAsString());
 
         this.duration = object.get("duration").getAsLong();
 
@@ -47,18 +48,23 @@ public class PunishmentModel {
         this.punishedAt = object.get("punishedAt").getAsLong();
 
         this.punishedReason = object.get("punishedReason").getAsString();
-        this.template = object.get("template").getAsString();
+        this.template = (object.has("template") ? object.get("template").getAsString() : null);
 
-        this.serverType = object.get("serverType").getAsString();
-        this.server = object.get("server").getAsString();
+        this.serverType = object.get("punishedServerType").getAsString();
+        this.server = object.get("punishedServer").getAsString();
 
         this.removed = object.get("removed").getAsBoolean();
         this.removedBy = object.get("removedBy").getAsString();
         this.removedAt = object.get("removedAt").getAsLong();
         this.removedReason = object.get("removedReason").getAsString();
 
-        this.punishedByName = object.get("punishedByName").getAsString();
-        this.punishedByWebColor = object.get("punishedByWebColor").getAsString();
+        if (object.has("punishedByName"))
+            this.punishedByName = object.get("punishedByName").getAsString();
+        else this.punishedByName = UUIDCache.getName(UUID.fromString(punishedBy));
+
+        if (object.has("punishedByWebColor"))
+            this.punishedByWebColor = object.get("punishedByWebColor").getAsString();
+        else this.punishedByWebColor = "#212529";
     }
 
     public String getPunishedAgo() {
