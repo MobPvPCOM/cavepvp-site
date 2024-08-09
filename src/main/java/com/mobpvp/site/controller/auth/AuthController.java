@@ -61,8 +61,6 @@ public class AuthController {
             return new ModelAndView("auth/register-steps");
 
         RequestResponse response = RequestHandler.get("forum/account/token/%s", token);
-
-
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
