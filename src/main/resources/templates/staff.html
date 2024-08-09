@@ -37,7 +37,6 @@
                     </div>
                     <div class="staff-info card-body text-center">
                         <a class="staff-name"
-                           th:if="${profile != null}"
                              th:text="${member.getName()}"
                              th:href="${'/u/' + member.getName()}">
                         </a>
