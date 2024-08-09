@@ -10,7 +10,9 @@ public enum PrivacyModel {
 
     EVERYONE("Everyone"),
     FRIENDS("Friends"),
-    NOBODY("Nobody");
+    NOBODY("Nobody"),
+    YES("Yes"),
+    NO("No");
 
     private final String name;
 
@@ -25,6 +27,10 @@ public enum PrivacyModel {
             return false;
 
         return target != null && profile.hasFriend(target);
+    }
+
+    public boolean isYesOrNo() {
+        return this == YES || this == NO;
     }
 
     public static PrivacyModel get(String name) {

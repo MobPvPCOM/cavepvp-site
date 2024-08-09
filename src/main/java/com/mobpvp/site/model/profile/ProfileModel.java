@@ -43,7 +43,6 @@ public class ProfileModel extends UUIDHolder {
     private final List<LogModel> logs = new ArrayList<>();
     private final List<BadgeModel> badges = new ArrayList<>();
 
-
     private final Map<String, String> settings = new HashMap<>();
     private final boolean trusted;
 
@@ -253,6 +252,14 @@ public class ProfileModel extends UUIDHolder {
 
         return toReturn;
     }
+
+    public PrivacyModel getStaffPageStatus() {
+        return PrivacyModel.valueOf(settings.getOrDefault(
+                "STAFF_PAGE_STATUS",
+                "YES"
+        ));
+    }
+
 
     public PrivacyModel getCommentStatus() {
         return PrivacyModel.valueOf(settings.getOrDefault(
