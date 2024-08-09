@@ -2,6 +2,7 @@ package com.mobpvp.site.model.staff;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mobpvp.site.cache.impl.ProfileCache;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -26,8 +27,11 @@ public class StaffRankModel {
         for (JsonElement element : object.get("members").getAsJsonArray()) {
             StaffMember member = new StaffMember(element.getAsJsonObject());
 
-            if (members.contains(member))
+            if (members.contains(member)) {
                 continue;
+            }
+
+
 
             members.add(member);
         }

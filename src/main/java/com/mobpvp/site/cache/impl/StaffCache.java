@@ -20,7 +20,7 @@ public class StaffCache extends RepeatingCache<List<StaffRankModel>> {
 
     @Override
     public void execute() {
-        RequestResponse response = RequestHandler.get("staffList");
+        RequestResponse response = RequestHandler.get("staffList?website=true");
         if (!response.wasSuccessful())
             return;
 
