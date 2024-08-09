@@ -839,6 +839,14 @@ div#sidebar.end {
     outline: 1px solid #ffffff82;
     border: 1px solid #0000002b !important;
 }
+.btn.btn-red {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.01);
+    background: #c60e0e !important;
+    color: white !important;
+    outline-offset: -2px;
+    outline: 1px solid #ffffff82;
+    border: 1px solid #0000002b !important;
+}
 
 .news-title span {
     background: var(--primaryColor) !important;

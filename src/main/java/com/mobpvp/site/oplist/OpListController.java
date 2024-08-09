@@ -69,7 +69,7 @@ public class OpListController {
         return new ModelAndView("redirect:/oplist");
     }
     @PostMapping("/oplist/remove")
-    public ModelAndView removeUser(HttpServletRequest request, @RequestParam("uuid") UUID playerId) {
+    public ModelAndView removeUser(HttpServletRequest request, @RequestParam("name") String name) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
         if (profile == null)
@@ -78,7 +78,7 @@ public class OpListController {
         if (!profile.hasPermission("trusted"))
             return ErrorUtil.noPerms("You do not have permission to view this page.");
 
-
+        UUID playerId = UUIDCache.getUuid(name);
         RequestResponse response = RequestHandler.delete("oplist/" + playerId.toString());
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
