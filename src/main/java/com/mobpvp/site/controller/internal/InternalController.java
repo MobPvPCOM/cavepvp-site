@@ -52,7 +52,7 @@ public class InternalController {
         }
         response.add("mobServers", servers);
 
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private ServerInfo serverInfo;
