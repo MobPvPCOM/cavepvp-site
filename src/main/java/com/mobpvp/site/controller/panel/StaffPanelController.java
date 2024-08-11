@@ -5,6 +5,7 @@ import com.mobpvp.site.util.SessionUtil;
 import com.mobpvp.site.advice.item.NavItem;
 import com.mobpvp.site.model.profile.ProfileModel;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,5 +37,6 @@ public class StaffPanelController {
 
         return view;
     }
+
 
 }

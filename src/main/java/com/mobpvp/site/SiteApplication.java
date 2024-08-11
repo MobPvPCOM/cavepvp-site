@@ -1,7 +1,9 @@
 package com.mobpvp.site;
 
 import com.mobpvp.site.cache.impl.*;
+import com.mobpvp.site.config.RedisConfig;
 import com.mobpvp.site.config.SiteBadgeConfig;
+import com.mobpvp.site.redis.RedisService;
 import lombok.Getter;
 import com.mobpvp.site.badge.BadgeHandler;
 import com.mobpvp.site.cache.CacheHandler;
@@ -21,6 +23,8 @@ public class SiteApplication {
     private final CacheThread cacheThread;
     private final BadgeHandler badgeHandler;
     private final SiteBadgeConfig badgeConfig;
+    private final RedisConfig redisConfig;
+    private final RedisService redisService;
 
     public SiteApplication() {
         INSTANCE = this;
@@ -29,9 +33,14 @@ public class SiteApplication {
                 SiteBadgeConfig.class,
                 new File("config/badges.json")
         );
+        this.redisConfig = ConfigurationHandler.INSTANCE.loadConfiguration(
+                RedisConfig.class,
+                new File("config/redis.json")
+        );
 
         this.cacheThread = new CacheThread();
         this.badgeHandler = new BadgeHandler();
+        this.redisService = new RedisService(this.redisConfig, "core");
 
         CacheHandler.registerAll(
                 new StaffCache(),

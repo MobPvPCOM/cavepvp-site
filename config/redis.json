@@ -1,0 +1,7 @@
+{
+  "host": "mobpvp",
+  "port": 6379,
+  "authEnabled": false,
+  "authPassword": "password",
+  "dbId": 0
+}
