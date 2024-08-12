@@ -17,6 +17,7 @@ import com.mobpvp.site.util.uuid.UUIDHolder;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 public class ProfileModel extends UUIDHolder {
@@ -26,6 +27,7 @@ public class ProfileModel extends UUIDHolder {
 
     private final long firstJoin;
     private final long lastSeen;
+    private final long playTime;
     private final String lastServer;
     private final String currentServer;
 
@@ -53,6 +55,9 @@ public class ProfileModel extends UUIDHolder {
 
         this.lastSeen = object.has("lastSeen")
                 ? object.get("lastSeen").getAsLong()
+                : -1;
+        this.playTime = object.has("playTime")
+                ? object.get("playTime").getAsLong()
                 : -1;
 
         this.lastServer = object.has("lastServer")
@@ -197,6 +202,10 @@ public class ProfileModel extends UUIDHolder {
 
     public String formatFirstJoin() {
         return TimeUtils.formatCalendarString(firstJoin, false);
+    }
+
+    public String formatPlaytime() {
+        return TimeUtils.formatTimeShort(playTime);
     }
 
     public boolean isOnline() {
