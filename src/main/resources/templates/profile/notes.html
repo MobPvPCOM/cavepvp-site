@@ -20,7 +20,7 @@
                         <div class="fw-bold">
                             <a th:style="${'color: ' + log.getAddedByWebColor()}" th:text="${log.getAddedByName()}"></a>
                             <a th:text="${log.getNote() + ' on '}" style="color: silver"></a>
-                            <a th:style="${'color: #db5757'}" th:text="${log.getAddedOn()}"></a>
+                            <a th:style="${'color: var(--primaryColor)'}" th:text="${log.getAddedOn()}"></a>
                         </div>
                         <div class="card-feed-meta">
                             <span th:text="${log.getAddedAgo()}"></span>
