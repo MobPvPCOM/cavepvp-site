@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body>
+<div th:fragment="notes">
+    <div class="card">
+        <div class="card-feed-list card-recent">
+            <ol class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:if="${!notes.isEmpty()}"
+                    th:each="log: ${notes}">
+                    <div class="avatar xm log">
+                        <img th:src="${'https://mc-heads.net/body/' + log.getAddedByName()}"/>
+                    </div>
+                    <!--/*@thymesVar id="log" type="com.mobpvp.site.model.profile.log.Note"*/-->
+                    <div class="ms-lg-3 me-auto">
+                        <div class="fw-bold">
+                            <a th:style="${'color: ' + log.getAddedByWebColor()}" th:text="${log.getAddedByName()}"></a>
+                            <a th:text="${log.getNote() + ' on '}" style="color: silver"></a>
+                            <a th:style="${'color: #db5757'}" th:text="${log.getAddedOn()}"></a>
+                        </div>
+                        <div class="card-feed-meta">
+                            <span th:text="${log.getAddedAgo()}"></span>
+                        </div>
+                    </div>
+
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    style="background-color: #973333; justify-content: center !important;"
+                    th:if="${notes.isEmpty()}">
+                    <div class="fw-bold text-center error">This user has no notes.</div>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example" th:if="${!notes.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${previousPage == currentPage ? 'disabled' : ''}">
+                <a class="page-link" th:href="${previousPage == currentPage ? '' : previousPageUrl}" aria-disabled="true">&laquo;</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:text="${currentPage}">
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${nextPage == currentPage ? 'disabled' : ''}">
+                <a class="page-link" th:href="${nextPage == currentPage ? '' : nextPageUrl}" aria-disabled="true">&raquo;</a>
+            </li>
+        </ul>
+        <div class="navigation-meta" th:text="${'You are on page ' + currentPage + '/' + pageCount + '.'}">
+        </div>
+    </nav>
+
+</div>
+</body>
+</html>

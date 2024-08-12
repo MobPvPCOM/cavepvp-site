@@ -8,6 +8,7 @@ import com.mobpvp.site.model.RankModel;
 import com.mobpvp.site.model.forum.ForumThread;
 import com.mobpvp.site.model.profile.data.*;
 import com.mobpvp.site.model.profile.log.LogModel;
+import com.mobpvp.site.model.profile.log.Note;
 import com.mobpvp.site.model.punishment.PunishmentModel;
 import com.mobpvp.site.request.RequestHandler;
 import com.mobpvp.site.request.RequestResponse;
@@ -43,7 +44,9 @@ public class ProfileModel extends UUIDHolder {
     private final Map<String, Boolean> permissions = new HashMap<>();
 
     private final List<LogModel> logs = new ArrayList<>();
+    private final List<Note> notes = new ArrayList<>();
     private final List<BadgeModel> badges = new ArrayList<>();
+
 
     private final Map<String, String> settings = new HashMap<>();
     private final boolean trusted;
@@ -92,6 +95,9 @@ public class ProfileModel extends UUIDHolder {
         if (object.has("logs"))
             for (JsonElement element : object.get("logs").getAsJsonArray())
                 logs.add(new LogModel(element.getAsJsonObject()));
+        if (object.has("notes"))
+            for (JsonElement element : object.get("notes").getAsJsonArray())
+                notes.add(new Note(element.getAsJsonObject()));
 
 //        if (object.has("badges"))
 //            for (JsonElement element : object.get("badges").getAsJsonArray()) {

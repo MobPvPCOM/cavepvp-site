@@ -14,7 +14,6 @@ import com.mobpvp.site.controller.auth.AuthController;
 import com.mobpvp.site.model.account.ForumAccountModel;
 import com.mobpvp.site.controller.auth.AuthController;
 import com.mobpvp.site.model.profile.ProfileModel;
-import com.mobpvp.site.model.profile.data.ClaimableGrantModel;
 import com.mobpvp.site.model.profile.data.PrivacyModel;
 import com.mobpvp.site.model.profile.data.SocialModel;
 import com.mobpvp.site.request.RequestHandler;

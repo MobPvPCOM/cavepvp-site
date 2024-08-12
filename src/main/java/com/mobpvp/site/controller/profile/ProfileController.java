@@ -45,7 +45,7 @@ public class ProfileController {
                              @PathVariable("name") String name,
                              @RequestParam(value = "page", required = false) Integer page) {
         Tuple<ProfileModel, ModelAndView> tuple
-                = displayPage(request, name, "logs", "website.log.view");
+                = displayPage(request, name, "logs", "website.view.log");
 
         ProfileModel profile = tuple.key();
         ModelAndView view = tuple.value();
@@ -56,6 +56,27 @@ public class ProfileController {
                 page == null ? 1 : page, 10, profile.getLogs(), "logs"
         ).applyTo(view, String.format(
                 "/u/%s/logs?page={page}",
+                profile.getName()
+        ));
+
+        return view;
+    }
+    @RequestMapping({"/user/{name}/notes", "/u/{name}/notes"})
+    public ModelAndView notes(HttpServletRequest request,
+                             @PathVariable("name") String name,
+                             @RequestParam(value = "page", required = false) Integer page) {
+        Tuple<ProfileModel, ModelAndView> tuple
+                = displayPage(request, name, "notes", "website.view.notes");
+
+        ProfileModel profile = tuple.key();
+        ModelAndView view = tuple.value();
+        if (profile == null)
+            return view;
+
+        new ViewPaginationModel<>(
+                page == null ? 1 : page, 10, profile.getNotes(), "notes"
+        ).applyTo(view, String.format(
+                "/u/%s/notes?page={page}",
                 profile.getName()
         ));
 
@@ -181,7 +202,10 @@ public class ProfileController {
         List<NavItem> userNavItems = List.of(
                 new NavItem("General", "/u/" + profile.getName()),
                 new NavItem("Forums", "/u/" + profile.getName() + "/forums"),
-                new NavItem("Logs", "/u/" + profile.getName() + "/logs", "website.log.view")
+                new NavItem("Logs", "/u/" + profile.getName() + "/logs", "website.view.logs"),
+                new NavItem("Notes", "/u/" + profile.getName() + "/notes", "website.view.notes"),
+                new NavItem("Grants", "/u/" + profile.getName() + "/grants", "website.view.grants"),
+                new NavItem("Punishments", "/u/" + profile.getName() + "/punishments", "website.view.punishments")
         );
 
         List<ForumThread> threads = new ArrayList<>(profile.getThreads());
