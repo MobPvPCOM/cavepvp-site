@@ -149,7 +149,7 @@
                                                 th:if="${privacySetting.isYesOrNo()}"
                                                 th:value="${privacySetting.name()}"
                                                 th:text="${privacySetting.getName()}"
-                                                th:selected="${privacySetting == sessionProfile.getOnlineStatus()}">
+                                                th:selected="${privacySetting == sessionProfile.getStaffPageStatus()}">
                                         </option>
                                     </select>
                                 </div>

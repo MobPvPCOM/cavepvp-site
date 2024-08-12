@@ -1,18 +1,12 @@
 
 package com.mobpvp.site.controller.profile;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import com.mobpvp.site.util.ErrorUtil;
-import com.mobpvp.site.util.PopupUtil;
-import com.mobpvp.site.util.SessionUtil;
 import com.mobpvp.site.cache.CacheHandler;
 import com.mobpvp.site.cache.impl.ProfileCache;
 import com.mobpvp.site.cache.impl.SessionCache;
 import com.mobpvp.site.controller.auth.AuthController;
 import com.mobpvp.site.model.account.ForumAccountModel;
-import com.mobpvp.site.controller.auth.AuthController;
 import com.mobpvp.site.model.profile.ProfileModel;
 import com.mobpvp.site.model.profile.data.PrivacyModel;
 import com.mobpvp.site.model.profile.data.SocialModel;
@@ -31,10 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class SettingsController {
@@ -54,8 +44,6 @@ public class SettingsController {
 
         if (profile == null)
             return ErrorUtil.loginRedirect("/settings");
-
-
 
 
         ModelAndView view = new ModelAndView("profile/settings");
@@ -171,7 +159,8 @@ public class SettingsController {
     @PostMapping("/updatePrivacySettings")
     public ModelAndView updatePrivacy(HttpServletRequest request,
                                       @RequestParam("commentStatus") String commentStatus,
-                                      @RequestParam("onlineStatus") String onlineStatus) {
+                                      @RequestParam("onlineStatus") String onlineStatus,
+                                      @RequestParam("staffPageStatus") String staffPageStatus) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
         if (profile == null)
@@ -186,6 +175,7 @@ public class SettingsController {
         JsonObject body = new JsonObject();
         body.addProperty("COMMENT_STATUS", commentStatus);
         body.addProperty("ONLINE_STATUS", onlineStatus);
+        body.addProperty("STAFF_PAGE_STATUS", staffPageStatus);
 
         RequestResponse response = RequestHandler.put(
                 "forum/account/setting/%s",
