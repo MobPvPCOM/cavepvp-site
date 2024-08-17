@@ -42,7 +42,7 @@ public class InternalController {
         JsonObject servers = new JsonObject();
 
         for (ServerInfo server : ServerInfo.getServers()) {
-            if (server.getGrantScope().equals("proxy")) {
+            if (server.getGrantScope().equals("proxy") || server.getGrantScope().equals("linked")) {
                 continue;
             }
             JsonObject serverObject = new JsonObject();
@@ -60,6 +60,7 @@ public class InternalController {
     private void sendVanicLink(int online) {
         if (this.serverInfo == null) {
             this.serverInfo = new ServerInfo("uhc-2");
+            this.serverInfo.setGrantScope("linked");
             this.serverInfo.setMaxPlayers(1000);
             this.serverInfo.setTps(20);
             this.serverInfo.setState(ServerState.ONLINE);

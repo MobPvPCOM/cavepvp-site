@@ -75,7 +75,6 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .failureUrl("/login")
                 .failureHandler((httpServletRequest, httpServletResponse, e) -> {
-                    e.printStackTrace();
                     httpServletRequest.getSession().setAttribute("error_message", "Invalid username or password.");
                     httpServletResponse.sendRedirect("/login");
                 })

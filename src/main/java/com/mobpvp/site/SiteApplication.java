@@ -51,7 +51,8 @@ public class SiteApplication {
                 new StaffSupportCache(),
                 new ApplicationSupportCache(),
                 new ProfileCache(),
-                new SessionCache()
+                new SessionCache(),
+                new TagCache()
         );
 
         Runtime.getRuntime().addShutdownHook(new Thread(

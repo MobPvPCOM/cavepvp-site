@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Tags</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/nailujx86/mcmotdparser@master/dist/mcmotd.css">
+    <link rel="stylesheet" th:href="@{/css/minecraftia.css}">
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="content">
+
+        <div id="section-above">
+            <div class="alert alert-light breadcrumb-bar" role="alert">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/panel">Admin Panel</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tags</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card forum-list policy tickets" th:if="${tags.isEmpty()}">
+            <p style="margin-top: 1rem; text-align: center">
+                <b>There are no tags</b>
+            </p>
+        </div>
+
+        <div class="card forum-list" th:if="${!tags.isEmpty()}">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="ticket-title text-center" style="width: 150px">Name</th>
+                    <th class="ticket-status-title"  style="width: 250px">Prefix</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="tag: ${tags}">
+                    <th class="text-center" th:text="${tag.getName()}">
+                    </th>
+
+                    <th  style="background-image: url('https://i.imgur.com/jHRzOfO.png'); font-family: Minecraftia;" th:utext="${tag.getDisplayNameHtml()}">
+                    </th>
+
+                    <th class="text-left">
+
+                    </th>
+
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const uuidPattern = /^[0-9a-f]{8}(-?[0-9a-f]{4}){3}-?[0-9a-f]{12}$/i;
+
+
+        function getName(uuid) {
+            const apiUrl = `https://playerdb.co/api/player/minecraft/${uuid}`;
+
+            return fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Request failed");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.data || !data.data.player || !data.data.player.username) {
+                        throw new Error("Data not found");
+                    }
+
+                    return data.data.player.username;
+                })
+                .catch(error => {
+                    throw error;
+                });
+        }
+    </script>
+</div>
+</body>
+</html>
