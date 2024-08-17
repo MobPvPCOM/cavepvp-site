@@ -21,7 +21,7 @@ import java.util.UUID;
 @Controller
 public class OpListController {
 
-    @RequestMapping("/oplist")
+    @RequestMapping("/admin/oplist")
     public ModelAndView panel(HttpServletRequest request) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
@@ -49,7 +49,7 @@ public class OpListController {
         view.addObject("oplist", users);
         return view;
     }
-    @PostMapping("/oplist/add")
+    @PostMapping("/admin/oplist/add")
     public ModelAndView addPlayer(HttpServletRequest request, String name) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
@@ -85,7 +85,7 @@ public class OpListController {
 
         return new ModelAndView("redirect:/oplist");
     }
-    @GetMapping("/oplist/remove")
+    @GetMapping("/admin/oplist/remove")
     public ModelAndView removeUser(HttpServletRequest request) {
         return new ModelAndView("redirect:/oplist");
     }

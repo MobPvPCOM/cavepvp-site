@@ -19,7 +19,7 @@ public class StaffPanelController {
             new NavItem("Staff Ticket View", "/support/staff", "core.staff"),
             new NavItem("Badge Management", "/badges", "*"),
             new NavItem("Applications", "/applications/staff", "website.support.application.view"),
-            new NavItem("Op List", "/oplist", "trusted"),
+            new NavItem("Op List", "/admin/oplist", "trusted"),
             new NavItem("Tags", "/admin/tags", "website.view.tags")
     );
 
