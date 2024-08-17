@@ -18,9 +18,9 @@ public class StaffPanelController {
     public static final List<NavItem> ITEMS = List.of(
             new NavItem("Staff Ticket View", "/support/staff", "core.staff"),
             new NavItem("Badge Management", "/badges", "*"),
+            new NavItem("Applications", "/applications/staff", "website.support.application.view"),
             new NavItem("Op List", "/oplist", "trusted"),
-            new NavItem("Tags", "/admin/tags", "website.view.tags"),
-            new NavItem("Applications", "/applications/staff", "website.support.application.view")
+            new NavItem("Tags", "/admin/tags", "website.view.tags")
     );
 
     @RequestMapping("/panel")
