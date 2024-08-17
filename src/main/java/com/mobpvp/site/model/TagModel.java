@@ -2,6 +2,7 @@ package com.mobpvp.site.model;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mobpvp.site.model.profile.ProfileModel;
 import com.mobpvp.site.util.MinecraftTextUtils;
 import lombok.Data;
 
@@ -28,6 +29,11 @@ public class TagModel {
 
     public String getDisplayNameFormatted() {
         return this.displayName.replace(MinecraftTextUtils.COLOR_CHAR, '&');
+    }
+    public String getDisplayNameHtml(ProfileModel model) {
+        String formattedName = model.getRank().getPrefix() + model.getName();
+        String formattedChat = MinecraftTextUtils.COLOR_CHAR + "7: " + model.getRank().getChatColor() + "Hello World";
+        return MinecraftTextUtils.toHtml(formattedName + " " + this.displayNameHtml + " " + formattedChat);
     }
 
 }
