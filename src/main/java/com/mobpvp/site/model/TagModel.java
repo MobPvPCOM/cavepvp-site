@@ -26,5 +26,8 @@ public class TagModel {
         this.displayNameHtml = MinecraftTextUtils.toHtml(this.displayName);
     }
 
+    public String getDisplayNameFormatted() {
+        return this.displayName.replace(MinecraftTextUtils.COLOR_CHAR, '&');
+    }
 
 }

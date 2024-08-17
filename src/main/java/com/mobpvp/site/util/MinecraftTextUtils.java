@@ -14,6 +14,7 @@ import java.util.Map;
  */
 //Based off https://github.com/nailujx86/mcmotdparser
 public class MinecraftTextUtils {
+    public static final char COLOR_CHAR = '§';
     public static final Map<String, String> CLASSES = new HashMap<>();
     public static final Map<String, String> COLORS = new HashMap<>();
     public static final Map<String, String> EXTRAS = new HashMap<>();

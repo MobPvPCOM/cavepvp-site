@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="@{default}"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+>
 <head>
     <title>Tags</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/nailujx86/mcmotdparser@master/dist/mcmotd.css">
@@ -28,6 +28,13 @@
             <p style="margin-top: 1rem; text-align: center">
                 <b>There are no tags</b>
             </p>
+            <a type="button" style="color:lime" class=" btn" th:href="'#create-tag'" data-bs-toggle="modal">
+                Create
+                <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                </svg>
+
+            </a>
         </div>
 
         <div class="card forum-list" th:if="${!tags.isEmpty()}">
@@ -35,7 +42,8 @@
                 <thead>
                 <tr>
                     <th class="ticket-title text-center" style="width: 150px">Name</th>
-                    <th class="ticket-status-title"  style="width: 250px">Prefix</th>
+                    <th class="ticket-status-title" style="width: 250px">Prefix</th>
+                    <th class="ticket-title text-center" style="width: 200px">Options</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,17 +51,138 @@
                     <th class="text-center" th:text="${tag.getName()}">
                     </th>
 
-                    <th  style="background-image: url('https://i.imgur.com/jHRzOfO.png'); font-family: Minecraftia;" th:utext="${tag.getDisplayNameHtml()}">
+                    <th style="background-image: url('https://i.imgur.com/jHRzOfO.png'); font-family: Minecraftia;"
+                        th:utext="${tag.getDisplayNameHtml()}">
                     </th>
 
-                    <th class="text-left">
+                    <th class="text-center">
+                        <a type="button" class="btn" th:href="'#edit-' + ${tag.getName()}" data-bs-toggle="modal">
+                            <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                 fill="currentColor" class="size-6">
+                                <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z"/>
+                                <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z"/>
+                            </svg>
+                        </a>
 
+                        <a type="button" class="btn red" th:href="'#delete-' + ${tag.getName()}" data-bs-toggle="modal">
+                            <svg width="32" height="32" color="red" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path fill-rule="evenodd"
+                                      d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </a>
                     </th>
 
+                    <div class="modal fade" th:id="'edit-' + ${tag.getName()}"
+                         style="transform: translateY(250px);">
 
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Update Tag
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form th:action="@{/admin/tags/update}" method="post">
+                                <div class="modal-body">
+                                    <label for="tag-text" class="form-label"
+                                           th:text="'New Tag Prefix'"></label>
+                                    <input type="text" id="tag-text" name="tag-text" class="form-control"
+                                           th:value="${tag.getDisplayNameFormatted()}" required>
+                                    <input type="hidden" id="tag-update" name="tag" class="form-control"
+                                           th:value="${tag.getName()}" required>
+                                </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary confirm" id="confirmButton-update"
+                                                style="background-color: limegreen !important">Update
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal fade" th:id="'delete-' + ${tag.getName()}"
+                         style="transform: translateY(250px);">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Delete Tag
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form th:action="@{/admin/tags/delete}" method="post">
+                                <div class="modal-body">
+                                    <label for="tag-text" class="form-label"
+                                           th:text="'Are you sure you want to Delete ' + ${tag.getName} + '?'"></label>
+                                    <input type="hidden" id="tag-delete" name="tag" class="form-control"
+                                           th:value="${tag.getName()}" required>
+                                </div>
+
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary confirm" id="confirmButton-delete"
+                                                style="background-color: red !important">Delete
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </tr>
+
+                <tr>
+                    <th></th>
+                    <th>
+                        <a type="button" style="color:lime" class=" btn" th:href="'#create-tag'" data-bs-toggle="modal">
+                            Create
+                            <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                            </svg>
+
+                        </a>
+                    </th>
+                    <th></th>
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="modal fade" th:id="'create-tag'"
+             style="transform: translateY(250px);">
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Create Tag
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form th:action="@{/admin/tags/create}" method="post">
+                        <div class="modal-body">
+                            <label for="tag-text" class="form-label"
+                                   th:text="'Tag Name'"></label>
+                            <input type="text" id="tag-name" name="tag" class="form-control" required>
+                            <label for="tag-text" class="form-label"
+                                   th:text="'Tag Display'"></label>
+                            <input type="text" id="tag-name-display" name="tag-text" class="form-control" required>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close
+                            </button>
+                            <button type="submit" class="btn btn-primary confirm" id="confirmButton-create"
+                                    style="background-color: limegreen !important">Create
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 
