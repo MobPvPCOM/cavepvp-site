@@ -113,8 +113,8 @@ public class ForumsController {
         body.addProperty("description", description);
         body.addProperty("locked", locked);
 
-        if (permission != null && !permission.isEmpty())
-            body.addProperty("permission", permission);
+        if (permission != null)
+            body.addProperty("permission", permission.isEmpty() ? "" : permission);
 
         RequestResponse response = RequestHandler.post("forum/forum", body);
         if (!response.wasSuccessful())

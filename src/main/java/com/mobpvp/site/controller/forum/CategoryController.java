@@ -1,15 +1,15 @@
 package com.mobpvp.site.controller.forum;
 
 import com.google.gson.JsonObject;
-import com.mobpvp.site.util.ErrorUtil;
-import com.mobpvp.site.util.PopupUtil;
-import com.mobpvp.site.util.SessionUtil;
-import com.mobpvp.site.util.StringUtil;
 import com.mobpvp.site.cache.CacheHandler;
 import com.mobpvp.site.cache.impl.CategoryCache;
 import com.mobpvp.site.model.profile.ProfileModel;
 import com.mobpvp.site.request.RequestHandler;
 import com.mobpvp.site.request.RequestResponse;
+import com.mobpvp.site.util.ErrorUtil;
+import com.mobpvp.site.util.PopupUtil;
+import com.mobpvp.site.util.SessionUtil;
+import com.mobpvp.site.util.StringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,8 +83,8 @@ public class CategoryController {
         body.addProperty("name", name);
         body.addProperty("weight", weight);
 
-        if (permission != null && !permission.isEmpty())
-            body.addProperty("permission", permission);
+        if (permission != null)
+            body.addProperty("permission", permission.isEmpty() ? "" : permission);
 
         RequestResponse response = RequestHandler.put("forum/category/%s", body, id);
         if (!response.wasSuccessful())
