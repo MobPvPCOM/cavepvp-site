@@ -32,14 +32,12 @@ public class IndexController {
             view.addObject("latestAnnouncement", announcements.get(0));
             announcements.remove(0);
 
-            if (!announcements.isEmpty())
-                view.addObject(
-                        "announcements",
-                        announcements.subList(0, announcements.size() == 1 ? 1 : 2)
-                );
+            if (!announcements.isEmpty()) {
+                int endIndex = Math.min(2, announcements.size());
+                view.addObject("announcements", announcements.subList(0, endIndex));
+            }
         }
 
         return view;
     }
-
 }

@@ -25,8 +25,7 @@
                         <span>Latest</span>
                     </a>
 
-                    <div class="news-desc" th:utext="${latestAnnouncement.getContent()}">
-                    </div>
+                    <div class="news-desc" th:utext="${latestAnnouncement.getContent()}"></div>
 
                     <div class="user-meta">
                         <div class="avatar">
@@ -44,7 +43,7 @@
             </div>
         </div>
 
-        <div id="news-collection" class="small two" th:if="${announcements != null && announcements.size() > 1}">
+        <div id="news-collection" class="small two" th:if="${announcements != null && !announcements.isEmpty()}">
             <div class="news-post" th:each="announcement: ${announcements}">
                 <a th:href="${'/thread/' + announcement.getId()}" class="news-image">
                     <img th:src="${!announcement.getImageUrl().isEmpty() ? announcement.getImageUrl() : 'https://assets.originrealms.com/cdn-cgi/image/format=webp,quality=90,fit=scale-down,width=1920/2022/03/Badlands_Blog.jpg'}">
@@ -54,8 +53,7 @@
                        th:text="${announcement.getTitle()}">
                     </a>
 
-                    <div class="news-desc" th:utext="${announcement.getContent()}">
-                    </div>
+                    <div class="news-desc" th:utext="${announcement.getContent()}"></div>
 
                     <div class="user-meta">
                         <div class="avatar">
@@ -64,7 +62,7 @@
 
                         <a th:href="${'/u/' + announcement.getAuthorName()}"
                            th:text="${announcement.getAuthorName()}"
-                           th:style="${'color: ' + latestAnnouncement.getAuthorWebColor() + ' !important'}">
+                           th:style="${'color: ' + announcement.getAuthorWebColor() + ' !important'}">
                         </a>
 
                         <span th:text="${announcement.getPostedAgo()}"></span>
