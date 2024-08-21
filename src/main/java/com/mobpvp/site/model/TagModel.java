@@ -33,7 +33,7 @@ public class TagModel {
     public String getDisplayNameHtml(ProfileModel model) {
         String formattedName = model.getRank().getPrefix() + model.getName();
         String formattedChat = MinecraftTextUtils.COLOR_CHAR + "7: " + model.getRank().getChatColor() + "Hello World";
-        return MinecraftTextUtils.toHtml(formattedName + " " + this.displayNameHtml + " " + formattedChat);
+        return MinecraftTextUtils.toHtml(formattedName + " " + this.displayNameHtml + formattedChat);
     }
 
 }

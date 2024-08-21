@@ -26,7 +26,7 @@ public class OpListController {
         ProfileModel profile = SessionUtil.getProfile(request);
 
         if (profile == null)
-            return ErrorUtil.loginRedirect("/oplist");
+            return ErrorUtil.loginRedirect("/admin/oplist");
 
         if (!profile.hasPermission("trusted"))
             return ErrorUtil.noPerms("You do not have permission to view this page.");
@@ -46,7 +46,7 @@ public class OpListController {
             ));
         }
 
-        view.addObject("oplist", users);
+        view.addObject("admin/oplist", users);
         return view;
     }
     @PostMapping("/admin/oplist/add")
@@ -54,7 +54,7 @@ public class OpListController {
         ProfileModel profile = SessionUtil.getProfile(request);
 
         if (profile == null)
-            return ErrorUtil.loginRedirect("/oplist");
+            return ErrorUtil.loginRedirect("admin/oplist");
 
         if (!profile.hasPermission("trusted"))
             return ErrorUtil.noPerms("You do not have permission to view this page.");
@@ -66,14 +66,14 @@ public class OpListController {
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
-        return new ModelAndView("redirect:/oplist");
+        return new ModelAndView("redirect:/admin/oplist");
     }
     @PostMapping("/oplist/remove")
     public ModelAndView removeUser(HttpServletRequest request, @RequestParam("name") String name) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
         if (profile == null)
-            return ErrorUtil.loginRedirect("/oplist");
+            return ErrorUtil.loginRedirect("admin/oplist");
 
         if (!profile.hasPermission("trusted"))
             return ErrorUtil.noPerms("You do not have permission to view this page.");
@@ -83,10 +83,10 @@ public class OpListController {
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
-        return new ModelAndView("redirect:/oplist");
+        return new ModelAndView("redirect:admin/oplist");
     }
     @GetMapping("/admin/oplist/remove")
     public ModelAndView removeUser(HttpServletRequest request) {
-        return new ModelAndView("redirect:/oplist");
+        return new ModelAndView("redirect:admin/oplist");
     }
 }
