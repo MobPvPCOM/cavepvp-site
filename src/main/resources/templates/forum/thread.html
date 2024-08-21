@@ -185,7 +185,7 @@
                                 <img th:src="${'https://mc-heads.net/body/' + reply.getAuthorName()}"/>
                             </div>
                             <div class="ms-lg-3 me-auto">
-                                <div class="fw-bold" th:text="${reply.getBody()}"></div>
+                                <div class="fw-bold" th:text="${reply.getComment()}"></div>
                                 <div class="card-feed-meta">
                                     <a th:href="${'/u/' + reply.getAuthorName()}"
                                        th:text="${reply.getAuthorName()}"
@@ -196,11 +196,11 @@
                             </div>
                             <div class="node-controls">
                                 <div class="node-control-inner nci-user">
-                                    <a th:href="'#modal-reply-' + ${reply.getId()}"
+                                    <a th:href="'#modal-reply-' + ${reply.getUuid()}"
                                        data-bs-toggle="modal"
                                     ><i class="fa-solid fa-reply"></i> Reply</a>
 
-                                    <a th:href="'#modal-delete-' + ${reply.getId()}"
+                                    <a th:href="'#modal-delete-' + ${reply.getUuid()}"
                                        data-bs-toggle="modal"
                                        th:if="${reply.canDelete(sessionProfile)}"
                                     ><i class="fa-solid fa-trash-can"></i> Delete</a>
@@ -223,7 +223,7 @@
                             </div>
                             <div class="node-controls">
                                 <div class="node-control-inner nci-user">
-                                    <a th:href="'#modal-reply-' + ${reply.getId()}"
+                                    <a th:href="'#modal-reply-' + ${reply.getUuid()}"
                                        data-bs-toggle="modal"
                                     ><i class="fa-solid fa-reply"></i> Reply</a>
                                 </div>
@@ -231,7 +231,7 @@
                         </div>
 
                         <div class="modal fade" th:if="${reply.canDelete(sessionProfile)}"
-                             th:id="'modal-delete-' + ${reply.getId()}" style="transform: translateY(250px);">
+                             th:id="'modal-delete-' + ${reply.getUuid()}" style="transform: translateY(250px);">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -243,8 +243,8 @@
                                     </div>
 
                                     <form class="form-remove-grant" th:action="@{/reply/delete}" method="post">
-                                        <input type="hidden" name="replyId" th:value="${reply.getId()}">
-                                        <input type="hidden" name="parentId" th:value="${reply.getParentThreadId()}">
+                                        <input type="hidden" name="replyId" th:value="${reply.getUuid()}">
+                                        <input type="hidden" name="parentId" th:value="${reply.getThread()}">
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -258,7 +258,7 @@
                             </div>
                         </div>
 
-                        <div class="modal fade" th:id="'modal-reply-' + ${reply.getId()}"
+                        <div class="modal fade" th:id="'modal-reply-' + ${reply.getUuid()}"
                              style="transform: translateY(250px);">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -270,7 +270,7 @@
                                     </div>
 
                                     <form class="form-reply" th:action="@{'/reply/' + ${thread.getId()}}" method="post">
-                                        <input type="hidden" name="replyId" th:value="${reply.getId()}">
+                                        <input type="hidden" name="replyId" th:value="${reply.getUuid()}">
 
                                         <div class="modal-body">
                                             <textarea name="body" required></textarea>

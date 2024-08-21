@@ -33,6 +33,7 @@ public class SiteApplication {
                 SiteBadgeConfig.class,
                 new File("config/badges.json")
         );
+
         this.redisConfig = ConfigurationHandler.INSTANCE.loadConfiguration(
                 RedisConfig.class,
                 new File("config/redis.json")
@@ -52,7 +53,8 @@ public class SiteApplication {
                 new ApplicationSupportCache(),
                 new ProfileCache(),
                 new SessionCache(),
-                new TagCache()
+                new TagCache(),
+                new ReplyCache()
         );
 
         Runtime.getRuntime().addShutdownHook(new Thread(
