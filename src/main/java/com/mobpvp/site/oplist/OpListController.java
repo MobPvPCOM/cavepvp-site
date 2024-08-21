@@ -46,9 +46,10 @@ public class OpListController {
             ));
         }
 
-        view.addObject("admin/oplist", users);
+        view.addObject("oplist", users);
         return view;
     }
+
     @PostMapping("/admin/oplist/add")
     public ModelAndView addPlayer(HttpServletRequest request, String name) {
         ProfileModel profile = SessionUtil.getProfile(request);
@@ -62,12 +63,12 @@ public class OpListController {
         UUID playerId = UUIDCache.getUuid(name);
 
         RequestResponse response = RequestHandler.post("oplist/" + playerId.toString(), new JsonObject());
-
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
         return new ModelAndView("redirect:/admin/oplist");
     }
+
     @PostMapping("/oplist/remove")
     public ModelAndView removeUser(HttpServletRequest request, @RequestParam("name") String name) {
         ProfileModel profile = SessionUtil.getProfile(request);
@@ -85,6 +86,7 @@ public class OpListController {
 
         return new ModelAndView("redirect:admin/oplist");
     }
+
     @GetMapping("/admin/oplist/remove")
     public ModelAndView removeUser(HttpServletRequest request) {
         return new ModelAndView("redirect:admin/oplist");
