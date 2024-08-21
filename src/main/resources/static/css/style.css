@@ -370,12 +370,6 @@ h6.dropdown-header {
     width: 100px;
     height: 100px;
     transition: all 1s ease;
-    filter: grayscale(1);
-}
-
-#foot .logo:hover {
-    transition: all 1s ease;
-    filter: grayscale(0);
 }
 
 @media (max-width: 768px) {
