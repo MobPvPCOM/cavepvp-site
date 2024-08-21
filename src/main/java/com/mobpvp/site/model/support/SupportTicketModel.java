@@ -175,7 +175,7 @@ public class SupportTicketModel {
 
     public String getQuestionHeader(int id) {
         return category.getQuestionSet()
-                .getQuestions().get(id).getQuestion();
+                .getFormattedQuestion(id);
     }
 
     public String getContent(int id) {

@@ -247,7 +247,7 @@
                         <div class="ticket-question" th:each="entry: ${ticket.getQuestions()}">
                             <span class="title" th:text="${ticket.getQuestionHeader(entry.getKey())}"></span>
                             <br>
-                            <span th:utext="${ticket.getContent(entry.getKey())} + "s"></span>
+                            <span th:utext="${ticket.getContent(entry.getKey())} + 's'"></span>
                         </div>
                     </div>
                 </div>

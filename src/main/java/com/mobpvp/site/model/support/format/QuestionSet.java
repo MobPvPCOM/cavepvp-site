@@ -29,6 +29,12 @@ public class QuestionSet {
         placeholders.put("{" + placeholder.toLowerCase() + "}", value);
         return this;
     }
+    public String  getFormattedQuestion(int id) {
+        String question = questions.get(id).getQuestion();
+        for (Map.Entry<String, String> entry : placeholders.entrySet())
+            question = question.replace(entry.getKey(), entry.getValue());
+        return question;
+    }
 
     public Map<Integer, Question> getFormattedQuestions() {
         Map<Integer, Question> formatted = new LinkedHashMap<>();
