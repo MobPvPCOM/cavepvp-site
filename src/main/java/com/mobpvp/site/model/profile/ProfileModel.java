@@ -211,7 +211,7 @@ public class ProfileModel extends UUIDHolder {
     }
 
     public String formatPlaytime() {
-        return TimeUtils.formatTimeShort(playTime);
+        return TimeUtils.formatTimeShort(playTime - System.currentTimeMillis());
     }
 
     public boolean isOnline() {
