@@ -36,9 +36,6 @@ public class SupportResolveController {
         if (!profile.hasPermission("website.support.status"))
             return ErrorUtil.noPerms("You do not have permission to change the state of this ticket.");
 
-        if (decreaseLevel && !profile.hasPermission("core.command.infractions.decrease"))
-            return ErrorUtil.noPerms("You are not allowed to decrease infractions");
-
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
@@ -77,22 +74,6 @@ public class SupportResolveController {
             if (!response.wasSuccessful())
                 return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
-            if (decreaseLevel && punishment.getTemplate() != null && !punishment.getTemplate().isEmpty()) {
-                body = new JsonObject();
-                body.addProperty("method", "decrease");
-                body.addProperty("template", punishment.getTemplate());
-                body.addProperty("level", 1);
-
-                response = RequestHandler.put(
-                        "punishment/infractions/%s",
-                        body,
-                        punishment.getUuid().toString()
-                );
-
-                if (!response.wasSuccessful())
-                    return ErrorUtil.create(response.getCode(), response.getErrorMessage());
-            }
-
             body = new JsonObject();
             body.addProperty("status", TicketStatus.RESOLVED.name());
         } else {
@@ -128,9 +109,6 @@ public class SupportResolveController {
 
         if (!profile.hasPermission("website.support.status"))
             return ErrorUtil.noPerms("You do not have permission to change the state of this ticket.");
-
-        if (decreaseLevel && !profile.hasPermission("core.command.infractions.decrease"))
-            return ErrorUtil.noPerms("You are not allowed to decrease infractions");
 
         if (time <= 0)
             return ErrorUtil.create(400, "Time must be positive");
@@ -207,22 +185,6 @@ public class SupportResolveController {
             response = RequestHandler.post("punishment", body);
             if (!response.wasSuccessful())
                 return ErrorUtil.create(response.getCode(), response.getErrorMessage());
-
-            if (decreaseLevel && punishment.getTemplate() != null && !punishment.getTemplate().isEmpty()) {
-                body = new JsonObject();
-                body.addProperty("method", "decrease");
-                body.addProperty("template", punishment.getTemplate());
-                body.addProperty("level", 1);
-
-                response = RequestHandler.put(
-                        "punishment/infractions/%s",
-                        body,
-                        punishment.getUuid().toString()
-                );
-
-                if (!response.wasSuccessful())
-                    return ErrorUtil.create(response.getCode(), response.getErrorMessage());
-            }
 
             body = new JsonObject();
             body.addProperty("status", TicketStatus.RESOLVED.name());

@@ -94,11 +94,7 @@
                               th:utext="${'<b>Punishment Action: </b>'  + resolveSuggestion.formatPunishmentAction() + '<br>'}"></span>
                         <span th:if="${resolveSuggestion.getPunishmentAction() != null && resolveSuggestion.getPunishmentAction() == 'UPDATE_TIME'}"
                               th:utext="${'<b>New Punishment Duration: </b>'  + resolveSuggestion.formatNewDuration() + '<br>'}"></span>
-                        <span th:utext="${'<b>Decrease Infraction Level: </b>'  + resolveSuggestion.isDecreaseLevel() + '<br>'}"></span>
-                        <span><b>Staff: </b><a th:text="${resolveSuggestion.getStaffName()}"
-                                               th:href="${'/u/' + resolveSuggestion.getStaffName()}"
-                                               th:style="${'color: ' + resolveSuggestion.getStaffWebColor()}"></a>
-                        </span><br>
+                        <br>
 
                         <form style="display: inline-block;"
                               th:if="${sessionProfile.hasPermission('website.support.status.admin')}"
@@ -217,15 +213,6 @@
                                                 <option value="MONTHS">Month/s</option>
                                             </select>
                                         </div>
-
-                                        <div class="form-check"
-                                             style="display: flex; margin-top: 15px; padding-left: 3%;">
-                                            <input type="checkbox" id="decreaseLevel" name="decreaseLevel"
-                                                   class="form-check-input" style="margin-left: 0"
-                                                   th:disabled="${!sessionProfile.hasPermission('core.command.infractions.decrease')}">
-                                            <label for="decreaseLevel" class="form-check-label"
-                                                   style="margin-left: 10px">Decrease Infraction Level</label>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -260,7 +247,7 @@
                         <div class="ticket-question" th:each="entry: ${ticket.getQuestions()}">
                             <span class="title" th:text="${ticket.getQuestionHeader(entry.getKey())}"></span>
                             <br>
-                            <span th:utext="${ticket.getContent(entry.getKey())}"></span>
+                            <span th:utext="${ticket.getContent(entry.getKey())} + "s"></span>
                         </div>
                     </div>
                 </div>
