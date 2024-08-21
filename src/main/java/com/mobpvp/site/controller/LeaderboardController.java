@@ -1,10 +1,10 @@
 package com.mobpvp.site.controller;
 
-import com.mobpvp.site.util.ErrorUtil;
 import com.mobpvp.site.cache.CacheHandler;
 import com.mobpvp.site.cache.impl.LeaderboardCache;
 import com.mobpvp.site.cache.impl.PlayerCountCache;
 import com.mobpvp.site.model.leaderboard.LeaderboardModel;
+import com.mobpvp.site.util.ErrorUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +31,9 @@ public class LeaderboardController {
     }
 
     public ModelAndView fillData(String leaderboardId) {
+        if (CACHE.getCachedData().isEmpty())
+            return ErrorUtil.create(500, "Leaderboard data is currently unavailable.");
+
         LeaderboardModel leaderboard = CACHE.getLeaderboard(leaderboardId);
         if (leaderboard == null)
             return new ModelAndView("redirect:/leaderboard");
