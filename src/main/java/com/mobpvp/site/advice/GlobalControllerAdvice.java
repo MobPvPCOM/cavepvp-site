@@ -40,7 +40,7 @@ public class GlobalControllerAdvice {
 
             acceptedUrls.add("/leaderboard/" + name);
 
-            if (cachedDatum.getName().equalsIgnoreCase("hcf"))
+            if (cachedDatum.getName().equalsIgnoreCase("mini"))
                 acceptedUrls.add("/leaderboard");
 
             items.add(new NavItem(name, acceptedUrls));

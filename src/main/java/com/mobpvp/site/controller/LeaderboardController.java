@@ -22,7 +22,7 @@ public class LeaderboardController {
 
     @RequestMapping
     public ModelAndView defaultBoard() {
-        return fillData("hcf");
+        return fillData("mini");
     }
 
     @RequestMapping("/{id}")
