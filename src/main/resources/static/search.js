@@ -2,13 +2,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("searchInput");
     const searchResults = document.getElementById("searchResults");
     let playerSearchTimeout = null;
-    let lastSearchText = '';
 
     searchResults.style.display = "none";
 
     searchInput.addEventListener("input", function () {
         const searchText = searchInput.value.trim();
-        lastSearchText = searchText;
 
         // If input is empty, hide results and return
         if (!searchText) {
@@ -33,8 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 const { users = [] } = await response.json();
-
-                console.log("Search results: ", users);
 
                 // Clear previous search results
                 searchResults.innerHTML = '';
@@ -76,37 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         }, 300); // Debounce time of 300ms
-    });
-
-    searchInput.addEventListener("keydown", async function (event) {
-        if (event.key === "Enter" && lastSearchText.trim()) {
-            event.preventDefault(); // Prevent default form submission
-
-            console.log("Enter key pressed with search text: ", lastSearchText);
-
-            try {
-                const response = await fetch(`/search?query=${lastSearchText.trim()}`);
-
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-
-                const { users = [] } = await response.json();
-
-                console.log("Enter search results: ", users);
-
-                const matchingUser = users.find(user => user.name.toLowerCase() === lastSearchText.trim().toLowerCase());
-
-                if (matchingUser) {
-                    console.log("Matching user found: ", matchingUser);
-                    window.location.href = `/u/${matchingUser.name}`;
-                } else {
-                    console.log("No matching user found");
-                }
-            } catch (error) {
-                console.error("Fetch error: ", error);
-            }
-        }
     });
 });
 
