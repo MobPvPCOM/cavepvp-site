@@ -29,8 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
+                const jsonResponse = await response.json();
+                const { users = [] } = jsonResponse;
 
-                const { users = [] } = await response.json();
 
                 // Clear previous search results
                 searchResults.innerHTML = '';

@@ -3,6 +3,7 @@ package com.mobpvp.site.controller.internal;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mobpvp.site.SiteApplication;
+import com.mobpvp.site.SiteConstant;
 import com.mobpvp.site.server.ServerInfo;
 import com.mobpvp.site.server.ServerState;
 import com.mobpvp.site.server.packet.UpdateServerPacket;
@@ -24,18 +25,19 @@ public class InternalController {
     private static final String AUTH_KEY = "z46tR9ogDXkV0mXGB5CTFB5mvLWxrXrbv4R3gj51E1qJG0Pjglqwa1f3JWrZI7Mh";
 
     @PostMapping("/api/sync/vanic")
-    public ResponseEntity<JsonElement> handle(HttpServletRequest request, @RequestBody JsonObject object) {
+    public ResponseEntity<String> handle(HttpServletRequest request, @RequestBody String objectData) {
         JsonObject response = new JsonObject();
         if (request.getHeader("SyncAuth") == null) {
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(SiteConstant.GSON.toJson(response), HttpStatus.NOT_FOUND);
         }
         String authKey = request.getHeader("SyncAuth");
 
         if (!authKey.equals(AUTH_KEY)) {
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(SiteConstant.GSON.toJson(response), HttpStatus.NOT_FOUND);
         }
+        JsonObject object = SiteConstant.GSON.fromJson(objectData, JsonObject.class);
         if (!object.has("online")) {
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(SiteConstant.GSON.toJson(response), HttpStatus.NOT_FOUND);
         }
         int online = object.get("online").getAsInt();
         sendVanicLink(online);
@@ -52,7 +54,7 @@ public class InternalController {
         }
         response.add("mobServers", servers);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(SiteConstant.GSON.toJson(response), HttpStatus.OK);
     }
 
     private ServerInfo serverInfo;
