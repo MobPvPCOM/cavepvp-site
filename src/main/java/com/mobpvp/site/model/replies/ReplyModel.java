@@ -27,6 +27,7 @@ public class ReplyModel extends UUIDHolder {
 
     private final UUID uuid;
     private final UUID author;
+    private final String authorWebColor;
     private final String thread;
     private String comment;
 
@@ -41,6 +42,7 @@ public class ReplyModel extends UUIDHolder {
         this.thread = object.get("thread").getAsString();
         this.comment = object.get("comment").getAsString();
         this.createdAt = object.get("createdAt").getAsLong();
+        this.authorWebColor = object.get("authorWebColor").getAsString();
 
         if (object.has("replies")) {
             for (JsonElement element : object.get("replies").getAsJsonArray())
@@ -49,6 +51,7 @@ public class ReplyModel extends UUIDHolder {
 
         if (object.has("lastEditedAt"))
             this.lastEditedAt = object.get("lastEditedAt").getAsLong();
+
     }
 
     public String getAuthorName() {

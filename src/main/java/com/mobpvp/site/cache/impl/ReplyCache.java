@@ -30,8 +30,10 @@ public class ReplyCache extends RepeatingCache<List<ReplyModel>> {
             return;
 
         List<ReplyModel> replies = new ArrayList<>();
-        for (JsonElement element : response.asArray())
+
+        for (JsonElement element : response.asObject().getAsJsonArray("replies")) {
             replies.add(new ReplyModel(element.getAsJsonObject()));
+        }
 
         cache(replies);
     }

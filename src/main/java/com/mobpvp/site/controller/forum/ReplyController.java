@@ -56,6 +56,8 @@ public class ReplyController {
         body.addProperty("id", id.toString());
         body.addProperty("comment", content);
         body.addProperty("author", profile.getUuid().toString());
+        if(replyId != null)
+            body.addProperty("replyId", replyId);
 
         response = RequestHandler.post(
                 "forum/replies/%s",

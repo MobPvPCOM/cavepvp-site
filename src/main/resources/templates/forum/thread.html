@@ -213,7 +213,7 @@
                                 <img th:src="${'https://mc-heads.net/body/' + subReply.getAuthorName()}"/>
                             </div>
                             <div class="ms-lg-3 me-auto">
-                                <div class="fw-bold" th:utext="${subReply.getContent()}"></div>
+                                <div class="fw-bold" th:utext="${subReply.getComment()}"></div>
 
                                 <a th:href="${'/u/' + subReply.getAuthorName()}"
                                    th:text="${subReply.getAuthorName()}"
