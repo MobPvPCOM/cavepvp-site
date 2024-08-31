@@ -3,6 +3,7 @@ package com.mobpvp.site.controller.profile;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mobpvp.site.SiteApplication;
+import com.mobpvp.site.model.punishment.PunishmentModel;
 import com.mobpvp.site.util.ErrorUtil;
 import com.mobpvp.site.util.PopupUtil;
 import com.mobpvp.site.util.SessionUtil;
@@ -192,6 +193,15 @@ public class ProfileController {
                 return null;
 
             ProfileModel profile = new ProfileModel(response.asObject());
+
+            response =RequestHandler.get(
+                    "punishment/profile/%s?webResolved=true",
+                    uuid
+            );
+            profile.getPunishments().clear();
+            for (JsonElement element : response.asArray())
+                profile.getPunishments().add(new PunishmentModel(element.getAsJsonObject()));
+
             CACHE.update(profile);
 
             return profile;

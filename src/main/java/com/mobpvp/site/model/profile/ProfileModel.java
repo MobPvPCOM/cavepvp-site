@@ -95,11 +95,6 @@ public class ProfileModel extends UUIDHolder {
             for (JsonElement element : object.get("notes").getAsJsonArray())
                 notes.add(new Note(element.getAsJsonObject()));
 
-        if (object.has("punishments"))
-            for (JsonElement element : object.get("punishments").getAsJsonArray())
-                punishments.add(new PunishmentModel(element.getAsJsonObject()));
-
-        Collections.reverse(punishments);
 
 //        if (object.has("badges"))
 //            for (JsonElement element : object.get("badges").getAsJsonArray()) {
