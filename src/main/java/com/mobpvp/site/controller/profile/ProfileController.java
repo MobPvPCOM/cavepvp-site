@@ -82,6 +82,27 @@ public class ProfileController {
 
         return view;
     }
+    @RequestMapping({"/user/{name}/punishments", "/u/{name}/punishments"})
+    public ModelAndView punishments(HttpServletRequest request,
+                             @PathVariable("name") String name,
+                             @RequestParam(value = "page", required = false) Integer page) {
+        Tuple<ProfileModel, ModelAndView> tuple
+                = displayPage(request, name, "punishments", "website.view.punishments");
+
+        ProfileModel profile = tuple.key();
+        ModelAndView view = tuple.value();
+        if (profile == null)
+            return view;
+
+        new ViewPaginationModel<>(
+                page == null ? 1 : page, 10, profile.getPunishments(), "punishments"
+        ).applyTo(view, String.format(
+                "/u/%s/punishments?page={page}",
+                profile.getName()
+        ));
+
+        return view;
+    }
 
     @PostMapping("/comment")
     public ModelAndView comment(HttpServletRequest request,
