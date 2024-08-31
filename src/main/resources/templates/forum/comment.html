@@ -1,0 +1,60 @@
+<!-- fragments/comment.html -->
+<div th:fragment="comment(reply)">
+    <div class="comment comment--reply">
+        <div class="avatar xm">
+            <img th:src="${'https://mc-heads.net/body/' + reply.getAuthorName()}"/>
+        </div>
+        <div class="ms-lg-3 me-auto">
+            <div class="fw-bold" th:utext="${reply.getComment()}"></div>
+
+            <a th:href="${'/u/' + reply.getAuthorName()}"
+               th:text="${reply.getAuthorName()}"
+               th:style="${'color: ' + reply.getAuthorWebColor()}">
+            </a>
+            <span th:text="${' ' + reply.getPostedAgo()}"></span>
+        </div>
+        <div class="node-controls">
+            <div class="node-control-inner nci-user">
+                <a th:href="'#modal-reply-' + ${reply.getUuid()}"
+                   data-bs-toggle="modal"
+                ><i class="fa-solid fa-reply"></i> Reply</a>
+            </div>
+        </div>
+        <div class="modal fade" th:id="'modal-reply-' + ${reply.getUuid()}"
+             style="transform: translateY(250px);">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Reply to<span
+                            th:style="${'color: ' + reply.getAuthorWebColor() + '; padding-left: 4px;'}"
+                            th:text="${' ' + reply.getAuthorName()}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form class="form-reply" th:action="@{'/reply/' + ${reply.getThread()}}" method="post">
+                        <input type="hidden" name="replyId" th:value="${reply.getUuid()}">
+
+                        <div class="modal-body">
+                            <textarea name="body" required></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Recursive section for nested replies -->
+        <div class="replies" th:if="${reply.getReplies().size() > 0}">
+            <div th:each="subReply : ${reply.getReplies()}">
+                <div th:replace="forum/comment :: comment(${subReply})"></div>
+            </div>
+        </div>
+    </div>
+</div>

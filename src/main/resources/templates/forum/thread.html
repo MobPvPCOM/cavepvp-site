@@ -207,27 +207,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="comment comment--reply" th:each="subReply: ${reply.getReplies()}">
-                            <div class="avatar xm">
-                                <img th:src="${'https://mc-heads.net/body/' + subReply.getAuthorName()}"/>
-                            </div>
-                            <div class="ms-lg-3 me-auto">
-                                <div class="fw-bold" th:utext="${subReply.getComment()}"></div>
-
-                                <a th:href="${'/u/' + subReply.getAuthorName()}"
-                                   th:text="${subReply.getAuthorName()}"
-                                   th:style="${'color: ' + subReply.getAuthorWebColor()}">
-                                </a>
-                                <span th:text="${' ' + subReply.getPostedAgo()}"></span>
-                            </div>
-                            <div class="node-controls">
-                                <div class="node-control-inner nci-user">
-                                    <a th:href="'#modal-reply-' + ${reply.getUuid()}"
-                                       data-bs-toggle="modal"
-                                    ><i class="fa-solid fa-reply"></i> Reply</a>
-                                </div>
-                            </div>
+                        <div th:each="reply : ${reply.getReplies()}">
+                            <div th:replace="forum/comment :: comment(${reply})"></div>
                         </div>
 
                         <div class="modal fade" th:if="${reply.canDelete(sessionProfile)}"
