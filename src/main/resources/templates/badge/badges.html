@@ -64,10 +64,9 @@
                         </a>
                     </th>
 
-                    <div class="modal fade" th:id="'giveBadge-' + ${badge.getId()}"
-                         style="transform: translateY(250px);">
+                    <div class="modal fade" th:id="'giveBadge-' + ${badge.getId()}">
                         <form th:action="@{/badge/give}" method="post">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         Give Badge
