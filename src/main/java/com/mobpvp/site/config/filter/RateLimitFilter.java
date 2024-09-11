@@ -28,6 +28,7 @@ public class RateLimitFilter implements Filter {
         requestMap.putIfAbsent(clientIp, new AtomicInteger(0));
         if (requestMap.get(clientIp).incrementAndGet() > MAX_REQUESTS_PER_MINUTE) {
             response.setStatus(429);
+            response.getWriter().write("Rate limit exceeded");
             return;
         }
 

@@ -1,8 +1,9 @@
 package com.mobpvp.site.config;
 
-import com.mobpvp.site.util.SessionUtil;
+import com.mobpvp.site.SiteConstant;
 import com.mobpvp.site.model.PopupModel;
 import com.mobpvp.site.model.profile.ProfileModel;
+import com.mobpvp.site.util.SessionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -36,7 +38,7 @@ public class SiteInterceptHandler implements HandlerInterceptor {
     public void postHandle(@NotNull HttpServletRequest request,
                            @NotNull HttpServletResponse response,
                            @NotNull Object handler,
-                           ModelAndView modelAndView) {
+                           ModelAndView modelAndView) throws IOException {
         if (modelAndView == null)
             return;
 
@@ -78,11 +80,18 @@ public class SiteInterceptHandler implements HandlerInterceptor {
         if (profile != null)
             modelAndView.addObject("sessionProfile", profile);
 
+        if (SiteConstant.MAINTENANCE_MODE
+                && !request.getRequestURI().equals("/maintenance")
+                && !request.getRequestURI().equals("/login")
+                && profile == null
+                || (profile != null && !profile.hasPermission("website.maintenance.bypass")))
+            response.sendRedirect("/maintenance");
+
         if (modelMap.containsAttribute("accessPermission")) {
             String permission = (String) modelMap.get("accessPermission");
 
             if (profile == null) {
-                // todo redirect to login page
+                response.sendRedirect("/login");
                 return;
             }
 

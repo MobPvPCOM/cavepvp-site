@@ -1,6 +1,7 @@
 :root {
     --primaryColor: #6aa6eb;
     --transparentPrimaryColor: #6aa6eb5c;
+    --leaderBoardTopColor: #fcb434;
 }
 
 #view > .main--wrapper .container {
@@ -1395,7 +1396,7 @@ div#sidebar.end {
     font-size: 15px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #a3a3a3;
+    color: #000000;
     letter-spacing: .5px;
 }
 
@@ -1481,7 +1482,7 @@ div#section-above .server-status {
     font-weight: 800;
     color: #ffffff;
     font-size: 11px;
-    background: #e53a3a;
+    background: var(--leaderBoardTopColor);
     padding: 3px 12px;
     border-radius: 100px;
     margin-top: 2px;
@@ -1588,7 +1589,7 @@ ul.nav.nav-tabs.card-header-tabs {
 
 .stat-grid .list-group-item:first-child .float-right {
     background: #ffc00794;
-    color: #583629;
+    color: var(--leaderBoardTopColor);
 }
 
 .sidebar--before #sidebar {
@@ -2363,11 +2364,6 @@ body.dark {
 
 .dark .card {
     border-color: #333333 !important;
-}
-
-.dark .stat-grid .list-group-item:first-child .float-right {
-    background: #ea4949 !important;
-    color: white !important;
 }
 
 .dark .stat-grid .float-right {
