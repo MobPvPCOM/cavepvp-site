@@ -24,6 +24,7 @@ div#styleToggle i {
 
 body {
     font-family: 'Raleway', sans-serif;
+    transition: ease 0.3s;
 }
 
 #content {
