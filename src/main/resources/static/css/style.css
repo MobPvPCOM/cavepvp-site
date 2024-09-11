@@ -2526,8 +2526,14 @@ body.dark {
 
 .alert-error {
     color: white;
-    background-color: #7f2f2f;
     text-shadow: 1px 1px #ffffff61;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.11);
+    background-color: #f8d7da;
+    border: #ffbbc1 1px solid !important;
+}
+
+.alert-error h3 {
+    margin-bottom: 0 !important;
 }
 
 .error-container {
