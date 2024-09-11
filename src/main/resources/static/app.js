@@ -40,10 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 3000);
 });
 
-document.body.addEventListener('htmx:afterSwap', function (event) {
-    initializeTheme();
-});
-
 function fadeOut(element) {
     let opacity = 1;
     let interval = 50;
