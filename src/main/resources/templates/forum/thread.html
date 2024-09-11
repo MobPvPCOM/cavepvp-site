@@ -208,7 +208,7 @@
                             </div>
                         </div>
                         <div th:each="reply : ${reply.getReplies()}">
-                            <div th:replace="forum/comment :: comment(${reply})"></div>
+                            <div th:replace="forum/comment :: comment(${reply}, true, 0)"></div>
                         </div>
 
                         <div class="modal fade" th:if="${reply.canDelete(sessionProfile)}"
@@ -239,9 +239,8 @@
                             </div>
                         </div>
 
-                        <div class="modal fade" th:id="'modal-reply-' + ${reply.getUuid()}"
-                             style="transform: translateY(250px);">
-                            <div class="modal-dialog">
+                        <div class="modal fade" th:id="'modal-reply-' + ${reply.getUuid()}">
+                            <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         Reply to<span

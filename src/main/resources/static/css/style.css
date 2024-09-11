@@ -1247,6 +1247,10 @@ div#sidebar.end {
     font-size: 15px;
 }
 
+.comment.comment--reply.sub-reply {
+    margin-left: 15px;
+}
+
 .comment.comment--reply .avatar {
     max-width: 40px;
     height: 40px;

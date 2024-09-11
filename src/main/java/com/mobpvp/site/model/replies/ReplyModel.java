@@ -10,9 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author alfie
@@ -34,7 +32,10 @@ public class ReplyModel extends UUIDHolder {
     private long createdAt;
     private long lastEditedAt;
 
+    private UUID parentReply;
+
     private List<ReplyModel> replies = new ArrayList<>();
+    private transient Map<ReplyModel, Integer> allSubReplies = new HashMap<>();
 
     public ReplyModel(JsonObject object) {
         this.uuid = UUID.fromString(object.get("uuid").getAsString());
@@ -44,6 +45,9 @@ public class ReplyModel extends UUIDHolder {
         this.createdAt = object.get("createdAt").getAsLong();
         this.authorWebColor = object.get("authorWebColor").getAsString();
 
+        if (object.has("parentReply"))
+            this.parentReply = UUID.fromString(object.get("parentReply").getAsString());
+
         if (object.has("replies")) {
             for (JsonElement element : object.get("replies").getAsJsonArray())
                 replies.add(new ReplyModel(element.getAsJsonObject()));
@@ -52,6 +56,7 @@ public class ReplyModel extends UUIDHolder {
         if (object.has("lastEditedAt"))
             this.lastEditedAt = object.get("lastEditedAt").getAsLong();
 
+        this.allSubReplies = fetchSubReplies(1);
     }
 
     public String getAuthorName() {
@@ -68,6 +73,26 @@ public class ReplyModel extends UUIDHolder {
 
         return author.equals(profileModel.getUuid())
                 || profileModel.hasPermission("website.reply.delete.*");
+    }
+
+    public Map<ReplyModel, Integer> fetchSubReplies(int step) {
+        Map<ReplyModel, Integer> replyMap = new LinkedHashMap<>();
+
+        for (ReplyModel reply : getSortedReplies()) {
+            replyMap.put(reply, Math.min(step * 5, 15));
+
+            Map<ReplyModel, Integer> subReplies = reply.fetchSubReplies(step + 1);
+            replyMap.putAll(subReplies);
+        }
+
+        return replyMap;
+    }
+
+    public List<ReplyModel> getSortedReplies() {
+        List<ReplyModel> sortedReplies = new ArrayList<>(replies);
+        sortedReplies.sort(Comparator.comparingLong(ReplyModel::getCreatedAt));
+
+        return sortedReplies;
     }
 
 }

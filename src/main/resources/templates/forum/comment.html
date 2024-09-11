@@ -1,6 +1,7 @@
-<!-- fragments/comment.html -->
-<div th:fragment="comment(reply)">
-    <div class="comment comment--reply">
+<div th:fragment="comment(reply, firstReply, margin)">
+    <div class="comment comment--reply"
+         th:style="'margin-left: ' + ${margin} + 'px;'"
+         th:styleappend="'margin-top: ' + ${firstReply ? '15px' : '5px'}">
         <div class="avatar xm">
             <img th:src="${'https://mc-heads.net/body/' + reply.getAuthorName()}"/>
         </div>
@@ -20,9 +21,8 @@
                 ><i class="fa-solid fa-reply"></i> Reply</a>
             </div>
         </div>
-        <div class="modal fade" th:id="'modal-reply-' + ${reply.getUuid()}"
-             style="transform: translateY(250px);">
-            <div class="modal-dialog">
+        <div class="modal fade" th:id="'modal-reply-' + ${reply.getUuid()}">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         Reply to<span
@@ -45,16 +45,14 @@
                             <button type="submit" class="btn btn-primary">Post</button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Recursive section for nested replies -->
-        <div class="replies" th:if="${reply.getReplies().size() > 0}">
-            <div th:each="subReply : ${reply.getReplies()}">
-                <div th:replace="forum/comment :: comment(${subReply})"></div>
-            </div>
+    <div class="replies" th:if="${firstReply}">
+        <div th:each="entry : ${reply.getAllSubReplies().entrySet()}">
+            <div th:replace="forum/comment :: comment(${entry.getKey()}, false, ${entry.getValue()})"></div>
         </div>
     </div>
 </div>
