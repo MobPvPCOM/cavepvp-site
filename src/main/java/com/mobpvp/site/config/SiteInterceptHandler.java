@@ -80,7 +80,7 @@ public class SiteInterceptHandler implements HandlerInterceptor {
         if (profile != null)
             modelAndView.addObject("sessionProfile", profile);
 
-        if (SiteConstant.MAINTENANCE_MODE
+        if (SiteConstant. MAINTENANCE_MODE
                 && !request.getRequestURI().equals("/maintenance")
                 && !request.getRequestURI().equals("/login")
                 && profile == null
