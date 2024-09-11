@@ -37,6 +37,9 @@ public class PunishmentModel {
     private final String punishedByName;
     private final String punishedByWebColor;
 
+    private final String removerByName;
+    private final String removerByWebColor;
+
     public PunishmentModel(JsonObject object) {
         this.id = UUID.fromString(object.get("id").getAsString());
         this.uuid = UUID.fromString(object.get("uuid").getAsString());
@@ -65,10 +68,23 @@ public class PunishmentModel {
         if (object.has("punishedByWebColor"))
             this.punishedByWebColor = object.get("punishedByWebColor").getAsString();
         else this.punishedByWebColor = "#212529";
+
+
+        if (object.has("removerByName"))
+            this.removerByName = object.get("removerByName").getAsString();
+        else this.removerByName = (removedBy.equals("N/A") ? null : UUIDCache.getName(UUID.fromString(removedBy)));
+
+        if (object.has("removerByWebColor"))
+            this.removerByWebColor = object.get("removerByWebColor").getAsString();
+        else this.removerByWebColor = "#212529";
     }
 
     public String getPunishedAgo() {
         return TimeUtils.formatTimeAgo(punishedAt);
+    }
+
+    public String getRemovedAgo() {
+        return TimeUtils.formatTimeAgo(removedAt);
     }
 
     public String formatDuration() {
@@ -83,6 +99,10 @@ public class PunishmentModel {
             return "Active";
 
         return "Expired";
+    }
+
+    public boolean isRemoved() {
+        return !this.removedBy.equals("N/A");
     }
 
     public long getEnd() {

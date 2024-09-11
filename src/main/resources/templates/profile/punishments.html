@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+</head>
+<body>
+<div th:fragment="punishments">
+    <div class="card">
+        <div class="card-feed-list card-recent">
+            <ol class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    th:if="${!punishments.isEmpty()}"
+                    th:each="punishment: ${punishments}">
+                    <div class="avatar xm log">
+                        <img th:src="${'https://mc-heads.net/body/' + punishment.getPunishedByName()}"/>
+                    </div>
+                    <!--/*@thymesVar id="punishment" type="com.mobpvp.site.model.punishment.PunishmentModel"*/-->
+                    <div class="ms-lg-3 me-auto">
+                        <div class="fw-bold">
+                            <a th:style="${'color: ' + punishment.getPunishedByWebColor()}"
+                               th:text="${punishment.getPunishedByName()}"></a>
+                            <a th:text="${punishment.getType().getContext().toLowerCase() + ' on '}" style="color: silver"></a>
+                            <a th:style="${'color: var(--primaryColor)'}" th:text="${punishment.getServer()}"></a>
+                            <a th:text="' for '" style="color: silver"></a>
+                            <a th:text="${punishment.getPunishedReason()}" style="color: red"></a>
+                            <a th:if="${punishment.getEnd() != -1}"
+                               th:text="' for a period of ' + ${punishment.formatDuration()}" style="color: silver"></a>
+                        </div>
+
+                        <div class="card-feed-meta">
+                            <span th:text="${punishment.getPunishedAgo()}"></span>
+                        </div>
+                        <div th:if="${punishment.isRemoved()}" style="padding-left: 10px">
+                            <div class="fw-bold">
+                                <a th:style="${'color: ' + punishment.getRemoverByWebColor()}"
+                                   th:text="${punishment.getRemoverByName()}"></a>
+                                <a th:text="'un' + ${punishment.getType().getContext().toLowerCase()}"
+                                   style="color: silver"></a>
+                                <a th:text="' for '" style="color: silver"></a>
+                                <a th:text="${punishment.getRemovedReason()}" style="color: red"></a>
+                            </div>
+
+                            <div class="card-feed-meta">
+                                <span th:text="${punishment.getRemovedAgo()}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </li>
+
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    style="background-color: #973333; justify-content: center !important;"
+                    th:if="${punishments.isEmpty()}">
+                    <div class="fw-bold text-center error">This user has no punishments.</div>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example" th:if="${!punishments.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${previousPage == currentPage ? 'disabled' : ''}">
+                <a class="page-link" th:href="${previousPage == currentPage ? '' : previousPageUrl}"
+                   aria-disabled="true">&laquo;</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" th:text="${currentPage}">
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${nextPage == currentPage ? 'disabled' : ''}">
+                <a class="page-link" th:href="${nextPage == currentPage ? '' : nextPageUrl}" aria-disabled="true">&raquo;</a>
+            </li>
+        </ul>
+        <div class="navigation-meta" th:text="${'You are on page ' + currentPage + '/' + pageCount + '.'}">
+        </div>
+    </nav>
+
+</div>
+</body>
+</html>

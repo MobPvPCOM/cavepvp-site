@@ -37,9 +37,8 @@
 
                     <div class="modal fade"
                          th:if="${sessionProfile.hasPermission('website.log.details')}"
-                         th:id="'modal-info-' + ${log.getId()}"
-                         style="transform: translateY(250px);">
-                        <div class="modal-dialog">
+                         th:id="'modal-info-' + ${log.getId()}">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     Log Details

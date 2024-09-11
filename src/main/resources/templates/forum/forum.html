@@ -36,8 +36,8 @@
             <a th:href="${'/thread/new?forum=' + forum.getId()}" class="server-status cta" th:if="${forum.canPost(sessionProfile)}"
                th:style="${'max-width: ' + (admin ? '175px' : '350px')}">Create Thread</a>
 
-            <div class="modal fade" th:id="${'deleteForum'}" style="transform: translateY(250px);" th:if="${admin}">
-                <div class="modal-dialog">
+            <div class="modal fade" th:id="${'deleteForum'}" th:if="${admin}">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             Delete Forum
@@ -58,8 +58,8 @@
                 </div>
             </div>
 
-            <div class="modal fade" th:id="${'editForum'}" style="transform: translateY(250px);" th:if="${admin}">
-                <div class="modal-dialog">
+            <div class="modal fade" th:id="${'editForum'}" th:if="${admin}">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             Edit Forum

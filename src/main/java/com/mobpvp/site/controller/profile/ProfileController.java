@@ -3,6 +3,7 @@ package com.mobpvp.site.controller.profile;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mobpvp.site.SiteApplication;
+import com.mobpvp.site.model.punishment.PunishmentModel;
 import com.mobpvp.site.util.ErrorUtil;
 import com.mobpvp.site.util.PopupUtil;
 import com.mobpvp.site.util.SessionUtil;
@@ -77,6 +78,27 @@ public class ProfileController {
                 page == null ? 1 : page, 10, profile.getNotes(), "notes"
         ).applyTo(view, String.format(
                 "/u/%s/notes?page={page}",
+                profile.getName()
+        ));
+
+        return view;
+    }
+    @RequestMapping({"/user/{name}/punishments", "/u/{name}/punishments"})
+    public ModelAndView punishments(HttpServletRequest request,
+                             @PathVariable("name") String name,
+                             @RequestParam(value = "page", required = false) Integer page) {
+        Tuple<ProfileModel, ModelAndView> tuple
+                = displayPage(request, name, "punishments", "website.view.punishments");
+
+        ProfileModel profile = tuple.key();
+        ModelAndView view = tuple.value();
+        if (profile == null)
+            return view;
+
+        new ViewPaginationModel<>(
+                page == null ? 1 : page, 10, profile.getPunishments(), "punishments"
+        ).applyTo(view, String.format(
+                "/u/%s/punishments?page={page}",
                 profile.getName()
         ));
 
@@ -171,6 +193,15 @@ public class ProfileController {
                 return null;
 
             ProfileModel profile = new ProfileModel(response.asObject());
+
+            response =RequestHandler.get(
+                    "punishment/profile/%s?webResolved=true",
+                    uuid
+            );
+            profile.getPunishments().clear();
+            for (JsonElement element : response.asArray())
+                profile.getPunishments().add(new PunishmentModel(element.getAsJsonObject()));
+
             CACHE.update(profile);
 
             return profile;

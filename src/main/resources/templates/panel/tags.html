@@ -83,9 +83,8 @@
                         </a>
                     </th>
 
-                    <div class="modal fade" th:id="'view-' + ${tag.getName()}" style="transform: translateY(250px);">
-
-                        <div class="modal-dialog">
+                    <div class="modal fade" th:id="'view-' + ${tag.getName()}">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     Tag Display
@@ -106,10 +105,8 @@
                         </div>
 
                     </div>
-                    <div class="modal fade" th:id="'edit-' + ${tag.getName()}"
-                         style="transform: translateY(250px);">
-
-                        <div class="modal-dialog">
+                    <div class="modal fade" th:id="'edit-' + ${tag.getName()}">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     Update Tag
@@ -137,9 +134,8 @@
                         </div>
 
                     </div>
-                    <div class="modal fade" th:id="'delete-' + ${tag.getName()}"
-                         style="transform: translateY(250px);">
-                        <div class="modal-dialog">
+                    <div class="modal fade" th:id="'delete-' + ${tag.getName()}">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     Delete Tag
@@ -188,10 +184,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="modal fade" th:id="'create-tag'"
-             style="transform: translateY(250px);">
-
-            <div class="modal-dialog">
+        <div class="modal fade" th:id="'create-tag'">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         Create Tag

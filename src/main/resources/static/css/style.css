@@ -25,6 +25,7 @@ div#styleToggle i {
 
 body {
     font-family: 'Raleway', sans-serif;
+    transition: ease 0.3s;
 }
 
 #content {
@@ -1246,6 +1247,10 @@ div#sidebar.end {
     border-radius: 10px;
     margin-top: 15px;
     font-size: 15px;
+}
+
+.comment.comment--reply.sub-reply {
+    margin-left: 15px;
 }
 
 .comment.comment--reply .avatar {

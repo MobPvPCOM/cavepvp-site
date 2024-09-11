@@ -39,6 +39,7 @@ public class ProfileModel extends UUIDHolder {
     private final Map<String, Boolean> permissions = new HashMap<>();
 
     private final List<LogModel> logs = new ArrayList<>();
+    private final List<PunishmentModel> punishments = new ArrayList<>();
     private final List<Note> notes = new ArrayList<>();
     private final List<BadgeModel> badges = new ArrayList<>();
 
@@ -93,6 +94,7 @@ public class ProfileModel extends UUIDHolder {
         if (object.has("notes"))
             for (JsonElement element : object.get("notes").getAsJsonArray())
                 notes.add(new Note(element.getAsJsonObject()));
+
 
 //        if (object.has("badges"))
 //            for (JsonElement element : object.get("badges").getAsJsonArray()) {

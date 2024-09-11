@@ -1,8 +1,13 @@
 package com.mobpvp.site.model.forum;
 
 import com.google.gson.JsonObject;
+import com.mobpvp.site.SiteApplication;
 import com.mobpvp.site.SiteConstant;
+import com.mobpvp.site.cache.CacheHandler;
+import com.mobpvp.site.cache.impl.ReplyCache;
 import com.mobpvp.site.model.profile.ProfileModel;
+import com.mobpvp.site.model.replies.ReplyModel;
+import com.mobpvp.site.request.RequestResponse;
 import com.mobpvp.site.util.TimeUtils;
 import lombok.Data;
 
@@ -12,6 +17,8 @@ import java.util.UUID;
 
 @Data
 public class ForumThread {
+
+    public static final ReplyCache REPLY_CACHE = CacheHandler.getCache(ReplyCache.class);
 
     private final String id;
 
@@ -28,7 +35,6 @@ public class ForumThread {
     private UUID lastEditedBy;
     private long lastEditedAt;
 
-    private List<ForumThread> replies = new ArrayList<>();
     private long lastReplyAt;
 
     private boolean pinned;
@@ -73,22 +79,28 @@ public class ForumThread {
         if (object.has("parentThreadId"))
             this.parentThreadId = object.get("parentThreadId").getAsString();
 
-        if (object.has("replies"))
-            object.get("replies").getAsJsonArray().forEach(element ->
-                    replies.add(new ForumThread(element.getAsJsonObject())));
-
         if (object.has("seenBy"))
             object.get("seenBy").getAsJsonArray().forEach(element ->
                     seenBy.add(UUID.fromString(element.getAsString())));
-
-        replies.sort((o1, o2) -> (int) (o2.getCreatedAt() - o1.getCreatedAt()));
     }
 
-    public ForumThread getLastReply() {
+    public ReplyModel getLastReply() {
+        List<ReplyModel> replies = this.getReplies();
         if (replies.isEmpty())
             return null;
 
         return replies.get(0);
+    }
+
+    public List<ReplyModel> getReplies() {
+        List<ReplyModel> replies = new ArrayList<>();
+
+        for (ReplyModel replyModel : REPLY_CACHE.getCachedData()) {
+            if (replyModel.getThread().equals(id))
+                replies.add(replyModel);
+        }
+
+        return replies;
     }
 
     public String getFormattedForum() {
