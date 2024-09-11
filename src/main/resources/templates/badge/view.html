@@ -59,10 +59,9 @@
         </div>
     </div>
 
-    <div class="modal fade" th:id="'removeBadge-' + ${badge.getId()}"
-         style="transform: translateY(250px);">
+    <div class="modal fade" th:id="'removeBadge-' + ${badge.getId()}">
         <form th:action="@{/badge/remove}" method="post">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         Remove Badge

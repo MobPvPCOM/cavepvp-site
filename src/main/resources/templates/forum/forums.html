@@ -34,8 +34,8 @@
                 Create thread
             </a>
 
-            <div class="modal fade" th:if="${admin}" id="newCategory" style="transform: translateY(250px);">
-                <div class="modal-dialog">
+            <div class="modal fade" th:if="${admin}" id="newCategory">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             Create Category
@@ -87,9 +87,8 @@
                     </div>
                 </div>
 
-                <div class="modal fade" th:id="${'deleteCategory-' + category.getId()}"
-                     style="transform: translateY(250px);" th:if="${admin}">
-                    <div class="modal-dialog">
+                <div class="modal fade" th:id="${'deleteCategory-' + category.getId()}" th:if="${admin}">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 Delete Category
@@ -112,9 +111,8 @@
                     </div>
                 </div>
 
-                <div class="modal fade" th:id="${'editCategory-' + category.getId()}"
-                     style="transform: translateY(250px);" th:if="${admin}">
-                    <div class="modal-dialog">
+                <div class="modal fade" th:id="${'editCategory-' + category.getId()}" th:if="${admin}">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 Edit Category
@@ -148,9 +146,8 @@
                 </div>
             </div>
 
-            <div class="modal fade" th:id="${'newForum-' + category.getId()}"
-                 style="transform: translateY(250px);" th:if="${admin}">
-                <div class="modal-dialog">
+            <div class="modal fade" th:id="${'newForum-' + category.getId()}" th:if="${admin}">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             New Forum

@@ -31,9 +31,8 @@ public class ReplyCache extends RepeatingCache<List<ReplyModel>> {
 
         List<ReplyModel> replies = new ArrayList<>();
 
-        for (JsonElement element : response.asObject().getAsJsonArray("replies")) {
+        for (JsonElement element : response.asArray())
             replies.add(new ReplyModel(element.getAsJsonObject()));
-        }
 
         cache(replies);
     }
