@@ -64,7 +64,8 @@
                         </div>
                     </div>
 
-                    <form class="d-flex search" role="search">
+                    <form class="d-flex search" role="search"
+                          th:style="'margin-right: ' + ${sessionProfile.countUnreadNotifications() > 0 ? '' : '10px'}">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input class="form-control me-2 dropdown show" data-bs-toggle="dropdown"
                                type="search" placeholder="Search" aria-label="Search" id="searchInput"/>
@@ -78,7 +79,9 @@
                              aria-expanded="false">
                             <div class="user avatar xm">
                                 <img th:src="${'https://mc-heads.net/body/' + sessionProfile.getName()}">
-                                <!--                                <div class="notification">123</div>-->
+                                <div class="notification"
+                                     th:text="${sessionProfile.countUnreadNotifications()}"
+                                     th:if="${sessionProfile.countUnreadNotifications() > 0}"></div>
                             </div>
                             <div class="username" th:text="${sessionProfile.getName()}"></div>
                             <i class="fa-solid fa-angle-down"></i>

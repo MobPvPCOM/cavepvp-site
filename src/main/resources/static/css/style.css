@@ -3083,3 +3083,13 @@ canvas {
     background-color: #eb5555d6;
     border-radius: 10px;
 }
+
+.notification-view p {
+    margin-bottom: 0;
+    font-size: 12px;
+    color: gray;
+}
+
+.fa-bell {
+    color: var(--primaryColor);
+}

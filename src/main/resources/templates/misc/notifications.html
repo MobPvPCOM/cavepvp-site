@@ -22,21 +22,31 @@
         </div>
 
         <ol class="list-group list-group-flush">
-
-            <!-- todo: if notifications == 0 -->
-            <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group text-center" style="background-color: #7f2f2f">
+            <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group text-center"
+                style="background-color: #7f2f2f"
+                th:if="${sessionProfile.getNotifications.isEmpty()}">
                 <div class="ms-lg-3 me-auto flex-grow-1" style="color: white">
                     <a>You have <b>no notifications</b>.</a>
                 </div>
             </li>
 
-            <!-- todo: each notification if notifications > 0 -->
-<!--            <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group">-->
-<!--                <div class="node-icon"><i class="fa-regular fa-bell"></i></div>-->
-<!--                <div class="ms-lg-3 me-auto flex-grow-1">-->
-<!--                    <a>Your nan tried to stab you with a <b>cheese stick</b>.</a>-->
-<!--                </div>-->
-<!--            </li>-->
+            <li class="list-group-item d-flex justify-content-between align-items-center forum-list-group"
+                th:each="notification : ${sessionProfile.getNotifications()}">
+                <div class="node-icon">
+                    <i class="fa-regular fa-bell" th:if="${!notification.isRead()}"></i>
+                    <i class="fa-regular fa-bell-slash" th:if="${notification.isRead()}"></i>
+                </div>
+                <div class="ms-lg-3 me-auto flex-grow-1 notification-view">
+                    <a th:utext="${notification.getReplacedText()}"></a>
+                    <p th:text="${notification.getTimeAgo()}"></p>
+                </div>
+                <div class="notification-action">
+                    <a class="btn btn-primary btn-sm" th:if="${!notification.isRead()}" style="font-size: 10px">
+                        <i class="fa fa-book"></i>
+                        Mark As Read
+                    </a>
+                </div>
+            </li>
 
         </ol>
     </div>
