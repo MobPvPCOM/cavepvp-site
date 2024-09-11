@@ -90,7 +90,7 @@ public class ReplyController {
             return new ModelAndView("redirect:/thread/" + parentId);
         }
 
-        response = RequestHandler.delete("forum/replies/%s", parentId, replyId);
+        response = RequestHandler.delete("forum/replies/%s", replyId);
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
