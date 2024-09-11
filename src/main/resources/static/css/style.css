@@ -2534,6 +2534,7 @@ body.dark {
 
 .alert-error h3 {
     margin-bottom: 0 !important;
+    color: black !important;
 }
 
 .error-container {
