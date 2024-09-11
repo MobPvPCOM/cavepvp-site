@@ -80,7 +80,7 @@ public class ReplyController {
         if (profile == null)
             return ErrorUtil.loginRedirect("/thread/%s", parentId);
 
-        RequestResponse response = RequestHandler.get("forum/reply/%s", replyId);
+        RequestResponse response = RequestHandler.get("forum/replies/%s", replyId);
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
@@ -90,7 +90,7 @@ public class ReplyController {
             return new ModelAndView("redirect:/thread/" + parentId);
         }
 
-        response = RequestHandler.delete("forum/reply/%s/%s", parentId, replyId);
+        response = RequestHandler.delete("forum/replies/%s", parentId, replyId);
         if (!response.wasSuccessful())
             return ErrorUtil.create(response.getCode(), response.getErrorMessage());
 
