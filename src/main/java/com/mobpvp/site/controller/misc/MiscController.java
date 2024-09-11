@@ -12,4 +12,9 @@ public class MiscController {
         return new ModelAndView("misc/privacy-policy");
     }
 
+    @RequestMapping("/ranked/tutorial")
+    public ModelAndView rankedTutorial() {
+        return new ModelAndView("misc/ranked-tutorial");
+    }
+
 }
