@@ -83,8 +83,8 @@ public class SiteInterceptHandler implements HandlerInterceptor {
         if (SiteConstant.MAINTENANCE_MODE
                 && !request.getRequestURI().equals("/maintenance")
                 && !request.getRequestURI().equals("/login")
-                && profile == null
-                || (profile != null && !profile.hasPermission("website.maintenance.bypass")))
+                && (profile == null
+                || (profile != null && !profile.hasPermission("website.maintenance.bypass"))))
             response.sendRedirect("/maintenance");
 
         if (modelMap.containsAttribute("accessPermission")) {
