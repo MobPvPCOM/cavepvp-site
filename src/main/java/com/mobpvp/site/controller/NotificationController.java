@@ -52,8 +52,9 @@ public class NotificationController {
         return view;
     }
 
-    @PostMapping("/read/{uuid}")
+    @PostMapping("/read/{page}/{uuid}")
     public ModelAndView readNotifications(HttpServletRequest request,
+                                          @PathVariable Integer page,
                                           @PathVariable UUID uuid,
                                           RedirectAttributes redirectAttributes) {
         ProfileModel profile = SessionUtil.getProfile(request);
@@ -82,7 +83,8 @@ public class NotificationController {
         ));
 
         CACHE.update(profile.getUuid());
-        return new ModelAndView("redirect:/notifications");
+        return new ModelAndView("redirect:/notifications"
+                +  (page == 1 ? "" : "?page=" + page));
     }
 
 }
