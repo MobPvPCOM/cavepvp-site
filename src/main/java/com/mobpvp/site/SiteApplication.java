@@ -54,7 +54,8 @@ public class SiteApplication {
                 new ProfileCache(),
                 new SessionCache(),
                 new TagCache(),
-                new ReplyCache()
+                new ReplyCache(),
+                new NotificationCache()
         );
 
         Runtime.getRuntime().addShutdownHook(new Thread(

@@ -61,7 +61,7 @@
 
                     <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
                     <form class="d-flex search" role="search"
-                          th:style="'margin-right: ' + (${sessionProfile != null && sessionProfile.countUnreadNotifications() > 0} ? '' : '10px')">
+                          th:style="'margin-right: ' + (${sessionProfile != null && unreadNotifications > 0} ? '' : '10px')">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input class="form-control me-2 dropdown show" data-bs-toggle="dropdown"
                                type="search" placeholder="Search" aria-label="Search" id="searchInput"/>
@@ -76,8 +76,8 @@
                             <div class="user avatar xm">
                                 <img th:src="${'https://mc-heads.net/body/' + sessionProfile.getName()}">
                                 <div class="notification"
-                                     th:text="${sessionProfile.countUnreadNotifications()}"
-                                     th:if="${sessionProfile.countUnreadNotifications() > 0}"></div>
+                                     th:text="${unreadNotifications}"
+                                     th:if="${unreadNotifications > 0}"></div>
                             </div>
                             <div class="username" th:text="${sessionProfile.getName()}"></div>
                             <i class="fa-solid fa-angle-down"></i>

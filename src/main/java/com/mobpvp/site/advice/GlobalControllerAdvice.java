@@ -1,12 +1,17 @@
 package com.mobpvp.site.advice;
 
+import com.mobpvp.site.controller.NotificationController;
 import com.mobpvp.site.model.leaderboard.LeaderboardModel;
 import com.mobpvp.site.advice.item.NavItem;
 import com.mobpvp.site.cache.CacheHandler;
 import com.mobpvp.site.cache.impl.LeaderboardCache;
+import com.mobpvp.site.model.profile.ProfileModel;
+import com.mobpvp.site.util.SessionUtil;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +26,17 @@ public class GlobalControllerAdvice {
             new NavItem("Staff", "/staff"),
             new NavItem("Store", "https://store.mobpvp.com")
     );
+
+    @ModelAttribute
+    public void addAttributes(HttpServletRequest request, Model model) {
+        ProfileModel profile = SessionUtil.getProfile(request);
+
+        if (profile != null)
+            model.addAttribute(
+                    "unreadNotifications",
+                    NotificationController.CACHE.getUnreadCount(profile.getUuid())
+            );
+    }
 
     @ModelAttribute("navItems")
     public List<NavItem> getNavItems() {
