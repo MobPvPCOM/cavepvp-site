@@ -38,7 +38,7 @@ public class SupportResolveController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
         PunishmentModel punishment = ticket.getPunishment();
@@ -54,7 +54,7 @@ public class SupportResolveController {
 
             response = RequestHandler.put("forum/ticket/%s", body, id);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
 
             return new ModelAndView("redirect:/ticket/" + id);
         }
@@ -72,7 +72,7 @@ public class SupportResolveController {
             );
 
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
 
             body = new JsonObject();
             body.addProperty("status", TicketStatus.RESOLVED.name());
@@ -91,7 +91,7 @@ public class SupportResolveController {
         response = RequestHandler.put("forum/ticket/%s", body, id);
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/ticket/" + id);
     }
@@ -118,7 +118,7 @@ public class SupportResolveController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
         PunishmentModel punishment = ticket.getPunishment();
@@ -134,7 +134,7 @@ public class SupportResolveController {
 
             response = RequestHandler.put("forum/ticket/%s", body, id);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
 
             return new ModelAndView("redirect:/ticket/" + id);
         }
@@ -171,7 +171,7 @@ public class SupportResolveController {
             );
 
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
 
             body = new JsonObject();
             body.addProperty("uuid", punishment.getUuid().toString());
@@ -184,7 +184,7 @@ public class SupportResolveController {
 
             response = RequestHandler.post("punishment", body);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
 
             body = new JsonObject();
             body.addProperty("status", TicketStatus.RESOLVED.name());
@@ -203,7 +203,7 @@ public class SupportResolveController {
         response = RequestHandler.put("forum/ticket/%s", body, id);
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/ticket/" + id);
     }
@@ -221,7 +221,7 @@ public class SupportResolveController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
         PunishmentModel punishment = ticket.getPunishment();
@@ -235,7 +235,7 @@ public class SupportResolveController {
 
             response = RequestHandler.put("forum/ticket/%s", body, id);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
 
             return new ModelAndView("redirect:/ticket/" + id);
         }
@@ -256,7 +256,7 @@ public class SupportResolveController {
         );
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         if (resolveSuggestion.getPunishmentAction().equals("UPDATE_TIME")) {
             body = new JsonObject();
@@ -270,7 +270,7 @@ public class SupportResolveController {
 
             response = RequestHandler.post("punishment", body);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
         }
 
         body = new JsonObject();
@@ -279,7 +279,7 @@ public class SupportResolveController {
 
         response = RequestHandler.put("forum/ticket/%s", body, id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/ticket/" + id);
     }
@@ -297,7 +297,7 @@ public class SupportResolveController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
 
@@ -312,7 +312,7 @@ public class SupportResolveController {
 
         response = RequestHandler.put("forum/ticket/%s", body, id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/ticket/" + id);
     }

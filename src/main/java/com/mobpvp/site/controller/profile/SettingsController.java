@@ -76,7 +76,7 @@ public class SettingsController {
 
         RequestResponse response = RequestHandler.put("forum/account/setting/%s", body, profile.getUuid().toString());
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumAccountModel accountModel = new ForumAccountModel(response.asObject());
 

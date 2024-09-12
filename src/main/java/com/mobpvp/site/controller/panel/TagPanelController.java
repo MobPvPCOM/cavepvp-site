@@ -65,7 +65,7 @@ public class TagPanelController {
         RequestResponse response = RequestHandler.post("tag/" + tag, object);
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
         CACHE.execute();
         SiteApplication.INSTANCE.getRedisService().publish(new TagReloadPacket());
         return new ModelAndView("redirect:/admin/tags");
@@ -88,7 +88,7 @@ public class TagPanelController {
         RequestResponse response = RequestHandler.post("tag", object);
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
         CACHE.execute();
         SiteApplication.INSTANCE.getRedisService().publish(new TagReloadPacket());
         return new ModelAndView("redirect:/admin/tags");
@@ -108,7 +108,7 @@ public class TagPanelController {
         RequestResponse response = RequestHandler.delete("tag/" + tag, object);
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
         CACHE.execute();
         SiteApplication.INSTANCE.getRedisService().publish(new TagReloadPacket());
         return new ModelAndView("redirect:/admin/tags");

@@ -1,5 +1,6 @@
 package com.mobpvp.site.util;
 
+import com.mobpvp.site.request.RequestResponse;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ErrorUtil {
@@ -11,6 +12,13 @@ public class ErrorUtil {
         view.addObject("error", error);
 
         return view;
+    }
+
+    public static ModelAndView create(RequestResponse response) {
+        return create(
+                response.getCode(),
+                "API: " + response.getErrorMessage()
+        );
     }
 
     public static ModelAndView loginRedirect(String redirect, Object... args) {

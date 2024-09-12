@@ -35,7 +35,7 @@ public class ApplicationController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/player/%s/applications", profile.getUuid().toString());
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         List<SupportTicketModel> tickets = new ArrayList<>();
         response.asArray().forEach(element -> tickets.add(

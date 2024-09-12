@@ -56,7 +56,7 @@ public class SupportController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/player/%s", profile.getUuid().toString());
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         List<SupportTicketModel> tickets = new ArrayList<>();
         response.asArray().forEach(element -> tickets.add(
@@ -195,7 +195,7 @@ public class SupportController {
 
         RequestResponse response = RequestHandler.post("forum/ticket", body);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/ticket/" + randomId);
     }
@@ -211,7 +211,7 @@ public class SupportController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
 
@@ -232,7 +232,7 @@ public class SupportController {
 
         response = RequestHandler.post("forum/ticket/%s/reply", body, id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         TicketStatus newStatus = ticket.getCategory().name().contains("APPLICATION")
                 ? TicketStatus.PENDING : profile.getUuid().equals(ticket.getAuthor())
@@ -244,7 +244,7 @@ public class SupportController {
 
         response = RequestHandler.put("forum/ticket/%s", body, id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/ticket/" + id);
     }
@@ -263,7 +263,7 @@ public class SupportController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
         TicketStatus status = TicketStatus.getStatus(rawStatus);
@@ -287,7 +287,7 @@ public class SupportController {
 
             response = RequestHandler.put("forum/ticket/%s", body, id);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
 
             return new ModelAndView("redirect:/ticket/" + id);
         }
@@ -299,7 +299,7 @@ public class SupportController {
 
             response = RequestHandler.put("forum/ticket/%s", body, id);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
         } else {
             JsonObject body = new JsonObject();
 
@@ -312,7 +312,7 @@ public class SupportController {
 
             response = RequestHandler.put("forum/ticket/%s", body, id);
             if (!response.wasSuccessful())
-                return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+                return ErrorUtil.create(response);
         }
 
         return new ModelAndView("redirect:/ticket/" + id);
