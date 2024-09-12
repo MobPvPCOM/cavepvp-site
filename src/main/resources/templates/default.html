@@ -65,13 +65,15 @@
                     </div>
 
                     <form class="d-flex search" role="search"
-                          th:style="'margin-right: ' + (${sessionProfile.countUnreadNotifications()} > 0 ? '' : '10px')">
+                          th:style="'margin-right: ' + (${sessionProfile != null
+                          && sessionProfile.countUnreadNotifications()} > 0 ? '' : '10px')">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input class="form-control me-2 dropdown show" data-bs-toggle="dropdown"
                                type="search" placeholder="Search" aria-label="Search" id="searchInput"/>
                         <ul class="dropdown-menu" id="searchResults">
                         </ul>
                     </form>
+
 
                     <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
                     <div class="user-btn signed-in dropdown" th:if="${sessionProfile != null}">
