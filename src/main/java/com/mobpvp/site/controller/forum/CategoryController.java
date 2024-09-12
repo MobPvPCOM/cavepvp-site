@@ -54,7 +54,7 @@ public class CategoryController {
 
         RequestResponse response = RequestHandler.post("forum/category", body);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CATEGORY_CACHE.forceExecute();
         return new ModelAndView("redirect:/forums");
@@ -88,7 +88,7 @@ public class CategoryController {
 
         RequestResponse response = RequestHandler.put("forum/category/%s", body, id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CATEGORY_CACHE.forceExecute();
         return new ModelAndView("redirect:/forums");
@@ -107,7 +107,7 @@ public class CategoryController {
 
         RequestResponse response = RequestHandler.delete("forum/category/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CATEGORY_CACHE.forceExecute();
         return new ModelAndView("redirect:/forums");
