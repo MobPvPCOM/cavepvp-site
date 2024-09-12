@@ -40,7 +40,7 @@
                     <a th:utext="${notification.getReplacedText()}"></a>
                     <p th:text="${notification.getTimeAgo()}"></p>
                 </div>
-                <form class="notification-action" th:action="@{'/notifications/read/' + ${notification.getUuid()}}" method="post">
+                <form class="notification-action" th:action="@{'/notifications/read/' + ${currentPage} + '/' + ${notification.getUuid()}}" method="post">
                     <button class="btn btn-primary btn-sm" type="submit" th:if="${!notification.isRead()}" style="font-size: 10px">
                         <i class="fa fa-book"></i>
                         Mark As Read
