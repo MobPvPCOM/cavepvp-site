@@ -2,6 +2,7 @@ package com.mobpvp.site.model.profile;
 
 import com.google.gson.JsonObject;
 import com.mobpvp.site.util.TimeUtils;
+import com.mobpvp.site.util.uuid.UUIDHolder;
 import lombok.Data;
 
 import java.util.Comparator;
