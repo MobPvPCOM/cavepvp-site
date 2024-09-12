@@ -55,7 +55,7 @@ public class ForumsController {
                                   @RequestParam(value = "page", required = false) Integer page) {
         RequestResponse response = RequestHandler.get("forum/forum/%s?page=1", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         JsonObject object = response.asObject();
         ForumModel model = new ForumModel(object);
@@ -118,7 +118,7 @@ public class ForumsController {
 
         RequestResponse response = RequestHandler.post("forum/forum", body);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CATEGORY_CACHE.forceExecute();
         return new ModelAndView("redirect:/forums");
@@ -156,7 +156,7 @@ public class ForumsController {
 
         RequestResponse response = RequestHandler.put("forum/forum/%s", body, id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CATEGORY_CACHE.forceExecute();
         return new ModelAndView("redirect:/forums");
@@ -175,7 +175,7 @@ public class ForumsController {
 
         RequestResponse response = RequestHandler.delete("forum/forum/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CATEGORY_CACHE.forceExecute();
         return new ModelAndView("redirect:/forums");

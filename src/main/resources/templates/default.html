@@ -27,15 +27,10 @@
     <div id="header">
         <div class="header-bg"></div>
         <div class="header-logo header-bg">
-            <img th:src="@{/images/logo.png}">
+            <img th:src="@{/images/logo.png}" draggable="false">
         </div>
         <nav class="navbar navbar-expand-lg bg-transparent">
             <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <th:block th:each="item, itemStat : ${navItems}">
@@ -64,7 +59,9 @@
                         </div>
                     </div>
 
-                    <form class="d-flex search" role="search">
+                    <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+                    <form class="d-flex search" role="search"
+                          th:style="'margin-right: ' + (${sessionProfile != null && unreadNotifications > 0} ? '' : '10px')">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input class="form-control me-2 dropdown show" data-bs-toggle="dropdown"
                                type="search" placeholder="Search" aria-label="Search" id="searchInput"/>
@@ -72,13 +69,15 @@
                         </ul>
                     </form>
 
-                    <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
+
                     <div class="user-btn signed-in dropdown" th:if="${sessionProfile != null}">
                         <div class="dropdown-toggle" id="accountDropdown" data-bs-toggle="dropdown"
                              aria-expanded="false">
                             <div class="user avatar xm">
                                 <img th:src="${'https://mc-heads.net/body/' + sessionProfile.getName()}">
-                                <!--                                <div class="notification">123</div>-->
+                                <div class="notification"
+                                     th:text="${unreadNotifications}"
+                                     th:if="${unreadNotifications > 0}"></div>
                             </div>
                             <div class="username" th:text="${sessionProfile.getName()}"></div>
                             <i class="fa-solid fa-angle-down"></i>
@@ -109,6 +108,11 @@
                         <a href="/login">Login</a>
                     </div>
                 </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
         </nav>
         <div class="container">
@@ -170,6 +174,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+        let theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+            document.body.classList.add("dark");
+        } else {
+            document.body.classList.add("light");
+        }
+    })();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
         crossorigin="anonymous"></script>

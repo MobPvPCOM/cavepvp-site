@@ -1,6 +1,7 @@
 package com.mobpvp.site.config;
 
 import com.mobpvp.site.SiteConstant;
+import com.mobpvp.site.controller.NotificationController;
 import com.mobpvp.site.model.PopupModel;
 import com.mobpvp.site.model.profile.ProfileModel;
 import com.mobpvp.site.util.SessionUtil;
@@ -83,8 +84,8 @@ public class SiteInterceptHandler implements HandlerInterceptor {
         if (SiteConstant. MAINTENANCE_MODE
                 && !request.getRequestURI().equals("/maintenance")
                 && !request.getRequestURI().equals("/login")
-                && profile == null
-                || (profile != null && !profile.hasPermission("website.maintenance.bypass")))
+                && (profile == null
+                || (profile != null && !profile.hasPermission("website.maintenance.bypass"))))
             response.sendRedirect("/maintenance");
 
         if (modelMap.containsAttribute("accessPermission")) {

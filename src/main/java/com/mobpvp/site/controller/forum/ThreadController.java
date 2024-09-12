@@ -201,7 +201,7 @@ public class ThreadController {
 
         RequestResponse response = RequestHandler.get("forum/thread/%s", threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumThread thread = new ForumThread(response.asObject());
         if (!thread.getAuthor().equals(profile.getUuid())
@@ -220,7 +220,7 @@ public class ThreadController {
 
         response = RequestHandler.put("forum/thread/%s", body, threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         IndexController.CACHE.forceExecute();
         return new ModelAndView("redirect:/thread/" + threadId);
@@ -236,7 +236,7 @@ public class ThreadController {
 
         RequestResponse response = RequestHandler.get("forum/thread/%s", threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumThread thread = new ForumThread(response.asObject());
         if (!thread.getAuthor().equals(profile.getUuid())
@@ -245,7 +245,7 @@ public class ThreadController {
 
         response = RequestHandler.delete("forum/thread/%s", threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/forum/" + thread.getForum());
     }
@@ -260,7 +260,7 @@ public class ThreadController {
 
         RequestResponse response = RequestHandler.get("forum/thread/%s", threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumThread thread = new ForumThread(response.asObject());
         if (!profile.hasPermission("website.thread.lock"))
@@ -271,7 +271,7 @@ public class ThreadController {
 
         response = RequestHandler.put("forum/thread/%s", body, threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/thread/" + threadId);
     }
@@ -289,7 +289,7 @@ public class ThreadController {
 
         RequestResponse response = RequestHandler.get("forum/thread/%s", threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumThread thread = new ForumThread(response.asObject());
 
@@ -298,7 +298,7 @@ public class ThreadController {
 
         response = RequestHandler.put("forum/thread/%s", body, threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/thread/" + threadId);
     }

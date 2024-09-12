@@ -13,6 +13,7 @@ import com.mobpvp.site.util.TimeUtils;
 import com.mobpvp.site.util.uuid.UUIDHolder;
 import lombok.Getter;
 
+import javax.management.Notification;
 import java.util.*;
 
 @Getter
@@ -42,7 +43,6 @@ public class ProfileModel extends UUIDHolder {
     private final List<PunishmentModel> punishments = new ArrayList<>();
     private final List<Note> notes = new ArrayList<>();
     private final List<BadgeModel> badges = new ArrayList<>();
-
 
     private final Map<String, String> settings = new HashMap<>();
     private final boolean trusted;
@@ -258,4 +258,25 @@ public class ProfileModel extends UUIDHolder {
 
         return activeMute;
     }
+
+//    public NotificationModel getNotification(UUID uuid) {
+//        for (NotificationModel notification : notifications) {
+//            if (notification.getUuid().equals(uuid))
+//                return notification;
+//        }
+//
+//        return null;
+//    }
+//
+//    public int countUnreadNotifications() {
+//        int count = 0;
+//
+//        for (NotificationModel notification : notifications) {
+//            if (!notification.isRead())
+//                count++;
+//        }
+//
+//        return count;
+//    }
+
 }

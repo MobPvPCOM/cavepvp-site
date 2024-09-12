@@ -239,6 +239,12 @@ div#twitter {
 
 img {
     max-width: 100%;
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 a.donator {
@@ -2534,6 +2540,7 @@ body.dark {
 
 .alert-error h3 {
     margin-bottom: 0 !important;
+    color: black !important;
 }
 
 .error-container {
@@ -3081,4 +3088,14 @@ canvas {
     padding: 0 5px;
     background-color: #eb5555d6;
     border-radius: 10px;
+}
+
+.notification-view p {
+    margin-bottom: 0;
+    font-size: 12px;
+    color: gray;
+}
+
+.fa-bell {
+    color: var(--primaryColor);
 }

@@ -138,7 +138,7 @@ public class ProfileController {
         RequestResponse response = RequestHandler.post("forum/account/comment", body);
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CACHE.remove(targetProfile);
         return new ModelAndView("redirect:/u/" + targetProfile.getName());
@@ -166,7 +166,7 @@ public class ProfileController {
         System.out.println(response.toString());
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         CACHE.remove(targetProfile);
         return new ModelAndView("redirect:/u/" + targetProfile.getName());

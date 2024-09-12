@@ -26,7 +26,7 @@ public class TicketController {
 
         RequestResponse response = RequestHandler.get("forum/ticket/%s", id);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
         if (!profile.getUuid().equals(ticket.getAuthor())
