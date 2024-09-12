@@ -31,11 +31,6 @@
         </div>
         <nav class="navbar navbar-expand-lg bg-transparent">
             <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <th:block th:each="item, itemStat : ${navItems}">
@@ -64,9 +59,9 @@
                         </div>
                     </div>
 
+                    <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
                     <form class="d-flex search" role="search"
-                          th:style="'margin-right: ' + (${sessionProfile != null
-                          && sessionProfile.countUnreadNotifications()} > 0 ? '' : '10px')">
+                          th:style="'margin-right: ' + (${sessionProfile != null && sessionProfile.countUnreadNotifications() > 0} ? '' : '10px')">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input class="form-control me-2 dropdown show" data-bs-toggle="dropdown"
                                type="search" placeholder="Search" aria-label="Search" id="searchInput"/>
@@ -75,7 +70,6 @@
                     </form>
 
 
-                    <!--/*@thymesVar id="sessionProfile" type="com.mobpvp.site.model.profile.ProfileModel"*/-->
                     <div class="user-btn signed-in dropdown" th:if="${sessionProfile != null}">
                         <div class="dropdown-toggle" id="accountDropdown" data-bs-toggle="dropdown"
                              aria-expanded="false">
@@ -114,6 +108,11 @@
                         <a href="/login">Login</a>
                     </div>
                 </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
         </nav>
         <div class="container">
