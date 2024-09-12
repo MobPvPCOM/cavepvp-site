@@ -35,7 +35,7 @@ public class OpListController {
 
         RequestResponse response = RequestHandler.get("oplist");
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         List<OpListUser> users = new ArrayList<>();
         for (JsonElement element : response.asArray()) {
@@ -64,7 +64,7 @@ public class OpListController {
 
         RequestResponse response = RequestHandler.post("oplist/" + playerId.toString(), new JsonObject());
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:/admin/oplist");
     }
@@ -82,7 +82,7 @@ public class OpListController {
         UUID playerId = UUIDCache.getUuid(name);
         RequestResponse response = RequestHandler.delete("oplist/" + playerId.toString());
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         return new ModelAndView("redirect:admin/oplist");
     }

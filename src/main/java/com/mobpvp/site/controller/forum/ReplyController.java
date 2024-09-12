@@ -36,7 +36,7 @@ public class ReplyController {
 
         RequestResponse response = RequestHandler.get("forum/thread/%s", threadId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumThread mainThread = new ForumThread(response.asObject());
 
@@ -65,7 +65,7 @@ public class ReplyController {
         );
 
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumThread.REPLY_CACHE.forceExecute();
         return new ModelAndView("redirect:/thread/" + threadId);
@@ -82,7 +82,7 @@ public class ReplyController {
 
         RequestResponse response = RequestHandler.get("forum/replies/%s", replyId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ReplyModel replyModel = new ReplyModel(response.asObject());
         if (!replyModel.canDelete(profile)) {
@@ -92,7 +92,7 @@ public class ReplyController {
 
         response = RequestHandler.delete("forum/replies/%s", replyId);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ForumThread.REPLY_CACHE.forceExecute();
         return new ModelAndView("redirect:/thread/" + parentId);

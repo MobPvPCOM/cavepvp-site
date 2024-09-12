@@ -62,7 +62,7 @@ public class AuthController {
 
         RequestResponse response = RequestHandler.get("forum/account/token/%s", token);
         if (!response.wasSuccessful())
-            return ErrorUtil.create(response.getCode(), response.getErrorMessage());
+            return ErrorUtil.create(response);
 
         ModelAndView view = new ModelAndView("auth/register");
         JsonObject object = response.asObject();
