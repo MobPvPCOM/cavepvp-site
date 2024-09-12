@@ -47,8 +47,26 @@
                     </button>
                 </form>
             </li>
-
         </ol>
+
+        <nav aria-label="Page navigation example" th:if="${!notifications.isEmpty()}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${previousPage == currentPage ? 'disabled' : ''}">
+                    <a class="page-link" th:href="${previousPage == currentPage ? '' : previousPageUrl}" aria-disabled="true">&laquo;</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" th:text="${currentPage}">
+                    </a>
+                </li>
+
+                <li class="page-item" th:classappend="${nextPage == currentPage ? 'disabled' : ''}">
+                    <a class="page-link" th:href="${nextPage == currentPage ? '' : nextPageUrl}" aria-disabled="true">&raquo;</a>
+                </li>
+            </ul>
+            <div class="navigation-meta" th:text="${'You are on page ' + currentPage + '/' + pageCount + '.'}">
+            </div>
+        </nav>
     </div>
 
 </div>

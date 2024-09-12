@@ -12,15 +12,14 @@ import com.mobpvp.site.request.RequestHandler;
 import com.mobpvp.site.request.RequestResponse;
 import com.mobpvp.site.util.ErrorUtil;
 import com.mobpvp.site.util.SessionUtil;
+import com.mobpvp.site.util.pagination.ViewPaginationModel;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -31,14 +30,24 @@ public class NotificationController {
             = CacheHandler.getCache(NotificationCache.class);
 
     @GetMapping
-    public ModelAndView notifications(HttpServletRequest request) {
+    public ModelAndView notifications(HttpServletRequest request,
+                                      @RequestParam(value = "page", required = false) Integer page) {
         ProfileModel profile = SessionUtil.getProfile(request);
 
         if (profile == null)
             return ErrorUtil.loginRedirect("/notifications");
 
+        List<NotificationModel> notifications = CACHE.get(profile.getUuid());
+
         ModelAndView view = new ModelAndView("misc/notifications");
-        view.addObject("notifications", CACHE.get(profile.getUuid()));
+        view.addObject("notifications", notifications);
+
+        new ViewPaginationModel<>(
+                page == null ? 1 : page,
+                10,
+                notifications,
+                "notifications"
+        ).applyTo(view, "/notifications?page={page}");
 
         return view;
     }
