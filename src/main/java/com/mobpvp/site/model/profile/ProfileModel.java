@@ -43,7 +43,6 @@ public class ProfileModel extends UUIDHolder {
     private final List<PunishmentModel> punishments = new ArrayList<>();
     private final List<Note> notes = new ArrayList<>();
     private final List<BadgeModel> badges = new ArrayList<>();
-    private final List<NotificationModel> notifications = new ArrayList<>();
 
     private final Map<String, String> settings = new HashMap<>();
     private final boolean trusted;
@@ -113,13 +112,6 @@ public class ProfileModel extends UUIDHolder {
             settingsObject.keySet().forEach(key -> settings.put(
                     key, settingsObject.get(key).getAsString()
             ));
-        }
-
-        if (object.has("notifications")) {
-            for (JsonElement element : object.get("notifications").getAsJsonArray())
-                notifications.add(new NotificationModel(element.getAsJsonObject()));
-
-            notifications.sort(NotificationModel.COMPARATOR);
         }
 
         this.trusted = object.has("isTrusted")
@@ -267,15 +259,24 @@ public class ProfileModel extends UUIDHolder {
         return activeMute;
     }
 
-    public int countUnreadNotifications() {
-        int count = 0;
-
-        for (NotificationModel notification : notifications) {
-            if (!notification.isRead())
-                count++;
-        }
-
-        return count;
-    }
+//    public NotificationModel getNotification(UUID uuid) {
+//        for (NotificationModel notification : notifications) {
+//            if (notification.getUuid().equals(uuid))
+//                return notification;
+//        }
+//
+//        return null;
+//    }
+//
+//    public int countUnreadNotifications() {
+//        int count = 0;
+//
+//        for (NotificationModel notification : notifications) {
+//            if (!notification.isRead())
+//                count++;
+//        }
+//
+//        return count;
+//    }
 
 }
