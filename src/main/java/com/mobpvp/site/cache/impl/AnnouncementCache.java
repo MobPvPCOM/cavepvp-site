@@ -30,9 +30,10 @@ public class AnnouncementCache extends RepeatingCache<List<ForumThread>> {
         ForumModel forumModel = new ForumModel(response.asObject());
         List<ForumThread> latestThreads = new ArrayList<>(forumModel.getThreads());
 
-        latestThreads.sort((o1, o2) -> Math.toIntExact(
-                o2.getCreatedAt() - o1.getCreatedAt()
+        latestThreads.sort((o1, o2) -> Long.compare(
+                o2.getCreatedAt(), o1.getCreatedAt()
         ));
+
 
         cache(latestThreads);
     }
