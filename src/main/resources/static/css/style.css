@@ -946,9 +946,9 @@ div#sidebar.end {
     }
 
     #styleToggle svg {
-
         width: 30px;
         stroke: white;
+        margin-left: 15px;
     }
 
     .node-meta {
