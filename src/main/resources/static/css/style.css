@@ -945,6 +945,12 @@ div#sidebar.end {
         gap: 15px !important;
     }
 
+    #styleToggle svg {
+        width: 30px;
+        stroke: white;
+        margin-left: 15px;
+    }
+
     .node-meta {
         display: none;
     }
@@ -1004,7 +1010,6 @@ div#sidebar.end {
     .navbar-expand-lg .navbar-nav {
         gap: 10px;
         padding-top: 15px;
-        background: #0000005e;
         margin-bottom: 0px !important;
         text-align: center;
         border-top: 1px solid #ffffff24 !important;
