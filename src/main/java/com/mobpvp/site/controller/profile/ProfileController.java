@@ -163,7 +163,6 @@ public class ProfileController {
         RequestResponse response = RequestHandler.delete(
                 "forum/account/comment/" + uuid + "/" + commentId.toString()
         );
-        System.out.println(response.toString());
 
         if (!response.wasSuccessful())
             return ErrorUtil.create(response);

@@ -55,6 +55,7 @@ public class ProfileModel extends UUIDHolder {
         this.lastSeen = object.has("lastSeen")
                 ? object.get("lastSeen").getAsLong()
                 : -1;
+
         this.playTime = object.has("playTime")
                 ? object.get("playTime").getAsLong()
                 : -1;
@@ -155,13 +156,13 @@ public class ProfileModel extends UUIDHolder {
     }
 
     public String formatPlaytime() {
-        return TimeUtils.formatTimeShort(playTime - System.currentTimeMillis());
+        return TimeUtils.formatTimeShort(playTime);
     }
 
     public boolean isOnline() {
-        if (currentServer != null) {
+        if (currentServer != null)
             return !currentServer.equalsIgnoreCase("N/A");
-        }
+
         return false;
     }
 
