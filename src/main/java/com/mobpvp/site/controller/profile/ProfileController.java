@@ -201,7 +201,7 @@ public class ProfileController {
             profile.getPunishments().clear();
             for (JsonElement element : response.asArray())
                 profile.getPunishments().add(new PunishmentModel(element.getAsJsonObject()));
-
+            profile.getPunishments().sort((o1, o2) -> Long.compare(o2.getPunishedAt(), o1.getPunishedAt()));
             CACHE.update(profile);
 
             return profile;
