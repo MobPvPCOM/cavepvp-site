@@ -17,44 +17,54 @@ public enum SupportTypeModel {
             model -> model.getActiveBan() != null,
             QuestionSetRegistry.PUNISHMENT_QUESTIONS.clone("punishment", "banned")
     ),
+
     MUTE_APPEAL(
             "Mute Appeal",
             model -> model.getActiveMute() != null,
             QuestionSetRegistry.PUNISHMENT_QUESTIONS.clone("punishment", "muted")
     ),
+
     GENERAL_SUPPORT(
             "General Support", model -> true,
             QuestionSetRegistry.GENERAL_SUPPORT
     ),
+
     PAYMENT_SUPPORT(
             "Payment Support", model -> true,
             QuestionSetRegistry.PAYMENT_SUPPORT
     ),
+
     PLAYER_REPORT(
             "Player Report", model -> true,
             QuestionSetRegistry.USER_REPORT.clone("type", "player")
     ),
+
     STAFF_REPORT(
             "Staff Report", model -> true,
             QuestionSetRegistry.USER_REPORT.clone("type", "staff member")
     ),
+
     BUG_REPORT(
             "Bug Report", model -> true,
             QuestionSetRegistry.BUG_REPORT
     ),
+
     STAFF_APPLICATION(
             "Staff Application",
             model -> true,
             QuestionSetRegistry.STAFF_APPLICATION
     ),
+
     BUILDER_APPLICATION(
             "Builder Application", model -> true,
             QuestionSetRegistry.BUILDER_APPLICATION
     ),
+
     TRANSLATOR_APPLICATION(
             "Translator Application", model -> true,
             QuestionSetRegistry.TRANSLATOR_APPLICATION
     ),
+
     MEDIA_APPLICATION(
             "Media Application", model -> true,
             QuestionSetRegistry.MEDIA_APPLICATION
