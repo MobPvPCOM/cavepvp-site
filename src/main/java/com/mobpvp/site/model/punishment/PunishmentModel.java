@@ -69,7 +69,6 @@ public class PunishmentModel {
             this.punishedByWebColor = object.get("punishedByWebColor").getAsString();
         else this.punishedByWebColor = "#212529";
 
-
         if (object.has("removerByName"))
             this.removerByName = object.get("removerByName").getAsString();
         else this.removerByName = (removedBy.equals("N/A") ? null : UUIDCache.getName(UUID.fromString(removedBy)));
