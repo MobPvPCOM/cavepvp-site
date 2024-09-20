@@ -31,7 +31,7 @@ public class TicketController {
         SupportTicketModel ticket = new SupportTicketModel(response.asObject());
         if (!profile.getUuid().equals(ticket.getAuthor())
                 && !profile.hasPermission("website.support.viewall")
-                && (!profile.hasPermission("webite.support.category." + ticket.getCategory().name().toLowerCase())))
+                && (!profile.hasPermission("website.support.category." + ticket.getCategory().name().toLowerCase())))
             return ErrorUtil.noPerms("You do not have permission to view this ticket.");
 
         ModelAndView view = new ModelAndView("support/ticket");
