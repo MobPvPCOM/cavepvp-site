@@ -51,16 +51,14 @@ public class ForumModel {
                 ? object.get("categoryPermission").getAsString() : "";
 
         threads.sort((o1, o2) -> {
-            if (o1.isPinned() && !o2.isPinned())
+            if (o2.isPinned() && !o1.isPinned())
                 return 1;
 
-            if (!o1.isPinned() && o2.isPinned())
+            if (!o2.isPinned() && o1.isPinned())
                 return -1;
 
-            return (int) (o1.getCreatedAt() - o2.getCreatedAt());
+            return (int) (o2.getCreatedAt() - o1.getCreatedAt());
         });
-
-        Collections.reverse(threads);
     }
 
     public String getUrlName() {
